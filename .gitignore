@@ -5,3 +5,4 @@ out/
 directus/uploads/*
 !directus/uploads/.gitkeep
 .DS_Store
+demo/
