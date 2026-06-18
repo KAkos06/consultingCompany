@@ -1,0 +1,307 @@
+/* Payload globális téma felülírások a sötét témához */
+[data-theme='dark'] {
+  --theme-bg: #0b1326;
+  --theme-elevation-0: #0b1326;
+  --theme-elevation-50: #0F172A;
+  --theme-elevation-100: #131b2e;
+  --theme-elevation-150: #171f33;
+  --theme-elevation-200: #222a3d;
+  
+  --theme-text: #dae2fd;
+  --theme-text-dim: #8c909f; /* outline color from template */
+  
+  --theme-border-color: #1E293B; /* outline-variant */
+  --theme-border-color-highlight: #2d3449;
+  
+  --theme-success-400: #4edea3;
+  --theme-success-500: #00a572;
+  
+  --theme-error-400: #ffb4ab;
+  --theme-error-500: #93000a;
+  
+  --theme-brand-primary: #4d8eff; /* primary container */
+}
+
+/* Fix for sidebar nav background to match our theme */
+.nav {
+  background-color: var(--theme-elevation-50) !important;
+  border-right: 1px solid var(--theme-border-color);
+}
+
+.nav__wrap {
+  padding: 1.5rem 1rem;
+}
+
+/* Customize global font to Inter / JetBrains Mono if available, or just fallback nicely */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* --- App Header (Top Right) --- */
+/* Hide the default header entirely */
+.app-header,
+#app-header,
+.step-nav,
+.nav-toggler,
+.app-header__mobile-menu {
+  display: none !important;
+}
+
+/* --- Account & Settings Page Redesign --- */
+.account, .collection-edit {
+  background-color: var(--theme-bg);
+}
+
+.account-page__header,
+.collection-edit__header {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--theme-border-color);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Fix Save button alignment in header */
+.account-page__header .btn,
+.collection-edit__header .btn,
+.render-custom-save-button .btn,
+.form-submit .btn {
+  margin: 0 !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 1rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  transform: translateY(0) !important;
+}
+
+/* Ensure the controls wrapper aligns items centrally */
+.doc-controls,
+.doc-controls__wrapper,
+.collection-edit__header-controls {
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
+}
+
+.doc-controls > *,
+.doc-controls__wrapper > * {
+  align-self: center !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Reusable Card Style */
+.premium-card,
+.collection-list,
+.collection-edit__document,
+.payload-preferences {
+  background-color: var(--theme-elevation-50) !important;
+  border: 1px solid var(--theme-border-color) !important;
+  border-radius: 1rem !important;
+  padding: 2rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  margin-bottom: 2rem !important;
+  margin-right: 2rem !important;
+  margin-top: 2rem !important;
+  max-width: calc(100% - 2rem) !important;
+}
+
+/* Remove Payload's native box styling from auth fields */
+.auth-fields.collection-edit__auth {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 0 2rem 0 !important;
+  box-shadow: none !important;
+}
+
+/* Pure CSS Account Page Title Override */
+.collection-edit--users .doc-header__title,
+.account-page .doc-header__title {
+  visibility: hidden;
+  position: relative;
+}
+.collection-edit--users .doc-header__title::after,
+.account-page .doc-header__title::after {
+  content: 'Fiók beállítások';
+  visibility: visible;
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+}
+
+/* Collection List Specifics (Pages/Media/Users) */
+.collection-list__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.collection-list__header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.collection-list__header .btn {
+  margin: 0 !important;
+}
+
+/* Fine Design for Collection Tables */
+.collection-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.collection-list th,
+.collection-list td {
+  border-bottom: 1px solid var(--theme-border-color) !important;
+  padding: 1rem 0.5rem !important;
+  text-align: left;
+  background-color: transparent !important;
+}
+
+.collection-list th {
+  color: var(--theme-text-dim) !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600 !important;
+  border-bottom: 2px solid var(--theme-border-color) !important;
+}
+
+.collection-list tbody tr {
+  transition: background-color 0.2s !important;
+}
+
+.collection-list tbody tr:hover td {
+  background-color: var(--theme-elevation-100) !important;
+}
+
+.form-submit {
+  border-top: none;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0 !important;
+}
+
+
+.account-page__title,
+.collection-edit__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--theme-text);
+}
+
+.field-type {
+  margin-bottom: 1.5rem;
+}
+
+.field-type label,
+.field-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--theme-text-dim);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+}
+
+.field-type input[type='text'],
+.field-type input[type='email'],
+.field-type input[type='password'],
+.field-type select {
+  width: 100%;
+  background-color: var(--theme-elevation-50);
+  border: 1px solid var(--theme-border-color);
+  color: var(--theme-text);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field-type input:focus,
+.field-type select:focus {
+  border-color: var(--theme-brand-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(77, 142, 255, 0.2);
+}
+
+/* React Select overriding */
+.rs__control {
+  background-color: var(--theme-elevation-50) !important;
+  border: 1px solid var(--theme-border-color) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.25rem !important;
+}
+
+.rs__control--is-focused {
+  border-color: var(--theme-brand-primary) !important;
+  box-shadow: 0 0 0 2px rgba(77, 142, 255, 0.2) !important;
+}
+
+.rs__single-value {
+  color: var(--theme-text) !important;
+}
+
+.rs__menu {
+  background-color: var(--theme-elevation-100) !important;
+  border: 1px solid var(--theme-border-color) !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden;
+}
+
+.rs__option {
+  background-color: transparent !important;
+  color: var(--theme-text) !important;
+  cursor: pointer !important;
+}
+
+.rs__option--is-focused,
+.rs__option:hover {
+  background-color: var(--theme-elevation-150) !important;
+}
+
+.rs__option--is-selected {
+  background-color: rgba(78, 222, 163, 0.1) !important;
+  color: var(--theme-brand-primary) !important;
+}
+
+/* "Payload Settings" section wrapper to look like a card */
+.payload-preferences h3,
+.payload-preferences h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--theme-border-color);
+  padding-bottom: 0.75rem;
+  color: var(--theme-text);
+}
+
+/* Reset preferences button (Reverted to outline style) */
+.payload-preferences button[type="button"] {
+  background-color: transparent !important;
+  border: 1px solid rgba(220, 53, 69, 0.3) !important;
+  color: #e57373 !important; /* Dull red */
+  transition: all 0.2s;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+.payload-preferences button[type="button"]:hover {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  border-color: rgba(220, 53, 69, 0.5) !important;
+  color: #ff8a80 !important;
+  transform: none;
+  box-shadow: none;
+}

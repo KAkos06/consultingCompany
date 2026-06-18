@@ -1,0 +1,7 @@
+:80 {
+    reverse_proxy frontend:3000
+}
+
+:8080 {
+    reverse_proxy cms:3000
+}

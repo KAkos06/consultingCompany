@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --ei-navy: #1A2A4F;
+    --ei-coral: #F7A5A5;
+    --ei-peach: #FFDBB6;
+    --ei-cream: #FFF2EF;
+    --ei-white: #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--ei-cream);
+    color: var(--ei-navy);
+    font-family: 'Manrope', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.02em;
+}
+
+::selection {
+    background-color: var(--ei-coral);
+    color: var(--ei-navy);
+}
+
+/* Navbar dynamic width — keeps center fixed, transitions smoothly */
+.nav-floating {
+    width: min(95%, 72rem);
+    border-radius: 9999px;
+    margin-top: 1rem;
+}
+
+.nav-stuck {
+    width: 100%;
+    border-radius: 0;
+    margin-top: 0;
+}
+
+.nav-shell {
+    transition:
+        width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        margin-top 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-shell-inner {
+    width: min(100%, 72rem);
+    margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .nav-shell-inner {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+/* Center-expanding underline animation for nav links */
+.nav-link {
+    position: relative;
+    padding: 0.5rem 0.25rem;
+    color: var(--ei-navy);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: var(--ei-coral);
+    transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 2px;
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after,
+.nav-item:hover .nav-link::after,
+.nav-item:focus-within .nav-link::after {
+    width: 50%;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+    color: var(--ei-navy);
+    outline: none;
+}
+
+/* Mega menu: shows on hover and focus-within
+   The outer wrapper has padding-top to create an invisible "bridge"
+   between the trigger button and the visible card, so moving the cursor
+   into the menu doesn't break hover state. */
+.mega-menu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) translateX(-50%);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+    padding-top: 1.25rem;
+}
+
+.nav-item:hover .mega-menu,
+.nav-item:focus-within .mega-menu,
+.mega-menu:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) translateX(-50%);
+    pointer-events: auto;
+}
+
+/* Hero radial spotlight */
+.hero-bg {
+    background:
+        radial-gradient(ellipse at 20% 0%, rgba(247, 165, 165, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 30%, rgba(255, 219, 182, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, #1A2A4F 0%, #1A2A4F 70%, #1A2A4F 100%);
+}
+
+.grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+/* Fade-in animation utility */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+    animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.25s; }
+.delay-3 { animation-delay: 0.4s; }
+.delay-4 { animation-delay: 0.55s; }
+
+/* Marquee */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+    animation: marquee 35s linear infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--ei-cream);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--ei-navy);
+    border-radius: 10px;
+}
