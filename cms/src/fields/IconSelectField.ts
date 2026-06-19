@@ -17,13 +17,11 @@ export const ICONS = [
 
 export const IconSelectField: Field = {
   name: 'icon',
-  type: 'select',
+  type: 'text', // Using text instead of select so we don't have to map all options
   label: 'Ikon',
   admin: {
-    isClearable: true,
+    components: {
+      Field: '/components/IconSelect/index#IconSelectClient',
+    },
   },
-  options: ICONS.map(icon => ({
-    label: icon,
-    value: icon,
-  })),
 };
