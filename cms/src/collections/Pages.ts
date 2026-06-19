@@ -7,6 +7,7 @@ import { contentBlocks } from '../blocks/contentBlocks';
 export const Pages: CollectionConfig = {
   slug: 'pages',
   admin: {
+    group: 'Tartalom',
     useAsTitle: 'title',
     livePreview: {
       url: ({ data }) => {

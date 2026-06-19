@@ -63,49 +63,56 @@ export const CustomDashboard = async () => {
       </section>
 
       <div className={classes.mainGrid}>
-        <section>
-          <h2 className={classes.sectionTitle}>Gyűjtemények</h2>
-          <div className={classes.collectionsGrid}>
-            <div className={classes.collectionCard}>
-              <div className={classes.collectionHeader}>
-                <div className={classes.collectionIcon}>
-                  <PagesIcon />
+        <div>
+          <section>
+            <h2 className={classes.sectionTitle}>Tartalom</h2>
+            <div className={classes.collectionsGrid}>
+              <div className={classes.collectionCard}>
+                <div className={classes.collectionHeader}>
+                  <div className={classes.collectionIcon}>
+                    <PagesIcon />
+                  </div>
+                  <h3 className={classes.collectionTitle}>Oldalak (Pages)</h3>
                 </div>
-                <h3 className={classes.collectionTitle}>Oldalak (Pages)</h3>
+                <div className={classes.collectionActions}>
+                  <Link href="/admin/collections/pages" className={classes.btnSecondary}>Összes</Link>
+                  <Link href="/admin/collections/pages/create" className={classes.btnPrimary}>Új oldal</Link>
+                </div>
               </div>
-              <div className={classes.collectionActions}>
-                <Link href="/admin/collections/pages" className={classes.btnSecondary}>Összes</Link>
-                <Link href="/admin/collections/pages/create" className={classes.btnPrimary}>Új oldal</Link>
-              </div>
-            </div>
 
-            <div className={classes.collectionCard}>
-              <div className={classes.collectionHeader}>
-                <div className={classes.collectionIcon}>
-                  <MediaIcon />
+              <div className={classes.collectionCard}>
+                <div className={classes.collectionHeader}>
+                  <div className={classes.collectionIcon}>
+                    <MediaIcon />
+                  </div>
+                  <h3 className={classes.collectionTitle}>Média (Media)</h3>
                 </div>
-                <h3 className={classes.collectionTitle}>Média (Media)</h3>
-              </div>
-              <div className={classes.collectionActions}>
-                <Link href="/admin/collections/media" className={classes.btnSecondary}>Összes</Link>
-                <Link href="/admin/collections/media/create" className={classes.btnPrimary}>Feltöltés</Link>
+                <div className={classes.collectionActions}>
+                  <Link href="/admin/collections/media" className={classes.btnSecondary}>Összes</Link>
+                  <Link href="/admin/collections/media/create" className={classes.btnPrimary}>Feltöltés</Link>
+                </div>
               </div>
             </div>
+          </section>
 
-            <div className={classes.collectionCard}>
-              <div className={classes.collectionHeader}>
-                <div className={classes.collectionIcon}>
-                  <UsersIcon />
+          <section style={{ marginTop: '2rem' }}>
+            <h2 className={classes.sectionTitle}>Adminisztráció</h2>
+            <div className={classes.collectionsGrid}>
+              <div className={classes.collectionCard}>
+                <div className={classes.collectionHeader}>
+                  <div className={classes.collectionIcon}>
+                    <UsersIcon />
+                  </div>
+                  <h3 className={classes.collectionTitle}>Felhasználók (Users)</h3>
                 </div>
-                <h3 className={classes.collectionTitle}>Felhasználók (Users)</h3>
-              </div>
-              <div className={classes.collectionActions}>
-                <Link href="/admin/collections/users" className={classes.btnSecondary}>Összes</Link>
-                <Link href="/admin/collections/users/create" className={classes.btnPrimary}>Új felhasználó</Link>
+                <div className={classes.collectionActions}>
+                  <Link href="/admin/collections/users" className={classes.btnSecondary}>Összes</Link>
+                  <Link href="/admin/collections/users/create" className={classes.btnPrimary}>Új felhasználó</Link>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
 
         <aside className={classes.activityPanel}>
           <div className={classes.activityHeader}>

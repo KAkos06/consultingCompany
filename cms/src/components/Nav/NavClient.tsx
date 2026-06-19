@@ -79,7 +79,7 @@ export const NavClient = ({ user }: { user: any }) => {
         </Link>
 
         <div className={classes.navDivider}></div>
-        <div className={classes.navGroupLabel}>Gyűjtemények</div>
+        <div className={classes.navGroupLabel}>Tartalom</div>
 
         <Link 
           href="/admin/collections/pages" 
@@ -95,6 +95,10 @@ export const NavClient = ({ user }: { user: any }) => {
           <MediaIcon />
           Média
         </Link>
+
+        <div className={classes.navDivider}></div>
+        <div className={classes.navGroupLabel}>Adminisztráció</div>
+
         <Link 
           href="/admin/collections/users" 
           className={`${classes.navLink} ${isActive('/admin/collections/users') ? classes.active : ''}`}
