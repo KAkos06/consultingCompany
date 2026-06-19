@@ -65,6 +65,47 @@ export const CustomDashboard = async () => {
       <div className={classes.mainGrid}>
         <div>
           <section>
+            <h2 className={classes.sectionTitle}>Globális beállítások</h2>
+            <div className={classes.collectionsGrid}>
+              <div className={classes.collectionCard}>
+                <div className={classes.collectionHeader}>
+                  <div className={classes.collectionIcon}>
+                    <PagesIcon />
+                  </div>
+                  <h3 className={classes.collectionTitle}>Oldal Beállítások (Site Settings)</h3>
+                </div>
+                <div className={classes.collectionActions}>
+                  <Link href="/admin/globals/site-settings" className={classes.btnPrimary}>Szerkesztés</Link>
+                </div>
+              </div>
+
+              <div className={classes.collectionCard}>
+                <div className={classes.collectionHeader}>
+                  <div className={classes.collectionIcon}>
+                    <PagesIcon />
+                  </div>
+                  <h3 className={classes.collectionTitle}>Főmenü (Main Menu)</h3>
+                </div>
+                <div className={classes.collectionActions}>
+                  <Link href="/admin/globals/main-menu" className={classes.btnPrimary}>Szerkesztés</Link>
+                </div>
+              </div>
+
+              <div className={classes.collectionCard}>
+                <div className={classes.collectionHeader}>
+                  <div className={classes.collectionIcon}>
+                    <PagesIcon />
+                  </div>
+                  <h3 className={classes.collectionTitle}>Lábléc (Footer)</h3>
+                </div>
+                <div className={classes.collectionActions}>
+                  <Link href="/admin/globals/footer" className={classes.btnPrimary}>Szerkesztés</Link>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section style={{ marginTop: '2rem' }}>
             <h2 className={classes.sectionTitle}>Tartalom</h2>
             <div className={classes.collectionsGrid}>
               <div className={classes.collectionCard}>

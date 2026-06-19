@@ -89,8 +89,16 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('hu' | 'en') | ('hu' | 'en')[];
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+    'main-menu': MainMenu;
+    footer: Footer;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'main-menu': MainMenuSelect<false> | MainMenuSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+  };
   locale: 'hu' | 'en';
   widgets: {
     collections: CollectionsWidget;
@@ -2062,6 +2070,221 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  siteName: string;
+  logo?: (number | null) | Media;
+  favicon?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "main-menu".
+ */
+export interface MainMenu {
+  id: number;
+  menuItems?:
+    | {
+        type?: ('link' | 'mega') | null;
+        title: string;
+        link?: (number | null) | Page;
+        megaItems?:
+          | {
+              icon?: (number | null) | Media;
+              title: string;
+              description?: string | null;
+              link?: (number | null) | Page;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  ctaButton?: {
+    label?: string | null;
+    link?: (number | null) | Page;
+    icon?: (number | null) | Media;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  columns?:
+    | (
+        | {
+            width?: number | null;
+            showLogo?: boolean | null;
+            content?: string | null;
+            socialLinks?:
+              | {
+                  platform: 'LinkedIn' | 'Twitter' | 'Instagram' | 'Facebook' | 'YouTube';
+                  url: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textBlock';
+          }
+        | {
+            width?: number | null;
+            title: string;
+            links?:
+              | {
+                  label: string;
+                  page?: (number | null) | Page;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'linkBlock';
+          }
+        | {
+            width?: number | null;
+            title: string;
+            description?: string | null;
+            placeholderText?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'newsletterBlock';
+          }
+      )[]
+    | null;
+  bottomBar?: {
+    copyright?: string | null;
+    legalLinks?:
+      | {
+          label: string;
+          page?: (number | null) | Page;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  logo?: T;
+  favicon?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "main-menu_select".
+ */
+export interface MainMenuSelect<T extends boolean = true> {
+  menuItems?:
+    | T
+    | {
+        type?: T;
+        title?: T;
+        link?: T;
+        megaItems?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              link?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  ctaButton?:
+    | T
+    | {
+        label?: T;
+        link?: T;
+        icon?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  columns?:
+    | T
+    | {
+        textBlock?:
+          | T
+          | {
+              width?: T;
+              showLogo?: T;
+              content?: T;
+              socialLinks?:
+                | T
+                | {
+                    platform?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        linkBlock?:
+          | T
+          | {
+              width?: T;
+              title?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    page?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        newsletterBlock?:
+          | T
+          | {
+              width?: T;
+              title?: T;
+              description?: T;
+              placeholderText?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  bottomBar?:
+    | T
+    | {
+        copyright?: T;
+        legalLinks?:
+          | T
+          | {
+              label?: T;
+              page?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -79,6 +79,31 @@ export const NavClient = ({ user }: { user: any }) => {
         </Link>
 
         <div className={classes.navDivider}></div>
+        <div className={classes.navGroupLabel}>Globális beállítások</div>
+
+        <Link 
+          href="/admin/globals/site-settings" 
+          className={`${classes.navLink} ${isActive('/admin/globals/site-settings') ? classes.active : ''}`}
+        >
+          <PagesIcon />
+          Oldal Beállítások
+        </Link>
+        <Link 
+          href="/admin/globals/main-menu" 
+          className={`${classes.navLink} ${isActive('/admin/globals/main-menu') ? classes.active : ''}`}
+        >
+          <PagesIcon />
+          Főmenü
+        </Link>
+        <Link 
+          href="/admin/globals/footer" 
+          className={`${classes.navLink} ${isActive('/admin/globals/footer') ? classes.active : ''}`}
+        >
+          <PagesIcon />
+          Lábléc
+        </Link>
+
+        <div className={classes.navDivider}></div>
         <div className={classes.navGroupLabel}>Tartalom</div>
 
         <Link 
