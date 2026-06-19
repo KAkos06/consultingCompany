@@ -1,5 +1,6 @@
 import { Block } from 'payload'
 import { thumbnails } from './thumbnails'
+import { IconSelectField } from '../fields/IconSelectField'
 
 export const QuoteSliderBlock: Block = {
   slug: 'quoteSlider',
@@ -18,14 +19,7 @@ export const QuoteSliderBlock: Block = {
       maxRows: 8,
       required: true,
       fields: [
-        {
-          name: 'icon',
-          type: 'select',
-          label: 'Icon',
-          defaultValue: 'Award',
-          options: ['Quote', 'Award', 'TrendingUp', 'Users'],
-          required: true,
-        },
+        IconSelectField,
         {
           name: 'tag',
           type: 'text',

@@ -10,13 +10,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
-
-const iconMap = {
-  Quote,
-  Award,
-  TrendingUp,
-  Users,
-};
+import { getIcon } from "@/lib/icons";
 
 const defaultSlides = [
   {
@@ -86,7 +80,7 @@ export default function QuoteSlider({ items = defaultSlides }) {
         <div className="flex-1 overflow-hidden" ref={emblaRef}>
           <div className="flex">
             {slides.map((slide, i) => {
-              const Icon = iconMap[slide.icon] || Award;
+              const Icon = getIcon(slide.icon);
               return (
                 <div
                   key={`${slide.title}-${i}`}

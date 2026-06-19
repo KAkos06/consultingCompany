@@ -15,6 +15,13 @@
   justify-content: center;
 }
 
+.logoImageNode {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
 .logoText {
   color: var(--theme-brand-primary);
   font-weight: bold;

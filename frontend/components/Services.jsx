@@ -7,6 +7,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import { getIcon } from "@/lib/icons";
 import Reveal from "@/components/Reveal";
 
 const defaultCards = [
@@ -88,7 +89,7 @@ export default function Services({
           className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
         >
           {cards.map((card, i) => {
-            const Icon = card.icon;
+            const Icon = getIcon(card.icon);
             return (
               <Reveal
                 key={card.title}

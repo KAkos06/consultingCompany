@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload'
+import { IconSelectField } from '../fields/IconSelectField'
 
 export const MainMenu: GlobalConfig = {
   slug: 'main-menu',
@@ -48,12 +49,7 @@ export const MainMenu: GlobalConfig = {
             condition: (_, siblingData) => siblingData.type === 'mega',
           },
           fields: [
-            {
-              name: 'icon',
-              type: 'upload',
-              relationTo: 'media',
-              label: 'Ikon',
-            },
+            IconSelectField,
             {
               name: 'title',
               type: 'text',
@@ -92,12 +88,7 @@ export const MainMenu: GlobalConfig = {
           relationTo: 'pages',
           label: 'Hivatkozott oldal',
         },
-        {
-          name: 'icon',
-          type: 'upload',
-          relationTo: 'media',
-          label: 'Ikon',
-        },
+        IconSelectField,
       ],
     },
   ],

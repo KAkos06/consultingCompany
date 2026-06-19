@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, MapPin, Phone, Send } from "lucide-react";
+import { Send } from "lucide-react";
+import { getIcon } from "@/lib/icons";
 import Reveal from "@/components/Reveal";
 
 export default function Contact({
   variant = "cream",
   eyebrow = "05 - Kapcsolat",
+  title,
+  description,
+  contactInfo,
 }) {
   const [form, setForm] = useState({
     name: "",
@@ -39,43 +43,49 @@ export default function Contact({
               <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
                 {eyebrow}
               </span>
-              <h2 className="mt-4 font-[Outfit] text-4xl font-bold leading-[1.08] tracking-tight text-[#1A2A4F] md:text-5xl">
-                Beszéljünk.
-                <br />
-                <span className="font-medium italic text-[#1A2A4F]/70">
-                  Diszkréten.
-                </span>
-              </h2>
+              {title ? (
+                <div dangerouslySetInnerHTML={{ __html: title }} className="mt-4 font-[Outfit] text-4xl font-bold leading-[1.08] tracking-tight text-[#1A2A4F] md:text-5xl" />
+              ) : (
+                <h2 className="mt-4 font-[Outfit] text-4xl font-bold leading-[1.08] tracking-tight text-[#1A2A4F] md:text-5xl">
+                  Beszéljünk.
+                  <br />
+                  <span className="font-medium italic text-[#1A2A4F]/70">
+                    Diszkréten.
+                  </span>
+                </h2>
+              )}
               <p className="mt-6 leading-relaxed text-[#1A2A4F]/70">
-                Egy 30 perces, kötelezettség nélküli konzultáció. Megnézzük a
-                kontextust, és eldöntjük együtt, van-e értelme tovább menni.
+                {description || "Egy 30 perces, kötelezettség nélküli konzultáció. Megnézzük a kontextust, és eldöntjük együtt, van-e értelme tovább menni."}
               </p>
             </div>
 
             <div className="mt-10 space-y-3">
-              {[
-                { Icon: Mail, label: "E-mail", value: "hello@executiveinsights.hu" },
-                { Icon: Phone, label: "Telefon", value: "+36 1 234 5678" },
-                { Icon: MapPin, label: "Iroda", value: "Budapest, Bajcsy-Zsilinszky út 12." },
-              ].map(({ Icon, label, value }, i) => (
-                <div
-                  key={i}
-                  data-testid={`contact-info-${i}`}
-                  className="flex items-center gap-4 rounded-2xl border border-[#1A2A4F]/5 bg-white px-5 py-4"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFDBB6]/40 text-[#1A2A4F]">
-                    <Icon size={18} />
-                  </div>
-                  <div>
-                    <div className="text-xs font-medium text-[#1A2A4F]/50">
-                      {label}
+              {(contactInfo || [
+                { icon: "Mail", label: "E-mail", value: "hello@executiveinsights.hu" },
+                { icon: "Phone", label: "Telefon", value: "+36 1 234 5678" },
+                { icon: "MapPin", label: "Iroda", value: "Budapest, Bajcsy-Zsilinszky út 12." },
+              ]).map((info, i) => {
+                const Icon = getIcon(info.icon);
+                return (
+                  <div
+                    key={i}
+                    data-testid={`contact-info-${i}`}
+                    className="flex items-center gap-4 rounded-2xl border border-[#1A2A4F]/5 bg-white px-5 py-4"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFDBB6]/40 text-[#1A2A4F]">
+                      <Icon size={18} />
                     </div>
-                    <div className="text-sm font-semibold text-[#1A2A4F]">
-                      {value}
+                    <div>
+                      <div className="text-xs font-medium text-[#1A2A4F]/50">
+                        {info.label}
+                      </div>
+                      <div className="text-sm font-semibold text-[#1A2A4F]">
+                        {info.value}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </Reveal>
 

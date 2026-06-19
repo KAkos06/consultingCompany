@@ -1,5 +1,6 @@
 import { Block } from 'payload';
 import { thumbnails } from './thumbnails';
+import { IconSelectField } from '../fields/IconSelectField';
 
 export const ServicesBlock: Block = {
   slug: 'services',
@@ -41,12 +42,7 @@ export const ServicesBlock: Block = {
       label: 'Service Cards',
       minRows: 1,
       fields: [
-        {
-          name: 'icon',
-          type: 'text',
-          label: 'Icon Name (lucide-react, e.g. Compass, Users, TrendingUp, Lightbulb, Target, Sparkles)',
-          required: true,
-        },
+        IconSelectField,
         {
           name: 'tag',
           type: 'text',

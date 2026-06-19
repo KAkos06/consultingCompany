@@ -123,7 +123,21 @@ export default function RenderBlocks({ blocks }: { blocks: any[] }) {
             );
 
           case "services":
-            return <Services key={index} />;
+            return (
+              <Services 
+                key={index} 
+                variant={block.variant}
+                eyebrow={asText(block.eyebrow)}
+                cards={Array.isArray(block.cards)
+                  ? block.cards.map((card: any) => ({
+                      icon: asText(card?.icon) || "Compass",
+                      tag: asText(card?.tag) || "",
+                      title: asText(card?.title) || "",
+                      desc: asText(card?.desc) || "",
+                    }))
+                  : undefined}
+              />
+            );
 
           case "about":
             return <About key={index} />;
@@ -135,7 +149,22 @@ export default function RenderBlocks({ blocks }: { blocks: any[] }) {
             return <Testimonials key={index} />;
 
           case "contact":
-            return <Contact key={index} />;
+            return (
+              <Contact 
+                key={index} 
+                variant={block.variant}
+                eyebrow={asText(block.eyebrow)}
+                title={block.title}
+                description={block.description}
+                contactInfo={Array.isArray(block.contactInfo) 
+                  ? block.contactInfo.map((info: any) => ({
+                      icon: asText(info?.icon) || "Mail",
+                      label: asText(info?.label) || "",
+                      value: asText(info?.value) || "",
+                    }))
+                  : undefined}
+              />
+            );
 
           default:
             return (

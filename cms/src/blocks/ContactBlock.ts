@@ -1,5 +1,6 @@
 import { Block } from 'payload';
 import { thumbnails } from './thumbnails';
+import { IconSelectField } from '../fields/IconSelectField';
 
 export const ContactBlock: Block = {
   slug: 'contact',
@@ -40,12 +41,7 @@ export const ContactBlock: Block = {
       type: 'array',
       label: 'Contact Info Items',
       fields: [
-        {
-          name: 'icon',
-          type: 'text',
-          label: 'Icon Name (lucide-react e.g. Mail, Phone, MapPin)',
-          required: true,
-        },
+        IconSelectField,
         {
           name: 'label',
           type: 'text',
