@@ -77,8 +77,11 @@ export default function QuoteSlider({ items = defaultSlides }) {
   return (
     <div
       data-testid="quote-slider"
-      className="relative border-t border-white/10 bg-[#1A2A4F]/40 backdrop-blur-sm"
+      className="relative rounded-3xl bg-[#1A2A4F] shadow-2xl shadow-[#1A2A4F]/20 overflow-hidden"
     >
+      {/* Subtle decor for the card */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E\")" }} />
+
       <div className="mx-auto flex max-w-6xl items-center gap-6 px-6 py-8">
         <div className="flex-1 overflow-hidden" ref={emblaRef}>
           <div className="flex">
@@ -88,7 +91,7 @@ export default function QuoteSlider({ items = defaultSlides }) {
                 <div
                   key={`${slide.title}-${i}`}
                   data-testid={`quote-slide-${i}`}
-                  className="basis-full shrink-0 grow-0 pr-6 md:basis-1/2 lg:basis-1/3"
+                  className="basis-full shrink-0 grow-0 pr-6 md:basis-1/2"
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#F7A5A5]/30 bg-[#F7A5A5]/20 text-[#F7A5A5]">
@@ -127,7 +130,7 @@ export default function QuoteSlider({ items = defaultSlides }) {
             onClick={scrollPrev}
             data-testid="quote-slider-prev"
             aria-label="Előző"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-[#FFF2EF] transition-all hover:bg-white/10 active:scale-95"
+            className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-[#FFF2EF] transition-all hover:bg-white/10 active:scale-95"
           >
             <ArrowLeft size={16} />
           </button>
@@ -135,7 +138,7 @@ export default function QuoteSlider({ items = defaultSlides }) {
             onClick={scrollNext}
             data-testid="quote-slider-next"
             aria-label="Következő"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F7A5A5] text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95"
+            className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[#F7A5A5] text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95"
           >
             <ArrowRight size={16} />
           </button>

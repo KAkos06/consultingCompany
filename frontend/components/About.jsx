@@ -1,6 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import Section from "@/components/Section";
 
 const defaultBullets = [
   "Több mint egy évtized C-szintű vezetői tapasztalat",
@@ -19,11 +18,10 @@ export default function About({
   floatingCardValue = "+78",
 }) {
   return (
-    <Section
-      variant={variant}
+    <div
       id="about"
-      testid="about-section"
-      className="px-6 py-28 md:py-36"
+      data-testid="about-section"
+      className="w-full"
     >
       <div className="mx-auto grid max-w-6xl items-center gap-16 lg:grid-cols-2">
         <Reveal className="relative">
@@ -93,6 +91,6 @@ export default function About({
           </a>
         </Reveal>
       </div>
-    </Section>
+    </div>
   );
 }

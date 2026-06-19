@@ -176,134 +176,830 @@ export interface Page {
   slug: string;
   layout: (
     | {
-        eyebrow?: string | null;
-        title?: string | null;
-        subtitle?: string | null;
-        primaryCtaText?: string | null;
-        primaryCtaLink?: string | null;
-        secondaryCtaText?: string | null;
-        secondaryCtaLink?: string | null;
-        stats?:
-          | {
-              value: string;
-              label: string;
-              id?: string | null;
-            }[]
+        background: 'cream' | 'warm' | 'dark' | 'solidDark';
+        padding: 'none' | 'small' | 'normal';
+        column?:
+          | (
+              | {
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  primaryCtaText?: string | null;
+                  primaryCtaLink?: string | null;
+                  secondaryCtaText?: string | null;
+                  secondaryCtaLink?: string | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'hero';
+                }
+              | {
+                  items: {
+                    icon: 'Quote' | 'Award' | 'TrendingUp' | 'Users';
+                    tag: string;
+                    title: string;
+                    desc: string;
+                    id?: string | null;
+                  }[];
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'quoteSlider';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  cards?:
+                    | {
+                        icon: string;
+                        tag?: string | null;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'services';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  image?: (number | null) | Media;
+                  floatingCardTitle?: string | null;
+                  floatingCardValue?: string | null;
+                  bullets?:
+                    | {
+                        text: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaText?: string | null;
+                  ctaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'about';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  steps?:
+                    | {
+                        number: string;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  bottomStripTitle?: string | null;
+                  bottomStripDesc?: string | null;
+                  bottomStripCtaText?: string | null;
+                  bottomStripCtaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'methodology';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  testimonials?:
+                    | {
+                        quote: string;
+                        authorName: string;
+                        authorTitle: string;
+                        authorImage?: (number | null) | Media;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'testimonials';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  contactInfo?:
+                    | {
+                        icon: string;
+                        label: string;
+                        value: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'contact';
+                }
+            )[]
           | null;
         id?: string | null;
         blockName?: string | null;
-        blockType: 'hero';
+        blockType: 'oneColumn';
       }
     | {
-        items: {
-          icon: 'Quote' | 'Award' | 'TrendingUp' | 'Users';
-          tag: string;
-          title: string;
-          desc: string;
-          id?: string | null;
-        }[];
+        background: 'cream' | 'warm' | 'dark' | 'solidDark';
+        padding: 'none' | 'small' | 'normal';
+        ratio: '1/2-1/2' | '1/3-2/3' | '2/3-1/3' | '1/4-3/4' | '3/4-1/4';
+        leftColumn?:
+          | (
+              | {
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  primaryCtaText?: string | null;
+                  primaryCtaLink?: string | null;
+                  secondaryCtaText?: string | null;
+                  secondaryCtaLink?: string | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'hero';
+                }
+              | {
+                  items: {
+                    icon: 'Quote' | 'Award' | 'TrendingUp' | 'Users';
+                    tag: string;
+                    title: string;
+                    desc: string;
+                    id?: string | null;
+                  }[];
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'quoteSlider';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  cards?:
+                    | {
+                        icon: string;
+                        tag?: string | null;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'services';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  image?: (number | null) | Media;
+                  floatingCardTitle?: string | null;
+                  floatingCardValue?: string | null;
+                  bullets?:
+                    | {
+                        text: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaText?: string | null;
+                  ctaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'about';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  steps?:
+                    | {
+                        number: string;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  bottomStripTitle?: string | null;
+                  bottomStripDesc?: string | null;
+                  bottomStripCtaText?: string | null;
+                  bottomStripCtaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'methodology';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  testimonials?:
+                    | {
+                        quote: string;
+                        authorName: string;
+                        authorTitle: string;
+                        authorImage?: (number | null) | Media;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'testimonials';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  contactInfo?:
+                    | {
+                        icon: string;
+                        label: string;
+                        value: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'contact';
+                }
+            )[]
+          | null;
+        rightColumn?:
+          | (
+              | {
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  primaryCtaText?: string | null;
+                  primaryCtaLink?: string | null;
+                  secondaryCtaText?: string | null;
+                  secondaryCtaLink?: string | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'hero';
+                }
+              | {
+                  items: {
+                    icon: 'Quote' | 'Award' | 'TrendingUp' | 'Users';
+                    tag: string;
+                    title: string;
+                    desc: string;
+                    id?: string | null;
+                  }[];
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'quoteSlider';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  cards?:
+                    | {
+                        icon: string;
+                        tag?: string | null;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'services';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  image?: (number | null) | Media;
+                  floatingCardTitle?: string | null;
+                  floatingCardValue?: string | null;
+                  bullets?:
+                    | {
+                        text: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaText?: string | null;
+                  ctaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'about';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  steps?:
+                    | {
+                        number: string;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  bottomStripTitle?: string | null;
+                  bottomStripDesc?: string | null;
+                  bottomStripCtaText?: string | null;
+                  bottomStripCtaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'methodology';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  testimonials?:
+                    | {
+                        quote: string;
+                        authorName: string;
+                        authorTitle: string;
+                        authorImage?: (number | null) | Media;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'testimonials';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  contactInfo?:
+                    | {
+                        icon: string;
+                        label: string;
+                        value: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'contact';
+                }
+            )[]
+          | null;
         id?: string | null;
         blockName?: string | null;
-        blockType: 'quoteSlider';
+        blockType: 'twoColumn';
       }
     | {
-        variant: 'cream' | 'warm' | 'dark';
-        eyebrow?: string | null;
-        title?: string | null;
-        subtitle?: string | null;
-        cards?:
-          | {
-              icon: string;
-              tag?: string | null;
-              title: string;
-              desc: string;
-              id?: string | null;
-            }[]
+        background: 'cream' | 'warm' | 'dark' | 'solidDark';
+        padding: 'none' | 'small' | 'normal';
+        leftColumn?:
+          | (
+              | {
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  primaryCtaText?: string | null;
+                  primaryCtaLink?: string | null;
+                  secondaryCtaText?: string | null;
+                  secondaryCtaLink?: string | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'hero';
+                }
+              | {
+                  items: {
+                    icon: 'Quote' | 'Award' | 'TrendingUp' | 'Users';
+                    tag: string;
+                    title: string;
+                    desc: string;
+                    id?: string | null;
+                  }[];
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'quoteSlider';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  cards?:
+                    | {
+                        icon: string;
+                        tag?: string | null;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'services';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  image?: (number | null) | Media;
+                  floatingCardTitle?: string | null;
+                  floatingCardValue?: string | null;
+                  bullets?:
+                    | {
+                        text: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaText?: string | null;
+                  ctaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'about';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  steps?:
+                    | {
+                        number: string;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  bottomStripTitle?: string | null;
+                  bottomStripDesc?: string | null;
+                  bottomStripCtaText?: string | null;
+                  bottomStripCtaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'methodology';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  testimonials?:
+                    | {
+                        quote: string;
+                        authorName: string;
+                        authorTitle: string;
+                        authorImage?: (number | null) | Media;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'testimonials';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  contactInfo?:
+                    | {
+                        icon: string;
+                        label: string;
+                        value: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'contact';
+                }
+            )[]
+          | null;
+        middleColumn?:
+          | (
+              | {
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  primaryCtaText?: string | null;
+                  primaryCtaLink?: string | null;
+                  secondaryCtaText?: string | null;
+                  secondaryCtaLink?: string | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'hero';
+                }
+              | {
+                  items: {
+                    icon: 'Quote' | 'Award' | 'TrendingUp' | 'Users';
+                    tag: string;
+                    title: string;
+                    desc: string;
+                    id?: string | null;
+                  }[];
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'quoteSlider';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  cards?:
+                    | {
+                        icon: string;
+                        tag?: string | null;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'services';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  image?: (number | null) | Media;
+                  floatingCardTitle?: string | null;
+                  floatingCardValue?: string | null;
+                  bullets?:
+                    | {
+                        text: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaText?: string | null;
+                  ctaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'about';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  steps?:
+                    | {
+                        number: string;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  bottomStripTitle?: string | null;
+                  bottomStripDesc?: string | null;
+                  bottomStripCtaText?: string | null;
+                  bottomStripCtaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'methodology';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  testimonials?:
+                    | {
+                        quote: string;
+                        authorName: string;
+                        authorTitle: string;
+                        authorImage?: (number | null) | Media;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'testimonials';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  contactInfo?:
+                    | {
+                        icon: string;
+                        label: string;
+                        value: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'contact';
+                }
+            )[]
+          | null;
+        rightColumn?:
+          | (
+              | {
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  primaryCtaText?: string | null;
+                  primaryCtaLink?: string | null;
+                  secondaryCtaText?: string | null;
+                  secondaryCtaLink?: string | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'hero';
+                }
+              | {
+                  items: {
+                    icon: 'Quote' | 'Award' | 'TrendingUp' | 'Users';
+                    tag: string;
+                    title: string;
+                    desc: string;
+                    id?: string | null;
+                  }[];
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'quoteSlider';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  subtitle?: string | null;
+                  cards?:
+                    | {
+                        icon: string;
+                        tag?: string | null;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'services';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  image?: (number | null) | Media;
+                  floatingCardTitle?: string | null;
+                  floatingCardValue?: string | null;
+                  bullets?:
+                    | {
+                        text: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaText?: string | null;
+                  ctaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'about';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  steps?:
+                    | {
+                        number: string;
+                        title: string;
+                        desc: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  bottomStripTitle?: string | null;
+                  bottomStripDesc?: string | null;
+                  bottomStripCtaText?: string | null;
+                  bottomStripCtaLink?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'methodology';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  testimonials?:
+                    | {
+                        quote: string;
+                        authorName: string;
+                        authorTitle: string;
+                        authorImage?: (number | null) | Media;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  stats?:
+                    | {
+                        value: string;
+                        label: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'testimonials';
+                }
+              | {
+                  variant: 'cream' | 'warm' | 'dark';
+                  eyebrow?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  contactInfo?:
+                    | {
+                        icon: string;
+                        label: string;
+                        value: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'contact';
+                }
+            )[]
           | null;
         id?: string | null;
         blockName?: string | null;
-        blockType: 'services';
-      }
-    | {
-        variant: 'cream' | 'warm' | 'dark';
-        eyebrow?: string | null;
-        title?: string | null;
-        description?: string | null;
-        image?: (number | null) | Media;
-        floatingCardTitle?: string | null;
-        floatingCardValue?: string | null;
-        bullets?:
-          | {
-              text: string;
-              id?: string | null;
-            }[]
-          | null;
-        ctaText?: string | null;
-        ctaLink?: string | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'about';
-      }
-    | {
-        variant: 'cream' | 'warm' | 'dark';
-        eyebrow?: string | null;
-        title?: string | null;
-        steps?:
-          | {
-              number: string;
-              title: string;
-              desc: string;
-              id?: string | null;
-            }[]
-          | null;
-        bottomStripTitle?: string | null;
-        bottomStripDesc?: string | null;
-        bottomStripCtaText?: string | null;
-        bottomStripCtaLink?: string | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'methodology';
-      }
-    | {
-        variant: 'cream' | 'warm' | 'dark';
-        eyebrow?: string | null;
-        title?: string | null;
-        testimonials?:
-          | {
-              quote: string;
-              authorName: string;
-              authorTitle: string;
-              authorImage?: (number | null) | Media;
-              id?: string | null;
-            }[]
-          | null;
-        stats?:
-          | {
-              value: string;
-              label: string;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'testimonials';
-      }
-    | {
-        variant: 'cream' | 'warm' | 'dark';
-        eyebrow?: string | null;
-        title?: string | null;
-        description?: string | null;
-        contactInfo?:
-          | {
-              icon: string;
-              label: string;
-              value: string;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'contact';
+        blockType: 'threeColumn';
       }
   )[];
   updatedAt: string;
@@ -440,141 +1136,885 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
-        hero?:
+        oneColumn?:
           | T
           | {
-              eyebrow?: T;
-              title?: T;
-              subtitle?: T;
-              primaryCtaText?: T;
-              primaryCtaLink?: T;
-              secondaryCtaText?: T;
-              secondaryCtaLink?: T;
-              stats?:
+              background?: T;
+              padding?: T;
+              column?:
                 | T
                 | {
-                    value?: T;
-                    label?: T;
-                    id?: T;
+                    hero?:
+                      | T
+                      | {
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          primaryCtaText?: T;
+                          primaryCtaLink?: T;
+                          secondaryCtaText?: T;
+                          secondaryCtaLink?: T;
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    quoteSlider?:
+                      | T
+                      | {
+                          items?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    services?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          cards?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    about?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          image?: T;
+                          floatingCardTitle?: T;
+                          floatingCardValue?: T;
+                          bullets?:
+                            | T
+                            | {
+                                text?: T;
+                                id?: T;
+                              };
+                          ctaText?: T;
+                          ctaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    methodology?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          steps?:
+                            | T
+                            | {
+                                number?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          bottomStripTitle?: T;
+                          bottomStripDesc?: T;
+                          bottomStripCtaText?: T;
+                          bottomStripCtaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonials?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          testimonials?:
+                            | T
+                            | {
+                                quote?: T;
+                                authorName?: T;
+                                authorTitle?: T;
+                                authorImage?: T;
+                                id?: T;
+                              };
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    contact?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          contactInfo?:
+                            | T
+                            | {
+                                icon?: T;
+                                label?: T;
+                                value?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
                   };
               id?: T;
               blockName?: T;
             };
-        quoteSlider?:
+        twoColumn?:
           | T
           | {
-              items?:
+              background?: T;
+              padding?: T;
+              ratio?: T;
+              leftColumn?:
                 | T
                 | {
-                    icon?: T;
-                    tag?: T;
-                    title?: T;
-                    desc?: T;
-                    id?: T;
+                    hero?:
+                      | T
+                      | {
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          primaryCtaText?: T;
+                          primaryCtaLink?: T;
+                          secondaryCtaText?: T;
+                          secondaryCtaLink?: T;
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    quoteSlider?:
+                      | T
+                      | {
+                          items?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    services?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          cards?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    about?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          image?: T;
+                          floatingCardTitle?: T;
+                          floatingCardValue?: T;
+                          bullets?:
+                            | T
+                            | {
+                                text?: T;
+                                id?: T;
+                              };
+                          ctaText?: T;
+                          ctaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    methodology?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          steps?:
+                            | T
+                            | {
+                                number?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          bottomStripTitle?: T;
+                          bottomStripDesc?: T;
+                          bottomStripCtaText?: T;
+                          bottomStripCtaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonials?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          testimonials?:
+                            | T
+                            | {
+                                quote?: T;
+                                authorName?: T;
+                                authorTitle?: T;
+                                authorImage?: T;
+                                id?: T;
+                              };
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    contact?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          contactInfo?:
+                            | T
+                            | {
+                                icon?: T;
+                                label?: T;
+                                value?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              rightColumn?:
+                | T
+                | {
+                    hero?:
+                      | T
+                      | {
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          primaryCtaText?: T;
+                          primaryCtaLink?: T;
+                          secondaryCtaText?: T;
+                          secondaryCtaLink?: T;
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    quoteSlider?:
+                      | T
+                      | {
+                          items?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    services?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          cards?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    about?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          image?: T;
+                          floatingCardTitle?: T;
+                          floatingCardValue?: T;
+                          bullets?:
+                            | T
+                            | {
+                                text?: T;
+                                id?: T;
+                              };
+                          ctaText?: T;
+                          ctaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    methodology?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          steps?:
+                            | T
+                            | {
+                                number?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          bottomStripTitle?: T;
+                          bottomStripDesc?: T;
+                          bottomStripCtaText?: T;
+                          bottomStripCtaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonials?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          testimonials?:
+                            | T
+                            | {
+                                quote?: T;
+                                authorName?: T;
+                                authorTitle?: T;
+                                authorImage?: T;
+                                id?: T;
+                              };
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    contact?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          contactInfo?:
+                            | T
+                            | {
+                                icon?: T;
+                                label?: T;
+                                value?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
                   };
               id?: T;
               blockName?: T;
             };
-        services?:
+        threeColumn?:
           | T
           | {
-              variant?: T;
-              eyebrow?: T;
-              title?: T;
-              subtitle?: T;
-              cards?:
+              background?: T;
+              padding?: T;
+              leftColumn?:
                 | T
                 | {
-                    icon?: T;
-                    tag?: T;
-                    title?: T;
-                    desc?: T;
-                    id?: T;
+                    hero?:
+                      | T
+                      | {
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          primaryCtaText?: T;
+                          primaryCtaLink?: T;
+                          secondaryCtaText?: T;
+                          secondaryCtaLink?: T;
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    quoteSlider?:
+                      | T
+                      | {
+                          items?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    services?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          cards?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    about?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          image?: T;
+                          floatingCardTitle?: T;
+                          floatingCardValue?: T;
+                          bullets?:
+                            | T
+                            | {
+                                text?: T;
+                                id?: T;
+                              };
+                          ctaText?: T;
+                          ctaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    methodology?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          steps?:
+                            | T
+                            | {
+                                number?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          bottomStripTitle?: T;
+                          bottomStripDesc?: T;
+                          bottomStripCtaText?: T;
+                          bottomStripCtaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonials?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          testimonials?:
+                            | T
+                            | {
+                                quote?: T;
+                                authorName?: T;
+                                authorTitle?: T;
+                                authorImage?: T;
+                                id?: T;
+                              };
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    contact?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          contactInfo?:
+                            | T
+                            | {
+                                icon?: T;
+                                label?: T;
+                                value?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
                   };
-              id?: T;
-              blockName?: T;
-            };
-        about?:
-          | T
-          | {
-              variant?: T;
-              eyebrow?: T;
-              title?: T;
-              description?: T;
-              image?: T;
-              floatingCardTitle?: T;
-              floatingCardValue?: T;
-              bullets?:
+              middleColumn?:
                 | T
                 | {
-                    text?: T;
-                    id?: T;
+                    hero?:
+                      | T
+                      | {
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          primaryCtaText?: T;
+                          primaryCtaLink?: T;
+                          secondaryCtaText?: T;
+                          secondaryCtaLink?: T;
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    quoteSlider?:
+                      | T
+                      | {
+                          items?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    services?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          cards?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    about?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          image?: T;
+                          floatingCardTitle?: T;
+                          floatingCardValue?: T;
+                          bullets?:
+                            | T
+                            | {
+                                text?: T;
+                                id?: T;
+                              };
+                          ctaText?: T;
+                          ctaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    methodology?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          steps?:
+                            | T
+                            | {
+                                number?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          bottomStripTitle?: T;
+                          bottomStripDesc?: T;
+                          bottomStripCtaText?: T;
+                          bottomStripCtaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonials?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          testimonials?:
+                            | T
+                            | {
+                                quote?: T;
+                                authorName?: T;
+                                authorTitle?: T;
+                                authorImage?: T;
+                                id?: T;
+                              };
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    contact?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          contactInfo?:
+                            | T
+                            | {
+                                icon?: T;
+                                label?: T;
+                                value?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
                   };
-              ctaText?: T;
-              ctaLink?: T;
-              id?: T;
-              blockName?: T;
-            };
-        methodology?:
-          | T
-          | {
-              variant?: T;
-              eyebrow?: T;
-              title?: T;
-              steps?:
+              rightColumn?:
                 | T
                 | {
-                    number?: T;
-                    title?: T;
-                    desc?: T;
-                    id?: T;
-                  };
-              bottomStripTitle?: T;
-              bottomStripDesc?: T;
-              bottomStripCtaText?: T;
-              bottomStripCtaLink?: T;
-              id?: T;
-              blockName?: T;
-            };
-        testimonials?:
-          | T
-          | {
-              variant?: T;
-              eyebrow?: T;
-              title?: T;
-              testimonials?:
-                | T
-                | {
-                    quote?: T;
-                    authorName?: T;
-                    authorTitle?: T;
-                    authorImage?: T;
-                    id?: T;
-                  };
-              stats?:
-                | T
-                | {
-                    value?: T;
-                    label?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        contact?:
-          | T
-          | {
-              variant?: T;
-              eyebrow?: T;
-              title?: T;
-              description?: T;
-              contactInfo?:
-                | T
-                | {
-                    icon?: T;
-                    label?: T;
-                    value?: T;
-                    id?: T;
+                    hero?:
+                      | T
+                      | {
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          primaryCtaText?: T;
+                          primaryCtaLink?: T;
+                          secondaryCtaText?: T;
+                          secondaryCtaLink?: T;
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    quoteSlider?:
+                      | T
+                      | {
+                          items?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    services?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          subtitle?: T;
+                          cards?:
+                            | T
+                            | {
+                                icon?: T;
+                                tag?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    about?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          image?: T;
+                          floatingCardTitle?: T;
+                          floatingCardValue?: T;
+                          bullets?:
+                            | T
+                            | {
+                                text?: T;
+                                id?: T;
+                              };
+                          ctaText?: T;
+                          ctaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    methodology?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          steps?:
+                            | T
+                            | {
+                                number?: T;
+                                title?: T;
+                                desc?: T;
+                                id?: T;
+                              };
+                          bottomStripTitle?: T;
+                          bottomStripDesc?: T;
+                          bottomStripCtaText?: T;
+                          bottomStripCtaLink?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonials?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          testimonials?:
+                            | T
+                            | {
+                                quote?: T;
+                                authorName?: T;
+                                authorTitle?: T;
+                                authorImage?: T;
+                                id?: T;
+                              };
+                          stats?:
+                            | T
+                            | {
+                                value?: T;
+                                label?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    contact?:
+                      | T
+                      | {
+                          variant?: T;
+                          eyebrow?: T;
+                          title?: T;
+                          description?: T;
+                          contactInfo?:
+                            | T
+                            | {
+                                icon?: T;
+                                label?: T;
+                                value?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
                   };
               id?: T;
               blockName?: T;

@@ -1,11 +1,8 @@
 import { CollectionConfig } from 'payload';
-import { HeroBlock } from '../blocks/HeroBlock';
-import { QuoteSliderBlock } from '../blocks/QuoteSliderBlock';
-import { ServicesBlock } from '../blocks/ServicesBlock';
-import { AboutBlock } from '../blocks/AboutBlock';
-import { MethodologyBlock } from '../blocks/MethodologyBlock';
-import { TestimonialsBlock } from '../blocks/TestimonialsBlock';
-import { ContactBlock } from '../blocks/ContactBlock';
+import { OneColumnBlock } from '../blocks/OneColumnBlock';
+import { TwoColumnBlock } from '../blocks/TwoColumnBlock';
+import { ThreeColumnBlock } from '../blocks/ThreeColumnBlock';
+import { contentBlocks } from '../blocks/contentBlocks';
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -43,13 +40,9 @@ export const Pages: CollectionConfig = {
       name: 'layout',
       type: 'blocks',
       blocks: [
-        HeroBlock,
-        QuoteSliderBlock,
-        ServicesBlock,
-        AboutBlock,
-        MethodologyBlock,
-        TestimonialsBlock,
-        ContactBlock,
+        OneColumnBlock,
+        TwoColumnBlock,
+        ThreeColumnBlock,
       ],
       required: true,
     },

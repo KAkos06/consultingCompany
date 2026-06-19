@@ -98,6 +98,11 @@ const variants = {
       </>
     ),
   },
+
+  solidDark: {
+    wrapper: "bg-[#1A2A4F] text-[#FFF2EF]",
+    decor: null,
+  },
 };
 
 const Section = forwardRef(function Section(

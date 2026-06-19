@@ -8,7 +8,6 @@ import {
   Users,
 } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import Section from "@/components/Section";
 
 const defaultCards = [
   {
@@ -55,11 +54,10 @@ export default function Services({
   cards = defaultCards,
 }) {
   return (
-    <Section
-      variant={variant}
+    <div
       id="services"
-      testid="services-section"
-      className="px-6 py-28 md:py-36"
+      data-testid="services-section"
+      className="w-full"
     >
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -125,6 +123,6 @@ export default function Services({
           })}
         </div>
       </div>
-    </Section>
+    </div>
   );
 }

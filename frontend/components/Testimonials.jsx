@@ -1,6 +1,5 @@
 import { Quote } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import Section from "@/components/Section";
 
 const defaultTestimonials = [
   {
@@ -32,11 +31,10 @@ export default function Testimonials({
   stats = defaultStats,
 }) {
   return (
-    <Section
-      variant={variant}
-      id="cases"
-      testid="testimonials-section"
-      className="px-6 py-28 md:py-36"
+    <div
+      id="testimonials"
+      data-testid="testimonials-section"
+      className="w-full"
     >
       <div className="relative mx-auto max-w-6xl">
         <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -109,6 +107,6 @@ export default function Testimonials({
           ))}
         </div>
       </div>
-    </Section>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
+import { ArrowRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import Section from "@/components/Section";
 
 const defaultSteps = [
   {
@@ -33,11 +33,10 @@ export default function Methodology({
   bottomStripCtaLink = "#contact",
 }) {
   return (
-    <Section
-      variant={variant}
+    <div
       id="methodology"
-      testid="methodology-section"
-      className="px-6 py-28 md:py-36"
+      data-testid="methodology-section"
+      className="w-full"
     >
       <div className="mx-auto max-w-6xl">
         <Reveal className="mx-auto mb-20 max-w-2xl text-center">
@@ -111,6 +110,6 @@ export default function Methodology({
           </a>
         </Reveal>
       </div>
-    </Section>
+    </div>
   );
 }

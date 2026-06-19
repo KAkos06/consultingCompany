@@ -17,11 +17,10 @@ export default function Hero({
   stats = defaultStats,
 }) {
   return (
-    <section
+    <div
       data-testid="hero-section"
-      className="relative hero-bg overflow-hidden"
+      className="relative w-full"
     >
-      <div className="grain" />
 
       <div className="absolute top-32 -left-20 h-72 w-72 rounded-full bg-[#F7A5A5]/20 blur-3xl" />
       <div className="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-[#FFDBB6]/15 blur-3xl" />
@@ -89,6 +88,6 @@ export default function Hero({
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import Section from "@/components/Section";
 
 export default function Contact({
   variant = "cream",
@@ -28,11 +27,10 @@ export default function Contact({
   };
 
   return (
-    <Section
-      variant={variant}
+    <div
       id="contact"
-      testid="contact-section"
-      className="px-6 py-28 md:py-36"
+      data-testid="contact-section"
+      className="w-full"
     >
       <div className="mx-auto max-w-6xl">
         <div className="grid items-stretch gap-10 lg:grid-cols-5">
@@ -167,6 +165,6 @@ export default function Contact({
           </Reveal>
         </div>
       </div>
-    </Section>
+    </div>
   );
 }
