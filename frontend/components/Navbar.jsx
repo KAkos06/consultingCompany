@@ -2,8 +2,13 @@ import { fetchGlobal } from "@/lib/payload";
 import NavbarClient from "./NavbarClient";
 
 export default async function Navbar() {
-  const mainMenu = await fetchGlobal('main-menu');
+  const [mainMenu, siteSettings] = await Promise.all([
+    fetchGlobal('main-menu'),
+    fetchGlobal('site-settings')
+  ]);
   
+  const logoUrl = siteSettings?.logo?.url || '/default-logo.svg';
+
   // Format the CMS data to match what NavbarClient expects
   const menuItems = mainMenu?.menuItems || [];
   const ctaButton = mainMenu?.ctaButton || {
@@ -37,6 +42,7 @@ export default async function Navbar() {
   return (
     <NavbarClient 
       items={formattedItems} 
+      logoUrl={logoUrl}
       ctaButton={{
         label: ctaButton.label,
         to: ctaButton.link?.slug ? `/${ctaButton.link.slug}` : '#',

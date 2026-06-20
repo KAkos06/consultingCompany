@@ -13,9 +13,6 @@ const LogoutIcon = () => (
   </svg>
 )
 
-const PUBLIC_LOGO = "https://customer-assets.emergentagent.com/job_exec-insights-26/artifacts/civu5y0j_ChatGPT_Image_2026._j%C3%BAn._18._13_58_58-removebg-preview.png";
-
-
 // Egyszerű Dashboard ikon
 const DashboardIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
@@ -23,7 +20,7 @@ const DashboardIcon = () => (
   </svg>
 )
 
-export const NavClient = ({ user }: { user: any }) => {
+export const NavClient = ({ user, logoUrl }: { user: any, logoUrl: string }) => {
   const pathname = usePathname()
   
   // Get current locale from cookie or default to hu
@@ -50,7 +47,7 @@ export const NavClient = ({ user }: { user: any }) => {
       <div className={classes.header}>
         <div className={classes.headerContent}>
           <div className={classes.logoIcon}>
-            <img src={PUBLIC_LOGO} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(0) invert(100%)' }} />
+            <img src={logoUrl} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(0) invert(100%)' }} />
           </div>
           <div>
             <h2 className={classes.logoTitle}>Executive Insights</h2>
@@ -136,9 +133,11 @@ export const NavClient = ({ user }: { user: any }) => {
       <div className={classes.footer}>
         <div className={classes.footerContent}>
           <div className={classes.userInfo}>
-            {user?.avatar?.url && (
-              <img src={user.avatar.url} alt="Avatar" className={classes.userAvatar} />
-            )}
+            <img 
+              src={user?.avatar?.url || "/default-avatar.svg"} 
+              alt="Avatar" 
+              className={classes.userAvatar} 
+            />
             <div className={classes.footerText}>
               <p className={classes.userEmail}>
                 {user?.firstName || user?.lastName 

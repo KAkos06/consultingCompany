@@ -58,6 +58,9 @@ export const TestimonialsBlock: Block = {
           type: 'upload',
           relationTo: 'media',
           label: 'Author Avatar',
+          filterOptions: {
+            'folder.name': { equals: 'content' }
+          }
         },
       ],
     },

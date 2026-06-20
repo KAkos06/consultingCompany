@@ -20,4 +20,5 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: true,
+  folders: true,
 }

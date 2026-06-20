@@ -99,7 +99,7 @@ const MobileAccordion = ({ label, items, testid }) => {
   );
 };
 
-export default function NavbarClient({ items = [], ctaButton }) {
+export default function NavbarClient({ items = [], ctaButton, logoUrl }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -134,7 +134,7 @@ export default function NavbarClient({ items = [], ctaButton }) {
             data-testid="nav-logo"
             className="flex shrink-0 items-center gap-2.5"
           >
-            <Logo size={44} />
+            <Logo size={44} logoUrl={logoUrl} />
             <span className="whitespace-nowrap font-[Outfit] text-base font-bold tracking-tight text-[#1A2A4F] sm:text-lg">
               Executive Insights
             </span>
@@ -216,7 +216,7 @@ export default function NavbarClient({ items = [], ctaButton }) {
             className="flex items-center gap-2.5"
             onClick={() => setMobileOpen(false)}
           >
-            <Logo size={42} />
+            <Logo size={42} logoUrl={logoUrl} />
             <span className="font-[Outfit] text-lg font-bold tracking-tight text-[#1A2A4F]">
               Executive Insights
             </span>

@@ -40,6 +40,9 @@ export const AboutBlock: Block = {
       relationTo: 'media',
       label: 'Side Image',
       required: false,
+      filterOptions: {
+        'folder.name': { equals: 'content' }
+      }
     },
     {
       name: 'floatingCardTitle',

@@ -31,7 +31,7 @@ export const CustomLogo = async () => {
         <img src={logoUrl} alt={siteName} className={classes.logoImageNode} />
       ) : (
         <div className={classes.logoImage}>
-          <span className={classes.logoText}>{siteName.charAt(0)}</span>
+          <img src="/default-logo.svg" alt={siteName} className={classes.logoImageNode} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
         </div>
       )}
       <div className={classes.textWrapper}>

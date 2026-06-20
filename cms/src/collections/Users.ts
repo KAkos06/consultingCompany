@@ -26,6 +26,11 @@ export const Users: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       label: 'Profilkép',
+      filterOptions: {
+        'folder.name': {
+          equals: 'avatars',
+        },
+      },
     },
   ],
   versions: false,

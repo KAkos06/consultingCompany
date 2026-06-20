@@ -11,5 +11,16 @@ export const CustomNav = async () => {
   const reqHeaders = await headers()
   const { user } = await payload.auth({ headers: reqHeaders })
 
-  return <NavClient user={user} />
+  let logoUrl = '/default-logo.svg'
+  try {
+    const siteSettings = await payload.findGlobal({
+      slug: 'site-settings',
+      depth: 1,
+    })
+    if (siteSettings?.logo && typeof siteSettings.logo === 'object' && siteSettings.logo.url) {
+      logoUrl = siteSettings.logo.url
+    }
+  } catch (err) {}
+
+  return <NavClient user={user} logoUrl={logoUrl} />
 }

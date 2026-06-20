@@ -2,10 +2,7 @@
 // The PNG is recolored to a solid cream tone via CSS filter so it reads
 // crisply on the navy badge; the badge itself gets a subtle peach inner
 // ring + coral glow for presence at small sizes.
-const LOGO_URL =
-  "https://customer-assets.emergentagent.com/job_exec-insights-26/artifacts/civu5y0j_ChatGPT_Image_2026._j%C3%BAn._18._13_58_58-removebg-preview.png";
-
-export default function Logo({ size = 44, variant = "light", className = "" }) {
+export default function Logo({ size = 44, variant = "light", className = "", logoUrl = "/default-logo.svg" }) {
   const isDark = variant === "dark";
 
   // Badge background follows the brand-name text color in each context.
@@ -42,7 +39,7 @@ export default function Logo({ size = 44, variant = "light", className = "" }) {
         style={{ boxShadow: `inset 0 0 0 1px ${ring}` }}
       />
       <img
-        src={LOGO_URL}
+        src={logoUrl}
         alt="Executive Insights"
         className="w-full h-full object-contain relative"
         style={{ filter: imgFilter }}
