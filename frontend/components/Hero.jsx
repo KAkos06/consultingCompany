@@ -15,6 +15,7 @@ export default function Hero({
   secondaryCtaText = "Hogyan dolgozunk?",
   secondaryCtaLink = "#methodology",
   stats = defaultStats,
+  image,
 }) {
   return (
     <div
@@ -25,29 +26,28 @@ export default function Hero({
       <div className="absolute top-32 -left-20 h-72 w-72 rounded-full bg-[#F7A5A5]/20 blur-3xl" />
       <div className="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-[#FFDBB6]/15 blur-3xl" />
 
-      <div className="relative mx-auto max-w-6xl px-6 pb-28 pt-40 md:pb-36 md:pt-48">
-        <div className="max-w-3xl">
-          <div
-            data-testid="hero-eyebrow"
-            className="fade-up mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-[#FFF2EF] backdrop-blur"
-          >
-            <Star size={12} className="text-[#F7A5A5]" fill="#F7A5A5" />
-            {eyebrow}
-          </div>
+      <div className="relative mx-auto max-w-7xl px-6 pb-28 pt-40 md:pb-36 md:pt-48">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="max-w-3xl">
+            <div
+              data-testid="hero-eyebrow"
+              className="fade-up mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-[#FFF2EF] backdrop-blur"
+            >
+              <Star size={12} className="text-[#F7A5A5]" fill="#F7A5A5" />
+              {eyebrow}
+            </div>
 
-          <h1
-            data-testid="hero-title"
-            className="fade-up delay-1 font-[Outfit] text-5xl font-bold leading-[1.05] tracking-tight text-[#FFF2EF] md:text-7xl"
-          >
-            {title}
-          </h1>
+            <h1
+              data-testid="hero-title"
+              className="fade-up delay-1 font-[Outfit] text-5xl font-bold leading-[1.05] tracking-tight text-[#FFF2EF] md:text-7xl"
+              dangerouslySetInnerHTML={{ __html: title || "" }}
+            />
 
-          <p
-            data-testid="hero-subtitle"
-            className="fade-up delay-2 mt-8 max-w-2xl text-lg leading-relaxed text-[#FFF2EF]/75 md:text-xl"
-          >
-            {subtitle}
-          </p>
+            <p
+              data-testid="hero-subtitle"
+              className="fade-up delay-2 mt-8 max-w-2xl text-lg leading-relaxed text-[#FFF2EF]/75 md:text-xl"
+              dangerouslySetInnerHTML={{ __html: subtitle || "" }}
+            />
 
           <div className="fade-up delay-3 mt-10 flex flex-wrap gap-4">
             <a
@@ -75,7 +75,7 @@ export default function Hero({
             data-testid="hero-stats"
             className="fade-up delay-4 mt-16 grid max-w-2xl grid-cols-3 gap-6"
           >
-            {stats.map((stat, i) => (
+            {stats?.map((stat, i) => (
               <div key={i} className="border-l border-white/15 pl-5">
                 <div className="font-[Outfit] text-3xl font-bold text-[#FFF2EF] md:text-4xl">
                   {stat.n}
@@ -86,6 +86,17 @@ export default function Hero({
               </div>
             ))}
           </div>
+          </div>
+
+          {image && image.url && (
+            <div className="flex justify-center items-center h-full fade-up delay-2">
+              <img
+                src={image.url}
+                alt={image.alt || "Hero kép"}
+                className="max-h-[500px] w-auto object-contain drop-shadow-2xl"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

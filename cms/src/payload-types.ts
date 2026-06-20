@@ -229,6 +229,7 @@ export interface Page {
                   primaryCtaLink?: string | null;
                   secondaryCtaText?: string | null;
                   secondaryCtaLink?: string | null;
+                  image?: (number | null) | Media;
                   stats?:
                     | {
                         value: string;
@@ -364,25 +365,6 @@ export interface Page {
         leftColumn?:
           | (
               | {
-                  eyebrow?: string | null;
-                  title?: string | null;
-                  subtitle?: string | null;
-                  primaryCtaText?: string | null;
-                  primaryCtaLink?: string | null;
-                  secondaryCtaText?: string | null;
-                  secondaryCtaLink?: string | null;
-                  stats?:
-                    | {
-                        value: string;
-                        label: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'hero';
-                }
-              | {
                   items: {
                     icon?: string | null;
                     tag: string;
@@ -497,25 +479,6 @@ export interface Page {
           | null;
         rightColumn?:
           | (
-              | {
-                  eyebrow?: string | null;
-                  title?: string | null;
-                  subtitle?: string | null;
-                  primaryCtaText?: string | null;
-                  primaryCtaLink?: string | null;
-                  secondaryCtaText?: string | null;
-                  secondaryCtaLink?: string | null;
-                  stats?:
-                    | {
-                        value: string;
-                        label: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'hero';
-                }
               | {
                   items: {
                     icon?: string | null;
@@ -639,25 +602,6 @@ export interface Page {
         leftColumn?:
           | (
               | {
-                  eyebrow?: string | null;
-                  title?: string | null;
-                  subtitle?: string | null;
-                  primaryCtaText?: string | null;
-                  primaryCtaLink?: string | null;
-                  secondaryCtaText?: string | null;
-                  secondaryCtaLink?: string | null;
-                  stats?:
-                    | {
-                        value: string;
-                        label: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'hero';
-                }
-              | {
                   items: {
                     icon?: string | null;
                     tag: string;
@@ -773,25 +717,6 @@ export interface Page {
         middleColumn?:
           | (
               | {
-                  eyebrow?: string | null;
-                  title?: string | null;
-                  subtitle?: string | null;
-                  primaryCtaText?: string | null;
-                  primaryCtaLink?: string | null;
-                  secondaryCtaText?: string | null;
-                  secondaryCtaLink?: string | null;
-                  stats?:
-                    | {
-                        value: string;
-                        label: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'hero';
-                }
-              | {
                   items: {
                     icon?: string | null;
                     tag: string;
@@ -906,25 +831,6 @@ export interface Page {
           | null;
         rightColumn?:
           | (
-              | {
-                  eyebrow?: string | null;
-                  title?: string | null;
-                  subtitle?: string | null;
-                  primaryCtaText?: string | null;
-                  primaryCtaLink?: string | null;
-                  secondaryCtaText?: string | null;
-                  secondaryCtaLink?: string | null;
-                  stats?:
-                    | {
-                        value: string;
-                        label: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'hero';
-                }
               | {
                   items: {
                     icon?: string | null;
@@ -1200,6 +1106,7 @@ export interface PagesSelect<T extends boolean = true> {
                           primaryCtaLink?: T;
                           secondaryCtaText?: T;
                           secondaryCtaLink?: T;
+                          image?: T;
                           stats?:
                             | T
                             | {
@@ -1342,26 +1249,6 @@ export interface PagesSelect<T extends boolean = true> {
               leftColumn?:
                 | T
                 | {
-                    hero?:
-                      | T
-                      | {
-                          eyebrow?: T;
-                          title?: T;
-                          subtitle?: T;
-                          primaryCtaText?: T;
-                          primaryCtaLink?: T;
-                          secondaryCtaText?: T;
-                          secondaryCtaLink?: T;
-                          stats?:
-                            | T
-                            | {
-                                value?: T;
-                                label?: T;
-                                id?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
                     quoteSlider?:
                       | T
                       | {
@@ -1485,26 +1372,6 @@ export interface PagesSelect<T extends boolean = true> {
               rightColumn?:
                 | T
                 | {
-                    hero?:
-                      | T
-                      | {
-                          eyebrow?: T;
-                          title?: T;
-                          subtitle?: T;
-                          primaryCtaText?: T;
-                          primaryCtaLink?: T;
-                          secondaryCtaText?: T;
-                          secondaryCtaLink?: T;
-                          stats?:
-                            | T
-                            | {
-                                value?: T;
-                                label?: T;
-                                id?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
                     quoteSlider?:
                       | T
                       | {
@@ -1636,26 +1503,6 @@ export interface PagesSelect<T extends boolean = true> {
               leftColumn?:
                 | T
                 | {
-                    hero?:
-                      | T
-                      | {
-                          eyebrow?: T;
-                          title?: T;
-                          subtitle?: T;
-                          primaryCtaText?: T;
-                          primaryCtaLink?: T;
-                          secondaryCtaText?: T;
-                          secondaryCtaLink?: T;
-                          stats?:
-                            | T
-                            | {
-                                value?: T;
-                                label?: T;
-                                id?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
                     quoteSlider?:
                       | T
                       | {
@@ -1779,26 +1626,6 @@ export interface PagesSelect<T extends boolean = true> {
               middleColumn?:
                 | T
                 | {
-                    hero?:
-                      | T
-                      | {
-                          eyebrow?: T;
-                          title?: T;
-                          subtitle?: T;
-                          primaryCtaText?: T;
-                          primaryCtaLink?: T;
-                          secondaryCtaText?: T;
-                          secondaryCtaLink?: T;
-                          stats?:
-                            | T
-                            | {
-                                value?: T;
-                                label?: T;
-                                id?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
                     quoteSlider?:
                       | T
                       | {
@@ -1922,26 +1749,6 @@ export interface PagesSelect<T extends boolean = true> {
               rightColumn?:
                 | T
                 | {
-                    hero?:
-                      | T
-                      | {
-                          eyebrow?: T;
-                          title?: T;
-                          subtitle?: T;
-                          primaryCtaText?: T;
-                          primaryCtaLink?: T;
-                          secondaryCtaText?: T;
-                          secondaryCtaLink?: T;
-                          stats?:
-                            | T
-                            | {
-                                value?: T;
-                                label?: T;
-                                id?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
                     quoteSlider?:
                       | T
                       | {

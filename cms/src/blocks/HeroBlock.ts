@@ -53,6 +53,13 @@ export const HeroBlock: Block = {
       defaultValue: '#methodology',
     },
     {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Hero Image (Right side)',
+      required: false,
+    },
+    {
       name: 'stats',
       type: 'array',
       label: 'Statistics',

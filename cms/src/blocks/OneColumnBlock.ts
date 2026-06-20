@@ -1,5 +1,6 @@
 import { Block } from 'payload';
 import { contentBlocks } from './contentBlocks';
+import { HeroBlock } from './HeroBlock';
 import { thumbnails } from './thumbnails';
 
 export const OneColumnBlock: Block = {
@@ -44,7 +45,7 @@ export const OneColumnBlock: Block = {
         singular: 'Layout',
         plural: 'Layoutok',
       },
-      blocks: contentBlocks,
+      blocks: [HeroBlock, ...contentBlocks],
     },
   ],
 };

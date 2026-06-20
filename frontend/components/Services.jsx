@@ -52,8 +52,25 @@ const defaultCards = [
 export default function Services({
   variant = "cream",
   eyebrow = "01 - Szolgáltatások",
+  title,
+  subtitle,
   cards = defaultCards,
 }) {
+  const isDark = variant === "dark" || variant === "solidDark";
+  const isWarm = variant === "warm";
+
+  const cardBgClasses = isDark
+    ? "bg-white/5 hover:border-[#FFF2EF]/20 hover:bg-white/10"
+    : isWarm
+    ? "bg-gradient-to-br from-white to-[#FFDBB6]/30 hover:border-[#F7A5A5]/60 hover:shadow-[0_24px_48px_-12px_rgba(26,42,79,0.15)]"
+    : "bg-white hover:border-[#F7A5A5]/40 hover:shadow-[0_24px_48px_-12px_rgba(26,42,79,0.12)]";
+
+  const iconBgClasses = isDark
+    ? "bg-white/10 text-[#FFF2EF] group-hover:bg-[#F7A5A5]/80 group-hover:text-[#1A2A4F]"
+    : isWarm
+    ? "bg-[#F7A5A5]/20 text-[#1A2A4F] group-hover:bg-[#F7A5A5]/60"
+    : "bg-[#FFDBB6]/40 text-[#1A2A4F] group-hover:bg-[#F7A5A5]/50";
+
   return (
     <div
       id="services"
@@ -63,24 +80,34 @@ export default function Services({
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <Reveal className="max-w-2xl">
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
+            <span className={`text-xs font-semibold uppercase tracking-[0.25em] ${isDark ? 'text-[#FFF2EF]/50' : 'text-[#1A2A4F]/50'}`}>
               {eyebrow}
             </span>
-            <h2 className="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight text-[#1A2A4F] md:text-6xl">
-              Programok, amik
-              <br />
-              <span className="font-medium italic text-[#1A2A4F]/70">
-                a vezetődet építik.
-              </span>
-            </h2>
+            {title ? (
+              <h2 
+                className={`mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight ${isDark ? 'text-[#FFF2EF] [&_span]:!text-[#FFF2EF]/70' : 'text-[#1A2A4F] [&_span]:!text-[#1A2A4F]/70'} md:text-6xl`}
+                dangerouslySetInnerHTML={{ __html: title }}
+              />
+            ) : (
+              <h2 className={`mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight ${isDark ? 'text-[#FFF2EF]' : 'text-[#1A2A4F]'} md:text-6xl`}>
+                Programok, amik
+                <br />
+                <span className={`font-medium italic ${isDark ? 'text-[#FFF2EF]/70' : 'text-[#1A2A4F]/70'}`}>
+                  a vezetődet építik.
+                </span>
+              </h2>
+            )}
           </Reveal>
           <Reveal
             delay={1}
-            as="p"
-            className="max-w-md text-lg leading-relaxed text-[#1A2A4F]/70"
+            as="div"
+            className={`max-w-md text-lg leading-relaxed ${isDark ? 'text-[#FFF2EF]/70' : 'text-[#1A2A4F]/70'}`}
           >
-            Hat különböző formátum, egy közös cél: tisztább gondolkodás,
-            bátrabb döntés és erősebb hatás.
+            {subtitle ? (
+              <div dangerouslySetInnerHTML={{ __html: subtitle }} />
+            ) : (
+              <p>Hat különböző formátum, egy közös cél: tisztább gondolkodás, bátrabb döntés és erősebb hatás.</p>
+            )}
           </Reveal>
         </div>
 
@@ -95,23 +122,27 @@ export default function Services({
                 key={card.title}
                 delay={i}
                 data-testid={`service-card-${i}`}
-                className="group relative cursor-pointer rounded-3xl border border-transparent bg-white p-7 transition-all hover:-translate-y-1 hover:border-[#F7A5A5]/40 hover:shadow-[0_24px_48px_-12px_rgba(26,42,79,0.12)]"
+                className={`group relative cursor-pointer rounded-3xl border border-transparent p-7 transition-all hover:-translate-y-1 ${cardBgClasses}`}
               >
                 <div className="mb-6 flex items-start justify-between">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FFDBB6]/40 text-[#1A2A4F] transition-colors group-hover:bg-[#F7A5A5]/50">
+                  <div className={`flex h-14 w-14 items-center justify-center rounded-2xl transition-colors ${iconBgClasses}`}>
                     <Icon size={24} strokeWidth={2} />
                   </div>
-                  <span className="rounded-full bg-[#FFF2EF] px-3 py-1 text-xs font-medium text-[#1A2A4F]/50">
+                  <span className={`rounded-full px-3 py-1 text-xs font-medium ${
+                    isDark ? "bg-white/10 text-[#FFF2EF]/70" : "bg-[#FFF2EF] text-[#1A2A4F]/50"
+                  }`}>
                     {card.tag}
                   </span>
                 </div>
-                <h3 className="mb-3 font-[Outfit] text-2xl font-semibold text-[#1A2A4F]">
+                <h3 className={`mb-3 font-[Outfit] text-2xl font-semibold ${isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]"}`}>
                   {card.title}
                 </h3>
-                <p className="mb-6 text-sm leading-relaxed text-[#1A2A4F]/65">
+                <p className={`mb-6 text-sm leading-relaxed ${isDark ? "text-[#FFF2EF]/70" : "text-[#1A2A4F]/65"}`}>
                   {card.desc}
                 </p>
-                <div className="flex items-center gap-2 text-sm font-medium text-[#1A2A4F] transition-colors group-hover:text-[#F7A5A5]">
+                <div className={`flex items-center gap-2 text-sm font-medium transition-colors ${
+                  isDark ? "text-[#FFF2EF] group-hover:text-[#F7A5A5]" : "text-[#1A2A4F] group-hover:text-[#F7A5A5]"
+                }`}>
                   Részletek
                   <ArrowUpRight
                     size={16}

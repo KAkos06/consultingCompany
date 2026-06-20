@@ -105,7 +105,20 @@ export default function RenderBlocks({ blocks }: { blocks: any[] }) {
         // --- CONTENT BLOCKS ---
         switch (block.blockType) {
           case "hero":
-            return <Hero key={index} />;
+            return (
+              <Hero 
+                key={index} 
+                eyebrow={asText(block.eyebrow)}
+                title={block.title}
+                subtitle={block.subtitle}
+                primaryCtaText={block.primaryCtaText}
+                primaryCtaLink={block.primaryCtaLink}
+                secondaryCtaText={block.secondaryCtaText}
+                secondaryCtaLink={block.secondaryCtaLink}
+                stats={block.stats?.map((s: any) => ({ n: s.value, l: s.label }))}
+                image={block.image}
+              />
+            );
 
           case "quoteSlider":
             return (
@@ -128,6 +141,8 @@ export default function RenderBlocks({ blocks }: { blocks: any[] }) {
                 key={index} 
                 variant={block.variant}
                 eyebrow={asText(block.eyebrow)}
+                title={block.title}
+                subtitle={block.subtitle}
                 cards={Array.isArray(block.cards)
                   ? block.cards.map((card: any) => ({
                       icon: asText(card?.icon) || "Compass",
