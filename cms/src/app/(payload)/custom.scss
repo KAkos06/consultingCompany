@@ -363,3 +363,96 @@ body {
   opacity: 0.9 !important;
   transform: translateY(-1px) !important;
 }
+
+/* --- Collapsible Blocks Nesting Colors --- */
+/* Level 1 (Default) */
+.collapsible {
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--theme-border-color) !important;
+}
+
+.collapsible .collapsible__toggle-wrap {
+  background-color: var(--theme-elevation-100) !important;
+  border-bottom: 1px solid var(--theme-border-color) !important;
+  transition: background-color 0.2s ease;
+}
+
+.collapsible .collapsible__toggle-wrap:hover {
+  background-color: var(--theme-elevation-150) !important;
+}
+
+.collapsible.collapsible--collapsed .collapsible__toggle-wrap {
+  border-bottom: none !important;
+}
+
+.collapsible .collapsible__content {
+  background-color: var(--theme-elevation-50) !important;
+  border-top: none !important;
+}
+
+/* Level 2 */
+.collapsible .collapsible {
+  border: 1px solid var(--theme-border-color-highlight) !important;
+}
+
+.collapsible .collapsible .collapsible__toggle-wrap {
+  background-color: var(--theme-elevation-200) !important;
+  border-bottom: 1px solid var(--theme-border-color-highlight) !important;
+}
+
+.collapsible .collapsible .collapsible__toggle-wrap:hover {
+  background-color: #29344d !important;
+}
+
+.collapsible .collapsible.collapsible--collapsed .collapsible__toggle-wrap {
+  border-bottom: none !important;
+}
+
+.collapsible .collapsible .collapsible__content {
+  background-color: var(--theme-elevation-100) !important;
+}
+
+/* Level 3 */
+.collapsible .collapsible .collapsible {
+  border: 1px solid #3b4661 !important;
+}
+
+.collapsible .collapsible .collapsible .collapsible__toggle-wrap {
+  background-color: #2f3b56 !important;
+  border-bottom: 1px solid #3b4661 !important;
+}
+
+.collapsible .collapsible .collapsible .collapsible__toggle-wrap:hover {
+  background-color: #3b4868 !important;
+}
+
+.collapsible .collapsible .collapsible.collapsible--collapsed .collapsible__toggle-wrap {
+  border-bottom: none !important;
+}
+
+.collapsible .collapsible .collapsible .collapsible__content {
+  background-color: var(--theme-elevation-150) !important;
+}
+
+/* Level 4 */
+.collapsible .collapsible .collapsible .collapsible {
+  border: 1px solid #4a5675 !important;
+}
+
+.collapsible .collapsible .collapsible .collapsible .collapsible__toggle-wrap {
+  background-color: #3f4c6f !important;
+  border-bottom: 1px solid #4a5675 !important;
+}
+
+.collapsible .collapsible .collapsible .collapsible .collapsible__toggle-wrap:hover {
+  background-color: #4b5a82 !important;
+}
+
+.collapsible .collapsible .collapsible .collapsible.collapsible--collapsed .collapsible__toggle-wrap {
+  border-bottom: none !important;
+}
+
+.collapsible .collapsible .collapsible .collapsible .collapsible__content {
+  background-color: var(--theme-elevation-200) !important;
+}
