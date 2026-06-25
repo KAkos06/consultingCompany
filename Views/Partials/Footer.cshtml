@@ -1,0 +1,121 @@
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Extensions;
+@using Umbraco.Cms.Core.Models;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var siteRoot = Model.Root();
+    var settings = siteRoot?.Children.FirstOrDefault(x => x.ContentType.Alias == "siteSettings") ?? siteRoot?.Children.FirstOrDefault(x => x.ContentType.Alias == "settings");
+    
+    var brandName = settings?.Value<string>("logoText") ?? "Executive Insights";
+    var footerDesc = settings?.Value<string>("footerDescription") ?? "Vezetői coaching és stratégiai mentorálás C-szintű vezetőknek és vezetői csapatoknak — Budapesten és online.";
+    var compTitle = settings?.Value<string>("footerCompanyTitle") ?? "Cég";
+    var compLinks = settings?.Value<IEnumerable<Link>>("footerCompanyLinks");
+    var servTitle = settings?.Value<string>("footerServicesTitle") ?? "Szolgáltatások";
+    var servLinks = settings?.Value<IEnumerable<Link>>("footerServicesLinks");
+    
+    var newsTitle = settings?.Value<string>("footerNewsletterTitle") ?? "Iratkozz fel";
+    var newsText = settings?.Value<string>("footerNewsletterText") ?? "Havi egy mély insight a vezetésről. Spam nélkül.";
+    
+    var copyText = settings?.Value<string>("copyrightText") ?? "© 2025 Executive Insights Kft. Minden jog fenntartva.";
+    var bottomLinks = settings?.Value<IEnumerable<Link>>("footerBottomLinks");
+    
+    var linkedinUrl = settings?.Value<string>("linkedinUrl");
+    var twitterUrl = settings?.Value<string>("twitterUrl");
+    var instagramUrl = settings?.Value<string>("instagramUrl");
+}
+
+<!-- Modern Dark Navy Footer -->
+<footer class="bg-[#1A2A4F] text-[#FFF2EF] pt-16 pb-12 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-12 gap-10 pb-16 border-b border-white/10">
+      
+      <!-- Brand Column -->
+      <div class="md:col-span-5">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-full bg-[#F7A5A5] text-[#1A2A4F] flex items-center justify-center font-bold text-xl font-[Outfit]">
+            EI
+          </div>
+          <span class="font-[Outfit] font-bold text-2xl text-white">
+            @brandName
+          </span>
+        </div>
+        <p class="text-[#FFF2EF]/70 leading-relaxed max-w-sm text-base mb-6">
+          @footerDesc
+        </p>
+        <div class="flex gap-3">
+          @if(!string.IsNullOrEmpty(linkedinUrl)) {
+            <a href="@linkedinUrl" target="_blank" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center font-bold text-xs hover:bg-[#F7A5A5] hover:border-[#F7A5A5] hover:text-[#1A2A4F] transition-all">
+              IN
+            </a>
+          }
+          @if(!string.IsNullOrEmpty(twitterUrl)) {
+            <a href="@twitterUrl" target="_blank" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center font-bold text-xs hover:bg-[#F7A5A5] hover:border-[#F7A5A5] hover:text-[#1A2A4F] transition-all">
+              TW
+            </a>
+          }
+          @if(!string.IsNullOrEmpty(instagramUrl)) {
+            <a href="@instagramUrl" target="_blank" class="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center font-bold text-xs hover:bg-[#F7A5A5] hover:border-[#F7A5A5] hover:text-[#1A2A4F] transition-all">
+              IG
+            </a>
+          }
+        </div>
+      </div>
+
+      <!-- Company Column -->
+      <div class="md:col-span-2 md:col-start-6">
+        <div class="text-xs font-bold uppercase tracking-[0.2em] text-[#FFDBB6] mb-5">
+          @compTitle
+        </div>
+        <ul class="space-y-3 text-sm text-[#FFF2EF]/80">
+          @if(compLinks != null) {
+            foreach(var link in compLinks) {
+              <li><a href="@link.Url" target="@link.Target" class="hover:text-[#F7A5A5] transition-colors">@link.Name</a></li>
+            }
+          }
+        </ul>
+      </div>
+
+      <!-- Services Column -->
+      <div class="md:col-span-2">
+        <div class="text-xs font-bold uppercase tracking-[0.2em] text-[#FFDBB6] mb-5">
+          @servTitle
+        </div>
+        <ul class="space-y-3 text-sm text-[#FFF2EF]/80">
+          @if(servLinks != null) {
+            foreach(var link in servLinks) {
+              <li><a href="@link.Url" target="@link.Target" class="hover:text-[#F7A5A5] transition-colors">@link.Name</a></li>
+            }
+          }
+        </ul>
+      </div>
+
+      <!-- Newsletter Column -->
+      <div class="md:col-span-3">
+        <div class="text-xs font-bold uppercase tracking-[0.2em] text-[#FFDBB6] mb-5">
+          @newsTitle
+        </div>
+        <p class="text-sm text-[#FFF2EF]/70 mb-4">
+          @newsText
+        </p>
+        <form class="flex gap-2" onsubmit="event.preventDefault();">
+          <input type="email" placeholder="te@email.hu" class="flex-1 bg-white/5 border border-white/15 px-4 py-3 rounded-full text-sm text-[#FFF2EF] placeholder:text-[#FFF2EF]/40 focus:border-[#F7A5A5] focus:outline-none transition-colors" />
+          <button type="submit" class="w-12 h-12 shrink-0 rounded-full bg-[#F7A5A5] text-[#1A2A4F] font-bold flex items-center justify-center hover:bg-[#FFDBB6] active:scale-95 transition-all">
+            →
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-xs text-[#FFF2EF]/50">
+      <div>@copyText</div>
+      <div class="flex gap-6">
+        @if(bottomLinks != null) {
+          foreach(var link in bottomLinks) {
+            <a href="@link.Url" target="@link.Target" class="hover:text-[#F7A5A5] transition-colors">@link.Name</a>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</footer>

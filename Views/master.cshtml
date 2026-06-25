@@ -10,25 +10,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@Model.Name - Executive Insights</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/main.css" />
-    <script type="module" src="/assets/js/main.js"></script>
+    <style>
+      body { font-family: 'Inter', sans-serif; }
+      h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans antialiased">
+<body class="bg-[#FFF2EF] text-[#1A2A4F] antialiased selection:bg-[#F7A5A5] selection:text-[#1A2A4F]">
     
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <h1 class="text-2xl font-bold text-indigo-900">Executive Insights</h1>
-        </div>
-    </header>
+    <!-- Header Component -->
+    @await Html.PartialAsync("Header")
 
-    <main>
+    <main class="min-h-screen">
         @RenderBody()
     </main>
 
-    <footer class="bg-indigo-900 text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            &copy; @DateTime.Now.Year Executive Insights. Minden jog fenntartva.
-        </div>
-    </footer>
+    <!-- Footer Component -->
+    @await Html.PartialAsync("Footer")
+
+    <!-- Main JavaScript -->
+    <script type="module" src="/assets/js/main.js"></script>
+
 </body>
 </html>
