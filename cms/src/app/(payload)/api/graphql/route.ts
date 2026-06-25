@@ -1,8 +1,0 @@
-/* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
-/* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
-import config from '@payload-config'
-import { GRAPHQL_GET, GRAPHQL_OPTIONS, GRAPHQL_POST } from '@payloadcms/next/routes'
-
-export const GET = GRAPHQL_GET(config)
-export const POST = GRAPHQL_POST(config)
-export const OPTIONS = GRAPHQL_OPTIONS(config)

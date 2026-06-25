@@ -1,0 +1,84 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<AboutComponent>>
+@{
+    var content = Model.Content;
+
+    var eyebrow = content.Tag;
+    var title = content.Title;
+    var description = content.Subtitle;
+    var floatingCardTitle = content.Stat1Label;
+    var floatingCardValue = content.Stat1Value;
+    var ctaText = content.CtaText;
+    var ctaLink = content.CtaLink;
+    
+    var imageUrl = content.Image != null ? content.Image.Url() : "";
+
+    var bullets = new List<string>();
+    if (!string.IsNullOrWhiteSpace(content.Bullet1)) bullets.Add(content.Bullet1);
+    if (!string.IsNullOrWhiteSpace(content.Bullet2)) bullets.Add(content.Bullet2);
+    if (!string.IsNullOrWhiteSpace(content.Bullet3)) bullets.Add(content.Bullet3);
+    if (!string.IsNullOrWhiteSpace(content.Bullet4)) bullets.Add(content.Bullet4);
+}
+
+<div id="about" data-testid="about-section" class="w-full">
+    <div class="mx-auto grid max-w-6xl items-center gap-16 lg:grid-cols-2">
+        <div class="relative fade-up">
+            <div class="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-2xl shadow-[#1A2A4F]/15">
+                @if (!string.IsNullOrEmpty(imageUrl)) {
+                    <img src="@imageUrl" alt="Kép" data-testid="about-image" class="h-full w-full object-cover" />
+                }
+                <div class="absolute inset-0 bg-gradient-to-t from-[#1A2A4F]/40 via-transparent to-transparent"></div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(floatingCardTitle) || !string.IsNullOrEmpty(floatingCardValue)) {
+                <div class="absolute -bottom-8 -right-4 max-w-[240px] rounded-2xl border border-[#1A2A4F]/5 bg-white p-5 shadow-xl shadow-[#1A2A4F]/10 md:-right-10">
+                    <div class="mb-2 flex items-center gap-2">
+                        @for (var i = 0; i < 5; i++) {
+                            <div class="h-2 w-2 rounded-full bg-[#F7A5A5]"></div>
+                        }
+                    </div>
+                    <div class="text-xs font-medium text-[#1A2A4F]/60">
+                        @floatingCardTitle
+                    </div>
+                    <div class="mt-1 font-[Outfit] text-3xl font-bold text-[#1A2A4F]">
+                        @floatingCardValue
+                    </div>
+                </div>
+            }
+
+            <div class="absolute -left-6 -top-6 -z-10 h-32 w-32 rounded-full bg-[#FFDBB6]/40"></div>
+        </div>
+
+        <div class="fade-up delay-1">
+            <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
+                @eyebrow
+            </span>
+            <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.08] tracking-tight text-[#1A2A4F] md:text-5xl">
+                @Html.Raw(title)
+            </h2>
+            <p class="mt-7 text-lg leading-relaxed text-[#1A2A4F]/70">
+                @description
+            </p>
+
+            @if (bullets.Count > 0) {
+                <div class="mt-9 space-y-3">
+                    @for (var i = 0; i < bullets.Count; i++) {
+                        var bullet = bullets[i];
+                        <div data-testid="about-bullet-@i" class="flex items-start gap-3 rounded-2xl border border-[#1A2A4F]/5 bg-white px-5 py-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0 text-[#F7A5A5]"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <span class="text-sm font-medium text-[#1A2A4F]">
+                                @bullet
+                            </span>
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(ctaText)) {
+                <a href="@ctaLink" data-testid="about-cta" class="mt-10 inline-flex items-center gap-2 rounded-full bg-[#1A2A4F] px-6 py-3.5 text-sm font-semibold text-[#FFF2EF] transition-all hover:bg-[#1A2A4F]/90 active:scale-95">
+                    @ctaText
+                </a>
+            }
+        </div>
+    </div>
+</div>

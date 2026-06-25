@@ -1,0 +1,84 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<MethodologyComponent>>
+@{
+    var content = Model.Content;
+    var eyebrow = content.Eyebrow;
+    var title = content.Title;
+    var subtitle = content.Subtitle;
+    var bTitle = content.BottomStripTitle;
+    var bDesc = content.BottomStripDesc;
+    var bCtaText = content.BottomStripCtaText;
+    var bCtaLink = content.BottomStripCtaLink;
+
+    var steps = new List<dynamic>();
+    if (!string.IsNullOrWhiteSpace(content.Step1Title)) steps.Add(new { n = content.Step1Num, title = content.Step1Title, desc = content.Step1Desc });
+    if (!string.IsNullOrWhiteSpace(content.Step2Title)) steps.Add(new { n = content.Step2Num, title = content.Step2Title, desc = content.Step2Desc });
+    if (!string.IsNullOrWhiteSpace(content.Step3Title)) steps.Add(new { n = content.Step3Num, title = content.Step3Title, desc = content.Step3Desc });
+    if (!string.IsNullOrWhiteSpace(content.Step4Title)) steps.Add(new { n = content.Step4Num, title = content.Step4Title, desc = content.Step4Desc });
+}
+
+<div id="methodology" data-testid="methodology-section" class="w-full">
+    <div class="mx-auto max-w-6xl">
+        <div class="mb-20 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <div class="max-w-2xl fade-up">
+                <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
+                    @eyebrow
+                </span>
+                <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight text-[#1A2A4F] md:text-6xl">
+                    @Html.Raw(title)
+                </h2>
+            </div>
+            <div class="max-w-md text-lg leading-relaxed text-[#1A2A4F]/70 fade-up delay-1">
+                <p>
+                    @subtitle
+                </p>
+            </div>
+        </div>
+
+        <div class="relative mx-auto max-w-5xl">
+            <div class="absolute left-[39px] top-10 hidden h-[calc(100%-80px)] w-px bg-gradient-to-b from-[#1A2A4F]/10 via-[#1A2A4F]/20 to-transparent md:block"></div>
+
+            <div class="flex flex-col gap-12">
+                @for (var i = 0; i < steps.Count; i++) {
+                    var step = steps[i];
+                    <div data-testid="step-@i" class="group relative flex flex-col gap-6 md:flex-row md:gap-16 fade-up delay-@i">
+                        <div class="relative z-10 flex shrink-0 items-start">
+                            <div class="flex h-20 w-20 items-center justify-center rounded-full bg-white text-3xl font-bold tracking-tighter text-[#1A2A4F] shadow-xl shadow-[#1A2A4F]/5 ring-8 ring-[#FFF2EF] transition-transform duration-500 group-hover:scale-110">
+                                @step.n
+                            </div>
+                        </div>
+
+                        <div class="relative flex-1 rounded-[32px] bg-white p-8 shadow-lg shadow-[#1A2A4F]/5 transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-[#1A2A4F]/10 md:p-12">
+                            <h3 class="mb-4 font-[Outfit] text-3xl font-bold text-[#1A2A4F]">
+                                @step.title
+                            </h3>
+                            <p class="text-lg leading-relaxed text-[#1A2A4F]/70">
+                                @step.desc
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if(!string.IsNullOrEmpty(bTitle) || !string.IsNullOrEmpty(bDesc)) {
+            <div class="mt-24 rounded-[32px] bg-gradient-to-br from-[#1A2A4F] to-[#1A2A4F]/90 p-8 shadow-2xl shadow-[#1A2A4F]/20 md:p-12 fade-up">
+                <div class="flex flex-col items-center justify-between gap-8 md:flex-row md:gap-12">
+                    <div class="text-center md:text-left">
+                        <h3 class="font-[Outfit] text-2xl font-bold text-[#FFF2EF] md:text-3xl">
+                            @bTitle
+                        </h3>
+                        <p class="mt-2 text-[#FFF2EF]/70">
+                            @bDesc
+                        </p>
+                    </div>
+                    @if(!string.IsNullOrEmpty(bCtaText)) {
+                        <a href="@bCtaLink" data-testid="methodology-cta" class="shrink-0 rounded-full bg-[#F7A5A5] px-8 py-4 text-sm font-bold text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95">
+                            @bCtaText
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

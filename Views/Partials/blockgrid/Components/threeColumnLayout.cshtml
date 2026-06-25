@@ -1,0 +1,61 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem>
+@{
+    var paddingName = Model.Settings?.Value<string>("padding") ?? Model.Content.Value<string>("padding");
+    var paddingClass = "py-16 md:py-24";
+    if (paddingName == "none") { paddingClass = "py-0"; }
+    else if (paddingName == "small") { paddingClass = "py-8 md:py-12"; }
+    else if (paddingName == "large") { paddingClass = "py-24 md:py-32"; }
+
+    var bgName = Model.Settings?.Value<string>("backgroundColor") ?? Model.Content.Value<string>("backgroundColor");
+    var bgClass = "bg-transparent";
+    if (bgName == "cream") { bgClass = "bg-[#FFF2EF] text-[#1A2A4F]"; }
+    else if (bgName == "warm") { bgClass = "text-[#1A2A4F] bg-gradient-to-br from-[#FFDBB6]/55 via-[#FFF2EF] to-[#F7A5A5]/30"; }
+    else if (bgName == "dark" || bgName == "solidDark") { bgClass = "bg-[#1A2A4F] text-[#FFF2EF]"; }
+}
+
+<section class="w-full relative overflow-hidden @bgClass @paddingClass">
+    @if (bgName == "cream") {
+        <div aria-hidden="true" class="absolute inset-0 opacity-[0.07] pointer-events-none" style="background-image: radial-gradient(circle, #1A2A4F 1px, transparent 1px); background-size: 24px 24px;"></div>
+        <div aria-hidden="true" class="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full bg-[#FFDBB6]/35 blur-3xl pointer-events-none"></div>
+        <div aria-hidden="true" class="absolute -bottom-32 -left-20 w-[360px] h-[360px] rounded-full bg-[#F7A5A5]/20 blur-3xl pointer-events-none"></div>
+    } else if (bgName == "warm") {
+        <div aria-hidden="true" class="absolute top-1/4 left-1/3 w-[520px] h-[520px] rounded-full bg-[#F7A5A5]/30 blur-[120px] pointer-events-none"></div>
+        <div aria-hidden="true" class="absolute -top-20 -left-20 w-[380px] h-[380px] rounded-full bg-[#FFDBB6]/60 blur-3xl pointer-events-none"></div>
+        <div aria-hidden="true" class="absolute -bottom-24 -right-16 w-[460px] h-[460px] rounded-full bg-[#F7A5A5]/25 blur-3xl pointer-events-none"></div>
+        <div aria-hidden="true" class="absolute inset-0 opacity-[0.05] pointer-events-none" style="background-image: repeating-linear-gradient(135deg, #1A2A4F 0 1px, transparent 1px 28px);"></div>
+    } else if (bgName == "dark") {
+        <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 15% 10%, rgba(247,165,165,0.18) 0%, transparent 55%), radial-gradient(ellipse at 85% 80%, rgba(255,219,182,0.15) 0%, transparent 55%);"></div>
+        <div aria-hidden="true" class="absolute inset-0 opacity-[0.07] pointer-events-none mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'3\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.4\'/%3E%3C/svg%3E');"></div>
+    }
+
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                @{
+                    var leftArea = Model.Areas.FirstOrDefault(x => x.Alias == "left");
+                    if (leftArea != null) {
+                        @await Html.GetBlockGridItemAreaHtmlAsync(leftArea)
+                    }
+                }
+            </div>
+            <div>
+                @{
+                    var middleArea = Model.Areas.FirstOrDefault(x => x.Alias == "middle");
+                    if (middleArea != null) {
+                        @await Html.GetBlockGridItemAreaHtmlAsync(middleArea)
+                    }
+                }
+            </div>
+            <div>
+                @{
+                    var rightArea = Model.Areas.FirstOrDefault(x => x.Alias == "right");
+                    if (rightArea != null) {
+                        @await Html.GetBlockGridItemAreaHtmlAsync(rightArea)
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,43 @@
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<CtaBandComponent>>
+@{
+    var content = Model.Content;
+    var eyebrow = content.Eyebrow;
+    var title = content.Title;
+    var subtitle = content.Subtitle;
+    var primaryLabel = content.PrimaryLabel;
+    var primaryTo = content.PrimaryTo;
+    var secondaryLabel = content.SecondaryLabel;
+    var secondaryTo = content.SecondaryTo;
+}
+
+<div data-testid="cta-band" class="w-full">
+  <div class="mx-auto max-w-5xl rounded-[32px] bg-[#1A2A4F] px-6 py-16 text-center shadow-2xl shadow-[#1A2A4F]/20 md:px-12 md:py-24 fade-up">
+    <div class="mx-auto max-w-3xl">
+      <div class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FFDBB6]">
+        @eyebrow
+      </div>
+      
+      <h2 class="mb-6 font-[Outfit] text-4xl font-bold leading-[1.1] text-[#FFF2EF] md:text-5xl">
+        @Html.Raw(title)
+      </h2>
+      
+      <p class="mb-10 text-lg leading-relaxed text-[#FFF2EF]/70 md:text-xl">
+        @subtitle
+      </p>
+      
+      <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+        @if(!string.IsNullOrEmpty(primaryLabel)) {
+            <a href="@primaryTo" class="w-full rounded-full bg-[#F7A5A5] px-8 py-4 text-sm font-bold text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95 sm:w-auto">
+            @primaryLabel
+            </a>
+        }
+        @if(!string.IsNullOrEmpty(secondaryLabel)) {
+            <a href="@secondaryTo" class="w-full rounded-full border border-[#FFF2EF]/20 bg-transparent px-8 py-4 text-sm font-semibold text-[#FFF2EF] transition-all hover:bg-[#FFF2EF]/10 active:scale-95 sm:w-auto">
+            @secondaryLabel
+            </a>
+        }
+      </div>
+    </div>
+  </div>
+</div>

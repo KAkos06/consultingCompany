@@ -1,0 +1,60 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ServicesComponent>>
+@{
+    var content = Model.Content;
+    var eyebrow = content.Eyebrow;
+    var title = content.Title;
+    var subtitle = content.Subtitle;
+    
+    var cards = new List<dynamic>();
+    if (!string.IsNullOrWhiteSpace(content.Service1Title)) cards.Add(new { title = content.Service1Title, desc = content.Service1Desc, tag = content.Service1Icon });
+    if (!string.IsNullOrWhiteSpace(content.Service2Title)) cards.Add(new { title = content.Service2Title, desc = content.Service2Desc, tag = content.Service2Icon });
+    if (!string.IsNullOrWhiteSpace(content.Service3Title)) cards.Add(new { title = content.Service3Title, desc = content.Service3Desc, tag = content.Service3Icon });
+    if (!string.IsNullOrWhiteSpace(content.Service4Title)) cards.Add(new { title = content.Service4Title, desc = content.Service4Desc, tag = content.Service4Icon });
+    if (!string.IsNullOrWhiteSpace(content.Service5Title)) cards.Add(new { title = content.Service5Title, desc = content.Service5Desc, tag = content.Service5Icon });
+    if (!string.IsNullOrWhiteSpace(content.Service6Title)) cards.Add(new { title = content.Service6Title, desc = content.Service6Desc, tag = content.Service6Icon });
+}
+
+<div id="services" data-testid="services-section" class="w-full">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div class="max-w-2xl fade-up">
+        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
+          @eyebrow
+        </span>
+        <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight text-[#1A2A4F] md:text-6xl">
+          @Html.Raw(title)
+        </h2>
+      </div>
+      <div class="max-w-md text-lg leading-relaxed text-[#1A2A4F]/70 fade-up delay-1">
+        <p>@subtitle</p>
+      </div>
+    </div>
+
+    <div data-testid="services-grid" class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      @for (var i = 0; i < cards.Count; i++) {
+        var card = cards[i];
+        <div data-testid="service-card-@i" class="group relative cursor-pointer rounded-3xl border border-transparent p-7 transition-all hover:-translate-y-1 bg-gradient-to-br from-white to-[#FFDBB6]/30 hover:border-[#F7A5A5]/60 hover:shadow-[0_24px_48px_-12px_rgba(26,42,79,0.15)] fade-up delay-@i">
+          <div class="mb-6 flex items-start justify-between">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl transition-colors bg-[#F7A5A5]/20 text-[#1A2A4F] group-hover:bg-[#F7A5A5]/60">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            </div>
+            <span class="rounded-full px-3 py-1 text-xs font-medium bg-[#FFF2EF] text-[#1A2A4F]/50">
+              @card.tag
+            </span>
+          </div>
+          <h3 class="mb-3 font-[Outfit] text-2xl font-semibold text-[#1A2A4F]">
+            @card.title
+          </h3>
+          <p class="mb-6 text-sm leading-relaxed text-[#1A2A4F]/65">
+            @card.desc
+          </p>
+          <div class="flex items-center gap-2 text-sm font-medium transition-colors text-[#1A2A4F] group-hover:text-[#F7A5A5]">
+            Részletek
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

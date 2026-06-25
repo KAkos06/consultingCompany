@@ -1,0 +1,68 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<PageHeroComponent>>
+@{
+    var content = Model.Content;
+    var eyebrow = content.Eyebrow;
+    var title = content.Title;
+    var highlight = content.Highlight;
+    var description = content.Description;
+    
+    var currentUrl = content.Url();
+    var currentName = content.Name;
+    var breadcrumbs = new[] {
+        new { label = "Kezdőlap", to = "/" },
+        new { label = currentName, to = currentUrl }
+    };
+}
+
+<section data-testid="page-hero" class="relative bg-[#1A2A4F] overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'3\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.4\'/%3E%3C/svg%3E')"></div>
+    <div aria-hidden="true" class="absolute top-32 -left-20 w-72 h-72 rounded-full bg-[#F7A5A5]/20 blur-3xl pointer-events-none"></div>
+    <div aria-hidden="true" class="absolute bottom-10 right-10 w-80 h-80 rounded-full bg-[#FFDBB6]/15 blur-3xl pointer-events-none"></div>
+
+    <div class="relative max-w-6xl mx-auto px-6 pt-40 pb-20 md:pt-44 md:pb-24">
+        @if (breadcrumbs.Length > 0) {
+            <nav data-testid="page-hero-breadcrumb" class="fade-up flex items-center gap-1.5 text-xs text-[#FFF2EF]/60 mb-7">
+                @for (var i = 0; i < breadcrumbs.Length; i++) {
+                    var b = breadcrumbs[i];
+                    var isLast = i == breadcrumbs.Length - 1;
+                    <span class="flex items-center gap-1.5">
+                        @if (!string.IsNullOrEmpty(b.to) && !isLast) {
+                            <a href="@b.to" class="hover:text-[#F7A5A5] transition-colors">
+                                @b.label
+                            </a>
+                        } else {
+                            <span class="@(isLast ? "text-[#FFDBB6] font-medium" : "text-[#FFF2EF]/60")">
+                                @b.label
+                            </span>
+                        }
+                        @if (!isLast) {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#FFF2EF]/30"><path d="m9 18 6-6-6-6"/></svg>
+                        }
+                    </span>
+                }
+            </nav>
+        }
+
+        @if (!string.IsNullOrEmpty(eyebrow)) {
+            <div data-testid="page-hero-eyebrow" class="fade-up delay-1 inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/15 text-[#FFF2EF] text-xs font-medium px-4 py-2 rounded-full mb-6">
+                @eyebrow
+            </div>
+        }
+
+        <h1 data-testid="page-hero-title" class="fade-up delay-2 font-[Outfit] text-[#FFF2EF] text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight max-w-4xl">
+            @Html.Raw(title) 
+            @if (!string.IsNullOrEmpty(highlight)) {
+                <span class="text-[#F7A5A5] italic font-medium">
+                    @highlight
+                </span>
+            }
+        </h1>
+
+        @if (!string.IsNullOrEmpty(description)) {
+            <p data-testid="page-hero-description" class="fade-up delay-3 mt-7 text-base md:text-xl text-[#FFF2EF]/75 max-w-2xl leading-relaxed">
+                @description
+            </p>
+        }
+    </div>
+</section>

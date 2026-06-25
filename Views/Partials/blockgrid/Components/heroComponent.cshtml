@@ -1,0 +1,76 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<HeroComponent>>
+@{
+    var content = Model.Content;
+    var tag = content.Tag;
+    var title = content.Title?.ToHtmlString();
+    var subtitle = content.Subtitle;
+    var primaryCtaText = content.PrimaryButtonText;
+    var primaryCtaLink = content.PrimaryCtaLink;
+    var secondaryCtaText = content.SecondaryCtaText;
+    var secondaryCtaLink = content.SecondaryCtaLink;
+    
+    var stats = new List<dynamic>();
+    if (!string.IsNullOrWhiteSpace(content.Stat1Num)) stats.Add(new { n = content.Stat1Num, l = content.Stat1Label });
+    if (!string.IsNullOrWhiteSpace(content.Stat2Num)) stats.Add(new { n = content.Stat2Num, l = content.Stat2Label });
+    if (!string.IsNullOrWhiteSpace(content.Stat3Num)) stats.Add(new { n = content.Stat3Num, l = content.Stat3Label });
+}
+
+<div data-testid="hero-section" class="relative w-full">
+    <div class="absolute top-32 -left-20 h-72 w-72 rounded-full bg-[#F7A5A5]/20 blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-[#FFDBB6]/15 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-7xl px-6 pb-28 pt-40 md:pb-36 md:pt-48">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="max-w-3xl">
+                @if (!string.IsNullOrEmpty(tag)) {
+                    <div data-testid="hero-eyebrow" class="fade-up mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-[#FFF2EF] backdrop-blur">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#F7A5A5" stroke="#F7A5A5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        @tag
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(title)) {
+                    <h1 data-testid="hero-title" class="fade-up delay-1 font-[Outfit] text-5xl font-bold leading-[1.05] tracking-tight text-[#FFF2EF] md:text-7xl">
+                        @Html.Raw(title)
+                    </h1>
+                }
+
+                @if (!string.IsNullOrEmpty(subtitle)) {
+                    <p data-testid="hero-subtitle" class="fade-up delay-2 mt-8 max-w-2xl text-lg leading-relaxed text-[#FFF2EF]/75 md:text-xl">
+                        @Html.Raw(subtitle)
+                    </p>
+                }
+
+                <div class="fade-up delay-3 mt-10 flex flex-wrap gap-4">
+                    @if (!string.IsNullOrEmpty(primaryCtaText)) {
+                        <a href="@primaryCtaLink" data-testid="hero-cta-primary" class="group inline-flex items-center gap-2 rounded-full bg-[#F7A5A5] px-7 py-4 text-base font-semibold text-[#1A2A4F] shadow-xl shadow-[#F7A5A5]/20 transition-all hover:bg-[#FFDBB6] active:scale-95">
+                            @primaryCtaText
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1"><path d="M5 12h14"><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
+                    }
+                    @if (!string.IsNullOrEmpty(secondaryCtaText)) {
+                        <a href="@secondaryCtaLink" data-testid="hero-cta-secondary" class="inline-flex items-center gap-2 rounded-full border border-white/25 px-7 py-4 text-base font-medium text-[#FFF2EF] transition-colors hover:bg-white/10">
+                            @secondaryCtaText
+                        </a>
+                    }
+                </div>
+
+                @if (stats.Count > 0) {
+                    <div data-testid="hero-stats" class="fade-up delay-4 mt-16 grid max-w-2xl grid-cols-3 gap-6">
+                        @foreach (var stat in stats) {
+                            <div class="border-l border-white/15 pl-5">
+                                <div class="font-[Outfit] text-3xl font-bold text-[#FFF2EF] md:text-4xl">
+                                    @stat.n
+                                </div>
+                                <div class="mt-1 text-xs text-[#FFF2EF]/60 md:text-sm">
+                                    @stat.l
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
