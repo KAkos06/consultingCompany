@@ -1,4 +1,4 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<TestimonialsComponent>>
 @{
     var content = Model.Content;
@@ -6,15 +6,7 @@
     var title = content.Title;
     var subtitle = content.Subtitle;
 
-    var testimonials = new List<dynamic>();
-    if (!string.IsNullOrWhiteSpace(content.T1Quote)) testimonials.Add(new { quote = content.T1Quote, name = content.T1Name, role = content.T1Role, image = content.T1Image != null ? content.T1Image.Url() : "" });
-    if (!string.IsNullOrWhiteSpace(content.T2Quote)) testimonials.Add(new { quote = content.T2Quote, name = content.T2Name, role = content.T2Role, image = content.T2Image != null ? content.T2Image.Url() : "" });
-
-    var stats = new List<dynamic>();
-    if (!string.IsNullOrWhiteSpace(content.Stat1Number)) stats.Add(new { number = content.Stat1Number, label = content.Stat1Label });
-    if (!string.IsNullOrWhiteSpace(content.Stat2Number)) stats.Add(new { number = content.Stat2Number, label = content.Stat2Label });
-    if (!string.IsNullOrWhiteSpace(content.Stat3Number)) stats.Add(new { number = content.Stat3Number, label = content.Stat3Label });
-    if (!string.IsNullOrWhiteSpace(content.Stat4Number)) stats.Add(new { number = content.Stat4Number, label = content.Stat4Label });
+    var testimonialBlocks = content.Testimonials;
 }
 
 <div id="testimonials" data-testid="testimonials-section" class="w-full">
@@ -35,47 +27,40 @@
             </div>
         </div>
 
-        <div class="mb-24 grid grid-cols-1 gap-8 md:grid-cols-2">
-            @for (var i = 0; i < testimonials.Count; i++) {
-                var item = testimonials[i];
-                <div data-testid="testimonial-@i" class="group relative rounded-[32px] bg-white p-10 shadow-xl shadow-[#1A2A4F]/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#1A2A4F]/10 fade-up delay-@i">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-8 text-[#FFDBB6] transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-6"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1.5.5 1.5 1.714V15c0 3-4 6-4 6z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.5c0 2.214-.5 2.714-1.5 2.714V15c0 3-4 6-4 6z"/></svg>
-                    
-                    <p class="mb-10 text-xl font-medium leading-relaxed text-[#1A2A4F]">
-                        "@item.quote"
-                    </p>
-                    
-                    <div class="flex items-center gap-4">
-                        @if (!string.IsNullOrEmpty(item.image)) {
-                            <img src="@item.image" alt="@item.name" class="h-14 w-14 rounded-full object-cover ring-4 ring-[#FFF2EF]" />
-                        } else {
-                            <div class="h-14 w-14 rounded-full bg-[#1A2A4F] ring-4 ring-[#FFF2EF]"></div>
-                        }
+        @if (testimonialBlocks != null && testimonialBlocks.Any()) {
+            <div class="mb-24 grid grid-cols-1 gap-8 md:grid-cols-2">
+                @{ var i = 0; }
+                @foreach (var block in testimonialBlocks) {
+                    var item = (TestimonialItem)block.Content;
+                    var imageUrl = item.Image != null ? item.Image.Url() : "";
+                    <div data-testid="testimonial-@i" class="group relative rounded-[32px] bg-white p-10 shadow-xl shadow-[#1A2A4F]/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#1A2A4F]/10 fade-up delay-@i flex flex-col justify-between">
                         <div>
-                            <div class="font-[Outfit] font-bold text-[#1A2A4F]">
-                                @item.name
-                            </div>
-                            <div class="text-sm font-medium text-[#1A2A4F]/60">
-                                @item.role
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-8 text-[#FFDBB6] transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-6"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1.5.5 1.5 1.714V15c0 3-4 6-4 6z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.5c0 2.214-.5 2.714-1.5 2.714V15c0 3-4 6-4 6z"/></svg>
+                            
+                            <p class="mb-10 text-xl font-medium leading-relaxed text-[#1A2A4F]">
+                                "@item.Quote"
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 mt-auto">
+                            @if (!string.IsNullOrEmpty(imageUrl)) {
+                                <img src="@imageUrl" alt="@item.Name" class="h-14 w-14 rounded-full object-cover ring-4 ring-[#FFF2EF]" />
+                            } else {
+                                <div class="h-14 w-14 rounded-full bg-[#1A2A4F] ring-4 ring-[#FFF2EF] flex items-center justify-center text-white font-bold">
+                                    @(string.IsNullOrEmpty(item.Name) ? "" : item.Name.Substring(0, 1).ToUpper())
+                                </div>
+                            }
+                            <div>
+                                <div class="font-[Outfit] font-bold text-[#1A2A4F]">
+                                    @item.Name
+                                </div>
+                                <div class="text-sm font-medium text-[#1A2A4F]/60">
+                                    @item.Role
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
-
-        @if(stats.Count > 0) {
-            <div class="grid grid-cols-2 gap-8 divide-x divide-[#1A2A4F]/10 border-y border-[#1A2A4F]/10 py-12 md:grid-cols-4">
-                @for (var i = 0; i < stats.Count; i++) {
-                    var stat = stats[i];
-                    <div data-testid="stat-@i" class="flex flex-col items-center justify-center text-center fade-up delay-@i">
-                        <div class="mb-2 font-[Outfit] text-4xl font-bold tracking-tight text-[#1A2A4F] md:text-5xl">
-                            @stat.number
-                        </div>
-                        <div class="text-sm font-semibold uppercase tracking-[0.15em] text-[#1A2A4F]/50">
-                            @stat.label
-                        </div>
-                    </div>
+                    i++;
                 }
             </div>
         }

@@ -5,36 +5,54 @@
     var eyebrow = content.Eyebrow;
     var title = content.Title;
     var subtitle = content.Subtitle;
-    var primaryLabel = content.PrimaryLabel;
-    var primaryTo = content.PrimaryTo;
-    var secondaryLabel = content.SecondaryLabel;
-    var secondaryTo = content.SecondaryTo;
+
+    var primaryBlock = content.PrimaryCta?.FirstOrDefault();
+    var primaryLink = primaryBlock?.Content.Value<IEnumerable<global::Umbraco.Cms.Core.Models.Link>>("link")?.FirstOrDefault() ?? primaryBlock?.Content.Value<global::Umbraco.Cms.Core.Models.Link>("link");
+    var primaryIconVal = primaryBlock?.Content.GetIconValue("icon");
+
+    var secondaryBlock = content.SecondaryCta?.FirstOrDefault();
+    var secondaryLink = secondaryBlock?.Content.Value<IEnumerable<global::Umbraco.Cms.Core.Models.Link>>("link")?.FirstOrDefault() ?? secondaryBlock?.Content.Value<global::Umbraco.Cms.Core.Models.Link>("link");
+    var secondaryIconVal = secondaryBlock?.Content.GetIconValue("icon");
 }
 
 <div data-testid="cta-band" class="w-full">
   <div class="mx-auto max-w-5xl rounded-[32px] bg-[#1A2A4F] px-6 py-16 text-center shadow-2xl shadow-[#1A2A4F]/20 md:px-12 md:py-24 fade-up">
     <div class="mx-auto max-w-3xl">
-      <div class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FFDBB6]">
-        @eyebrow
-      </div>
+      @if (!string.IsNullOrWhiteSpace(eyebrow)) {
+        <div class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FFDBB6]">
+          @eyebrow
+        </div>
+      }
       
       <h2 class="mb-6 font-[Outfit] text-4xl font-bold leading-[1.1] text-[#FFF2EF] md:text-5xl">
         @Html.Raw(title)
       </h2>
       
-      <p class="mb-10 text-lg leading-relaxed text-[#FFF2EF]/70 md:text-xl">
-        @subtitle
-      </p>
+      @if (!string.IsNullOrWhiteSpace(subtitle)) {
+        <p class="mb-10 text-lg leading-relaxed text-[#FFF2EF]/70 md:text-xl">
+          @subtitle
+        </p>
+      }
       
       <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
-        @if(!string.IsNullOrEmpty(primaryLabel)) {
-            <a href="@primaryTo" class="w-full rounded-full bg-[#F7A5A5] px-8 py-4 text-sm font-bold text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95 sm:w-auto">
-            @primaryLabel
+        @if (primaryLink != null && !string.IsNullOrWhiteSpace(primaryLink.Url)) {
+            <a href="@primaryLink.Url" target="@(primaryLink.Target ?? "_self")" class="group inline-flex items-center justify-center gap-2.5 w-full rounded-full bg-[#F7A5A5] px-8 py-4 text-sm font-bold text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95 sm:w-auto">
+                <span>@(!string.IsNullOrWhiteSpace(primaryLink.Name) ? primaryLink.Name : "Kezdés")</span>
+                @if (primaryIconVal != null && !primaryIconVal.IsEmpty) {
+                    <span class="transition-transform group-hover:translate-x-1">
+                        @primaryIconVal.Render(size: 18)
+                    </span>
+                }
             </a>
         }
-        @if(!string.IsNullOrEmpty(secondaryLabel)) {
-            <a href="@secondaryTo" class="w-full rounded-full border border-[#FFF2EF]/20 bg-transparent px-8 py-4 text-sm font-semibold text-[#FFF2EF] transition-all hover:bg-[#FFF2EF]/10 active:scale-95 sm:w-auto">
-            @secondaryLabel
+        @if (secondaryLink != null && !string.IsNullOrWhiteSpace(secondaryLink.Url)) {
+            <a href="@secondaryLink.Url" target="@(secondaryLink.Target ?? "_self")" class="group inline-flex items-center justify-center gap-2.5 w-full rounded-full border border-[#FFF2EF]/20 bg-transparent px-8 py-4 text-sm font-semibold text-[#FFF2EF] transition-all hover:bg-[#FFF2EF]/10 active:scale-95 sm:w-auto">
+                <span>@(!string.IsNullOrWhiteSpace(secondaryLink.Name) ? secondaryLink.Name : "Részletek")</span>
+                @if (secondaryIconVal != null && !secondaryIconVal.IsEmpty) {
+                    <span class="transition-transform group-hover:translate-x-1">
+                        @secondaryIconVal.Render(size: 18)
+                    </span>
+                }
             </a>
         }
       </div>
