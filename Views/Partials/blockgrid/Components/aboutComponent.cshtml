@@ -1,4 +1,4 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<AboutComponent>>
 @{
     var content = Model.Content;
@@ -8,16 +8,12 @@
     var description = content.Subtitle;
     var floatingCardTitle = content.Stat1Label;
     var floatingCardValue = content.Stat1Value;
-    var ctaText = content.CtaText;
-    var ctaLink = content.CtaLink;
     
     var imageUrl = content.Image != null ? content.Image.Url() : "";
 
-    var bullets = new List<string>();
-    if (!string.IsNullOrWhiteSpace(content.Bullet1)) bullets.Add(content.Bullet1);
-    if (!string.IsNullOrWhiteSpace(content.Bullet2)) bullets.Add(content.Bullet2);
-    if (!string.IsNullOrWhiteSpace(content.Bullet3)) bullets.Add(content.Bullet3);
-    if (!string.IsNullOrWhiteSpace(content.Bullet4)) bullets.Add(content.Bullet4);
+    var ctaBlock = content.Cta?.FirstOrDefault();
+    var ctaLinkObj = ctaBlock?.Content.Value<IEnumerable<global::Umbraco.Cms.Core.Models.Link>>("link")?.FirstOrDefault() ?? ctaBlock?.Content.Value<global::Umbraco.Cms.Core.Models.Link>("link");
+    var ctaIcon = ctaBlock?.Content.Value<string>("icon");
 }
 
 <div id="about" data-testid="about-section" class="w-full">
@@ -30,19 +26,23 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-[#1A2A4F]/40 via-transparent to-transparent"></div>
             </div>
 
-            @if (!string.IsNullOrEmpty(floatingCardTitle) || !string.IsNullOrEmpty(floatingCardValue)) {
+            @if (!string.IsNullOrWhiteSpace(floatingCardTitle) || !string.IsNullOrWhiteSpace(floatingCardValue)) {
                 <div class="absolute -bottom-8 -right-4 max-w-[240px] rounded-2xl border border-[#1A2A4F]/5 bg-white p-5 shadow-xl shadow-[#1A2A4F]/10 md:-right-10">
                     <div class="mb-2 flex items-center gap-2">
                         @for (var i = 0; i < 5; i++) {
                             <div class="h-2 w-2 rounded-full bg-[#F7A5A5]"></div>
                         }
                     </div>
-                    <div class="text-xs font-medium text-[#1A2A4F]/60">
-                        @floatingCardTitle
-                    </div>
-                    <div class="mt-1 font-[Outfit] text-3xl font-bold text-[#1A2A4F]">
-                        @floatingCardValue
-                    </div>
+                    @if (!string.IsNullOrWhiteSpace(floatingCardTitle)) {
+                        <div class="text-xs font-medium text-[#1A2A4F]/60">
+                            @floatingCardTitle
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(floatingCardValue)) {
+                        <div class="mt-1 font-[Outfit] text-3xl font-bold text-[#1A2A4F]">
+                            @floatingCardValue
+                        </div>
+                    }
                 </div>
             }
 
@@ -50,33 +50,69 @@
         </div>
 
         <div class="fade-up delay-1">
-            <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
-                @eyebrow
-            </span>
+            @if (!string.IsNullOrWhiteSpace(eyebrow)) {
+                <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
+                    @eyebrow
+                </span>
+            }
             <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.08] tracking-tight text-[#1A2A4F] md:text-5xl">
                 @Html.Raw(title)
             </h2>
-            <p class="mt-7 text-lg leading-relaxed text-[#1A2A4F]/70">
-                @description
-            </p>
+            @if (!string.IsNullOrWhiteSpace(description)) {
+                <p class="mt-7 text-lg leading-relaxed text-[#1A2A4F]/70">
+                    @description
+                </p>
+            }
 
-            @if (bullets.Count > 0) {
+            @if (content.Bullets != null && content.Bullets.Any()) {
                 <div class="mt-9 space-y-3">
-                    @for (var i = 0; i < bullets.Count; i++) {
-                        var bullet = bullets[i];
-                        <div data-testid="about-bullet-@i" class="flex items-start gap-3 rounded-2xl border border-[#1A2A4F]/5 bg-white px-5 py-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0 text-[#F7A5A5]"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    @{ var bulletIdx = 0; }
+                    @foreach (var item in content.Bullets) {
+                        var txt = item.Content.Value<string>("text");
+                        if (string.IsNullOrWhiteSpace(txt)) continue;
+                        
+                        var customIcon = item.Content.GetIconValue("icon");
+                        <div data-testid="about-bullet-@bulletIdx" class="flex items-center gap-3.5 rounded-2xl border border-[#1A2A4F]/5 bg-white px-5 py-4 shadow-sm transition-transform hover:translate-x-1">
+                            @if (customIcon != null && !customIcon.IsEmpty) {
+                                <span class="shrink-0 text-[#F7A5A5]">
+                                    @customIcon.Render(size: 22)
+                                </span>
+                            } else {
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-[#F7A5A5]"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            }
                             <span class="text-sm font-medium text-[#1A2A4F]">
-                                @bullet
+                                @txt
                             </span>
                         </div>
+                        bulletIdx++;
                     }
                 </div>
             }
 
-            @if (!string.IsNullOrEmpty(ctaText)) {
-                <a href="@ctaLink" data-testid="about-cta" class="mt-10 inline-flex items-center gap-2 rounded-full bg-[#1A2A4F] px-6 py-3.5 text-sm font-semibold text-[#FFF2EF] transition-all hover:bg-[#1A2A4F]/90 active:scale-95">
-                    @ctaText
+            @if (ctaLinkObj != null && !string.IsNullOrWhiteSpace(ctaLinkObj.Url)) {
+                <a href="@ctaLinkObj.Url" target="@(ctaLinkObj.Target ?? "_self")" data-testid="about-cta" class="group mt-10 inline-flex items-center gap-2.5 rounded-full bg-[#1A2A4F] px-7 py-4 text-sm font-semibold text-[#FFF2EF] shadow-lg shadow-[#1A2A4F]/20 transition-all hover:bg-[#1A2A4F]/90 hover:shadow-xl hover:-translate-y-0.5 active:scale-95">
+                    <span>@(!string.IsNullOrWhiteSpace(ctaLinkObj.Name) ? ctaLinkObj.Name : "Továbbiak")</span>
+                    <span class="transition-transform group-hover:translate-x-1">
+                        @if (ctaIcon == "ExternalLink") {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                        } else if (ctaIcon == "TrendingUp") {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                        } else if (ctaIcon == "Target") {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                        } else if (ctaIcon == "Sparkles") {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                        } else if (ctaIcon == "Award") {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                        } else if (ctaIcon == "Star") {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        } else if (ctaIcon == "MessageSquare") {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        } else if (ctaIcon == "Users") {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        } else {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        }
+                    </span>
                 </a>
             }
         </div>

@@ -50,52 +50,20 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Bullet 1
+		/// Bullets: Add bullet point items (Max 5)
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("bullet1")]
-		public virtual string Bullet1 => this.Value<string>(_publishedValueFallback, "bullet1");
+		[ImplementPropertyType("bullets")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Bullets => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "bullets");
 
 		///<summary>
-		/// Bullet 2
+		/// CTA Button: Add CTA link button with icon
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("bullet2")]
-		public virtual string Bullet2 => this.Value<string>(_publishedValueFallback, "bullet2");
-
-		///<summary>
-		/// Bullet 3
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("bullet3")]
-		public virtual string Bullet3 => this.Value<string>(_publishedValueFallback, "bullet3");
-
-		///<summary>
-		/// Bullet 4
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("bullet4")]
-		public virtual string Bullet4 => this.Value<string>(_publishedValueFallback, "bullet4");
-
-		///<summary>
-		/// CTA Link: Button link (e.g. #contact)
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("ctaLink")]
-		public virtual string CtaLink => this.Value<string>(_publishedValueFallback, "ctaLink");
-
-		///<summary>
-		/// CTA Text: Button text
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("ctaText")]
-		public virtual string CtaText => this.Value<string>(_publishedValueFallback, "ctaText");
+		[ImplementPropertyType("cta")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Cta => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "cta");
 
 		///<summary>
 		/// Image: Main image
