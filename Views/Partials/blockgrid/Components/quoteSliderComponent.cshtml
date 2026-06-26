@@ -6,12 +6,13 @@
     
     if (content.Quotes != null) {
         foreach (var block in content.Quotes) {
+            var iconVal = block.Content.GetIconValue("icon");
             var icon = block.Content.Value<string>("icon") ?? block.Content.Value<IEnumerable<string>>("icon")?.FirstOrDefault() ?? "Quote";
             var tag = block.Content.Value<string>("tag");
             var title = block.Content.Value<string>("title");
             var desc = block.Content.Value<string>("description");
             if (!string.IsNullOrWhiteSpace(title)) {
-                slides.Add(new { icon = icon, tag = tag, title = title, desc = desc });
+                slides.Add(new { iconVal = iconVal, icon = icon, tag = tag, title = title, desc = desc });
             }
         }
     }
@@ -30,7 +31,9 @@
                     <div data-testid="quote-slide-@i" class="snap-start basis-full shrink-0 grow-0 pr-6 md:basis-1/2 transition-opacity">
                         <div class="flex items-start gap-4">
                             <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#F7A5A5]/30 bg-[#F7A5A5]/20 text-[#F7A5A5]">
-                                @if (slide.icon == "Award") {
+                                @if (slide.iconVal != null && !slide.iconVal.IsEmpty) {
+                                    @slide.iconVal.Render(size: 20)
+                                } else if (slide.icon == "Award") {
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
                                 } else if (slide.icon == "TrendingUp") {
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>

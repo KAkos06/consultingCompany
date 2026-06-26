@@ -114,10 +114,15 @@
                         var subTarget = subLink.Target;
                         var subDesc = sub.Content.Value<string>("description");
                         var subIcon = sub.Content.Value<string>("icon");
+                        var subIconVal = sub.Content.GetIconValue("icon");
                         
                         <a href="@subUrl" target="@subTarget" class="mega-menu-card">
                           <div class="mega-menu-icon">
-                            @RenderSvgIcon(subIcon, 20)
+                            @if (subIconVal != null && !subIconVal.IsEmpty) {
+                              @subIconVal.Render(size: 20)
+                            } else {
+                              @RenderSvgIcon(subIcon, 20)
+                            }
                           </div>
                           <div style="min-width: 0;">
                             <div style="font-weight: 600; color: #1A2A4F; font-size: 14px; line-height: 1.25;">@subName</div>
@@ -152,8 +157,11 @@
         var ctaLinkObj = ctaLinks?.FirstOrDefault();
         if (ctaLinkObj != null) {
           var ctaIcon = ctaBlock?.Value<string>("icon");
+          var ctaIconVal = ctaBlock?.GetIconValue("icon");
           <a href="@ctaLinkObj.Url" target="@ctaLinkObj.Target" class="inline-flex items-center gap-2 bg-[#F7A5A5] text-[#1A2A4F] px-6 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-[#FFDBB6] active:scale-95 transition-all" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: #F7A5A5; color: #1A2A4F; padding: 10px 24px; border-radius: 9999px; font-size: 14px; font-weight: 700; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-            @if(!string.IsNullOrWhiteSpace(ctaIcon)) {
+            @if(ctaIconVal != null && !ctaIconVal.IsEmpty) {
+              @ctaIconVal.Render(size: 18)
+            } else if(!string.IsNullOrWhiteSpace(ctaIcon)) {
               @RenderSvgIcon(ctaIcon, 18)
             }
             @ctaLinkObj.Name
