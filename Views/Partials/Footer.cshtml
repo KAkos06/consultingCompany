@@ -4,7 +4,9 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
     var siteRoot = Model.Root();
-    var settings = siteRoot?.Children.FirstOrDefault(x => x.ContentType.Alias == "siteSettings") ?? siteRoot?.Children.FirstOrDefault(x => x.ContentType.Alias == "settings");
+    var settings = Umbraco.ContentAtRoot().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings") 
+        ?? siteRoot?.Children.FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings")
+        ?? siteRoot?.SiblingsAndSelf().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings");
     
     var brandName = settings?.Value<string>("logoText") ?? "Executive Insights";
     var footerDesc = settings?.Value<string>("footerDescription") ?? "Vezetői coaching és stratégiai mentorálás C-szintű vezetőknek és vezetői csapatoknak — Budapesten és online.";
