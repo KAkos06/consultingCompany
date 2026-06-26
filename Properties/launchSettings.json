@@ -23,7 +23,16 @@
       "applicationUrl": "https://localhost:44372;http://localhost:29646",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }      
+      }
+    },
+    "Umbraco Console": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://localhost:44372;http://localhost:29646",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }
