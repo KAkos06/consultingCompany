@@ -1,58 +1,160 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ServicesComponent>>
 @{
     var content = Model.Content;
     var eyebrow = content.Eyebrow;
     var title = content.Title;
     var subtitle = content.Subtitle;
-    
+    var variant = content.Variant ?? content.Value<string>("variant") ?? "";
+
     var cards = new List<dynamic>();
-    if (!string.IsNullOrWhiteSpace(content.Service1Title)) cards.Add(new { title = content.Service1Title, desc = content.Service1Desc, tag = content.Service1Icon });
-    if (!string.IsNullOrWhiteSpace(content.Service2Title)) cards.Add(new { title = content.Service2Title, desc = content.Service2Desc, tag = content.Service2Icon });
-    if (!string.IsNullOrWhiteSpace(content.Service3Title)) cards.Add(new { title = content.Service3Title, desc = content.Service3Desc, tag = content.Service3Icon });
-    if (!string.IsNullOrWhiteSpace(content.Service4Title)) cards.Add(new { title = content.Service4Title, desc = content.Service4Desc, tag = content.Service4Icon });
-    if (!string.IsNullOrWhiteSpace(content.Service5Title)) cards.Add(new { title = content.Service5Title, desc = content.Service5Desc, tag = content.Service5Icon });
-    if (!string.IsNullOrWhiteSpace(content.Service6Title)) cards.Add(new { title = content.Service6Title, desc = content.Service6Desc, tag = content.Service6Icon });
+    if (content.Services != null) {
+        foreach (var block in content.Services) {
+            var sTitle = block.Content.Value<string>("title");
+            var sDesc = block.Content.Value<string>("description");
+            var sIcon = block.Content.Value<string>("icon");
+            var sTag = block.Content.Value<string>("tag");
+            var sLinks = block.Content.Value<IEnumerable<global::Umbraco.Cms.Core.Models.Link>>("link");
+            var sLink = sLinks?.FirstOrDefault();
+            if (sLink == null) {
+                sLink = block.Content.Value<global::Umbraco.Cms.Core.Models.Link>("link");
+            }
+
+            if (!string.IsNullOrWhiteSpace(sTitle)) {
+                cards.Add(new {
+                    title = sTitle,
+                    desc = sDesc ?? "",
+                    icon = !string.IsNullOrWhiteSpace(sIcon) ? sIcon : "Target",
+                    tag = sTag ?? "",
+                    url = sLink?.Url,
+                    target = sLink?.Target ?? "_self",
+                    linkTitle = !string.IsNullOrWhiteSpace(sLink?.Name) ? sLink.Name : "Részletek"
+                });
+            }
+        }
+    }
+
+    var sectionWrapper = "w-full py-6";
+    var eyebrowColor = "text-[#1A2A4F]/50";
+    var titleColor = "text-[#1A2A4F]";
+    var subtitleColor = "text-[#1A2A4F]/70";
+    var cardBg = "bg-gradient-to-br from-white to-[#FFDBB6]/30 hover:border-[#F7A5A5]/60 hover:shadow-[0_24px_48px_-12px_rgba(26,42,79,0.15)]";
+    var cardTitleColor = "text-[#1A2A4F]";
+    var cardDescColor = "text-[#1A2A4F]/65";
+    var tagBadge = "bg-[#FFF2EF] text-[#1A2A4F]/50";
+    var iconBox = "bg-[#F7A5A5]/20 text-[#1A2A4F] group-hover:bg-[#F7A5A5]/60";
+    var linkColor = "text-[#1A2A4F] group-hover:text-[#F7A5A5]";
+
+    if (variant == "dark") {
+        sectionWrapper = "w-full rounded-[36px] bg-[#1A2A4F] px-6 py-16 md:px-12 md:py-24 shadow-2xl shadow-[#1A2A4F]/20 my-6";
+        eyebrowColor = "text-[#FFDBB6]";
+        titleColor = "text-[#FFF2EF]";
+        subtitleColor = "text-[#FFF2EF]/75";
+        cardBg = "bg-white/[0.07] border border-white/10 hover:border-[#F7A5A5]/60 hover:bg-white/[0.14] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)] backdrop-blur";
+        cardTitleColor = "text-[#FFF2EF]";
+        cardDescColor = "text-[#FFF2EF]/70";
+        tagBadge = "bg-white/10 text-[#FFF2EF]/80";
+        iconBox = "bg-[#F7A5A5] text-[#1A2A4F] group-hover:bg-[#FFDBB6]";
+        linkColor = "text-[#FFF2EF] group-hover:text-[#F7A5A5]";
+    } else if (variant == "warm") {
+        sectionWrapper = "w-full rounded-[36px] bg-gradient-to-br from-[#FFDBB6]/45 via-[#FFF2EF] to-[#F7A5A5]/25 px-6 py-16 md:px-12 md:py-24 border border-[#F7A5A5]/25 shadow-xl shadow-[#1A2A4F]/5 my-6";
+        eyebrowColor = "text-[#1A2A4F]/60";
+        titleColor = "text-[#1A2A4F]";
+        subtitleColor = "text-[#1A2A4F]/75";
+        cardBg = "bg-white/85 border border-white/60 hover:border-[#F7A5A5]/60 hover:bg-white hover:shadow-xl";
+    }
 }
 
-<div id="services" data-testid="services-section" class="w-full">
+<div id="services" data-testid="services-section" class="@sectionWrapper">
   <div class="mx-auto max-w-6xl">
     <div class="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       <div class="max-w-2xl fade-up">
-        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
-          @eyebrow
-        </span>
-        <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight text-[#1A2A4F] md:text-6xl">
+        @if (!string.IsNullOrEmpty(eyebrow)) {
+            <span class="text-xs font-semibold uppercase tracking-[0.25em] @eyebrowColor">
+              @eyebrow
+            </span>
+        }
+        <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight @titleColor md:text-6xl">
           @Html.Raw(title)
         </h2>
       </div>
-      <div class="max-w-md text-lg leading-relaxed text-[#1A2A4F]/70 fade-up delay-1">
-        <p>@subtitle</p>
-      </div>
+      @if (!string.IsNullOrEmpty(subtitle)) {
+          <div class="max-w-md text-lg leading-relaxed @subtitleColor fade-up delay-1">
+            <p>@subtitle</p>
+          </div>
+      }
     </div>
 
     <div data-testid="services-grid" class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
       @for (var i = 0; i < cards.Count; i++) {
         var card = cards[i];
-        <div data-testid="service-card-@i" class="group relative cursor-pointer rounded-3xl border border-transparent p-7 transition-all hover:-translate-y-1 bg-gradient-to-br from-white to-[#FFDBB6]/30 hover:border-[#F7A5A5]/60 hover:shadow-[0_24px_48px_-12px_rgba(26,42,79,0.15)] fade-up delay-@i">
-          <div class="mb-6 flex items-start justify-between">
-            <div class="flex h-14 w-14 items-center justify-center rounded-2xl transition-colors bg-[#F7A5A5]/20 text-[#1A2A4F] group-hover:bg-[#F7A5A5]/60">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+        <div data-testid="service-card-@i" class="group relative flex flex-col rounded-3xl border border-transparent p-7 transition-all @cardBg fade-up delay-@i @(!string.IsNullOrEmpty(card.url) ? "hover:-translate-y-1 cursor-pointer" : "")">
+          <div class="mb-6 flex items-start justify-between shrink-0">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl transition-colors @iconBox">
+              @if (card.icon == "BarChart2") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              } else if (card.icon == "Briefcase") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              } else if (card.icon == "Layers") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 10 6.5-10 6.5L2 8.5z"/><path d="m2 15.5 10 6.5 10-6.5"/><path d="m2 12 10 6.5 10-6.5"/></svg>
+              } else if (card.icon == "ShieldCheck") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+              } else if (card.icon == "Cpu") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+              } else if (card.icon == "TrendingUp") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              } else if (card.icon == "Users") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              } else if (card.icon == "Award") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+              } else if (card.icon == "Lightbulb") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+              } else if (card.icon == "Compass") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+              } else if (card.icon == "Sparkles") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+              } else if (card.icon == "PieChart") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+              } else if (card.icon == "Globe") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+              } else if (card.icon == "Zap") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              } else if (card.icon == "FileText") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+              } else if (card.icon == "CheckCircle") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+              } else if (card.icon == "Database") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+              } else if (card.icon == "Monitor") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              } else if (card.icon == "Smartphone") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+              } else if (card.icon == "Star") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              } else if (card.icon == "MessageSquare") {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              } else {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              }
             </div>
-            <span class="rounded-full px-3 py-1 text-xs font-medium bg-[#FFF2EF] text-[#1A2A4F]/50">
-              @card.tag
-            </span>
+            @if (!string.IsNullOrEmpty(card.tag)) {
+                <span class="rounded-full px-3 py-1 text-xs font-medium shrink-0 @tagBadge">
+                  @card.tag
+                </span>
+            }
           </div>
-          <h3 class="mb-3 font-[Outfit] text-2xl font-semibold text-[#1A2A4F]">
+          <h3 class="mb-3 font-[Outfit] text-2xl font-semibold @cardTitleColor">
             @card.title
           </h3>
-          <p class="mb-6 text-sm leading-relaxed text-[#1A2A4F]/65">
+          <p class="@(string.IsNullOrEmpty(card.url) ? "" : "mb-6 ")text-sm leading-relaxed @cardDescColor grow">
             @card.desc
           </p>
-          <div class="flex items-center gap-2 text-sm font-medium transition-colors text-[#1A2A4F] group-hover:text-[#F7A5A5]">
-            Részletek
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-          </div>
+          @if (!string.IsNullOrEmpty(card.url)) {
+              <a href="@card.url" target="@card.target" class="mt-auto pt-2 inline-flex items-center gap-2 text-sm font-medium transition-colors @linkColor before:absolute before:inset-0">
+                @card.linkTitle
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              </a>
+          }
         </div>
       }
     </div>
