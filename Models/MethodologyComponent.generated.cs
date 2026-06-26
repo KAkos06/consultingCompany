@@ -50,20 +50,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Bottom Strip CTA Link
+		/// Bottom Strip CTA: CTA button with icon
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("bottomStripCtaLink")]
-		public virtual string BottomStripCtaLink => this.Value<string>(_publishedValueFallback, "bottomStripCtaLink");
-
-		///<summary>
-		/// Bottom Strip CTA Text
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("bottomStripCtaText")]
-		public virtual string BottomStripCtaText => this.Value<string>(_publishedValueFallback, "bottomStripCtaText");
+		[ImplementPropertyType("bottomStripCta")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel BottomStripCta => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "bottomStripCta");
 
 		///<summary>
 		/// Bottom Strip Description
@@ -90,100 +82,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Eyebrow => this.Value<string>(_publishedValueFallback, "eyebrow");
 
 		///<summary>
-		/// Step 1 Description
+		/// Steps: Add methodology step items (numbers are auto-generated)
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step1Desc")]
-		public virtual string Step1Desc => this.Value<string>(_publishedValueFallback, "step1Desc");
-
-		///<summary>
-		/// Step 1 Number: Number (e.g. 01)
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step1Num")]
-		public virtual string Step1Num => this.Value<string>(_publishedValueFallback, "step1Num");
-
-		///<summary>
-		/// Step 1 Title
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step1Title")]
-		public virtual string Step1Title => this.Value<string>(_publishedValueFallback, "step1Title");
-
-		///<summary>
-		/// Step 2 Description
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step2Desc")]
-		public virtual string Step2Desc => this.Value<string>(_publishedValueFallback, "step2Desc");
-
-		///<summary>
-		/// Step 2 Number: Number (e.g. 01)
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step2Num")]
-		public virtual string Step2Num => this.Value<string>(_publishedValueFallback, "step2Num");
-
-		///<summary>
-		/// Step 2 Title
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step2Title")]
-		public virtual string Step2Title => this.Value<string>(_publishedValueFallback, "step2Title");
-
-		///<summary>
-		/// Step 3 Description
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step3Desc")]
-		public virtual string Step3Desc => this.Value<string>(_publishedValueFallback, "step3Desc");
-
-		///<summary>
-		/// Step 3 Number: Number (e.g. 01)
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step3Num")]
-		public virtual string Step3Num => this.Value<string>(_publishedValueFallback, "step3Num");
-
-		///<summary>
-		/// Step 3 Title
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step3Title")]
-		public virtual string Step3Title => this.Value<string>(_publishedValueFallback, "step3Title");
-
-		///<summary>
-		/// Step 4 Description
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step4Desc")]
-		public virtual string Step4Desc => this.Value<string>(_publishedValueFallback, "step4Desc");
-
-		///<summary>
-		/// Step 4 Number: Number (e.g. 01)
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step4Num")]
-		public virtual string Step4Num => this.Value<string>(_publishedValueFallback, "step4Num");
-
-		///<summary>
-		/// Step 4 Title
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("step4Title")]
-		public virtual string Step4Title => this.Value<string>(_publishedValueFallback, "step4Title");
+		[ImplementPropertyType("steps")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Steps => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "steps");
 
 		///<summary>
 		/// Subtitle
