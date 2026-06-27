@@ -17,6 +17,7 @@
     
     var newsTitle = settings?.Value<string>("footerNewsletterTitle") ?? "Iratkozz fel";
     var newsText = settings?.Value<string>("footerNewsletterText") ?? "Havi egy mély insight a vezetésről. Spam nélkül.";
+    var newsFormGuid = settings?.Value<Guid?>("footerNewsletterForm") ?? Model.Value<Guid?>("footerNewsletterForm");
     
     var copyText = settings?.Value<string>("copyrightText") ?? "© 2025 Executive Insights Kft. Minden jog fenntartva.";
     var bottomLinks = settings?.Value<IEnumerable<Link>>("footerBottomLinks");
@@ -24,6 +25,8 @@
     var linkedinUrl = settings?.Value<string>("linkedinUrl");
     var twitterUrl = settings?.Value<string>("twitterUrl");
     var instagramUrl = settings?.Value<string>("instagramUrl");
+    
+    var hasNewsForm = newsFormGuid != null && newsFormGuid != Guid.Empty;
 }
 
 <!-- Modern Dark Navy Footer -->
@@ -32,7 +35,7 @@
     <div class="grid md:grid-cols-12 gap-10 pb-16 border-b border-white/10">
       
       <!-- Brand Column -->
-      <div class="md:col-span-5">
+      <div class="@(hasNewsForm ? "md:col-span-5" : "md:col-span-8")">
         <div class="flex items-center gap-3 mb-6">
           <div class="w-10 h-10 rounded-full bg-[#F7A5A5] text-[#1A2A4F] flex items-center justify-center font-bold text-xl font-[Outfit]">
             EI
@@ -91,6 +94,7 @@
         </ul>
       </div>
 
+      @if (hasNewsForm) {
       <!-- Newsletter Column -->
       <div class="md:col-span-3">
         <div class="text-xs font-bold uppercase tracking-[0.2em] text-[#FFDBB6] mb-5">
@@ -99,13 +103,11 @@
         <p class="text-sm text-[#FFF2EF]/70 mb-4">
           @newsText
         </p>
-        <form class="flex gap-2" onsubmit="event.preventDefault();">
-          <input type="email" placeholder="te@email.hu" class="flex-1 bg-white/5 border border-white/15 px-4 py-3 rounded-full text-sm text-[#FFF2EF] placeholder:text-[#FFF2EF]/40 focus:border-[#F7A5A5] focus:outline-none transition-colors" />
-          <button type="submit" class="w-12 h-12 shrink-0 rounded-full bg-[#F7A5A5] text-[#1A2A4F] font-bold flex items-center justify-center hover:bg-[#FFDBB6] active:scale-95 transition-all">
-            →
-          </button>
-        </form>
+        <div class="footer-newsletter-form">
+          @await Component.InvokeAsync("RenderForm", new { formId = newsFormGuid.Value, theme = "default", includeScripts = false })
+        </div>
       </div>
+      }
     </div>
 
     <!-- Bottom Bar -->
@@ -121,3 +123,53 @@
     </div>
   </div>
 </footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const nForm = document.querySelector(".footer-newsletter-form");
+        if (nForm) {
+            const formEl = nForm.querySelector("form");
+            const inp = nForm.querySelector("input[type='text'], input[type='email']");
+            const sub = nForm.querySelector("input[type='submit'], button[type='submit']");
+
+            if (formEl && inp && sub) {
+                // Hozunk létre egy tiszta flex konténert az oszlop teljes szélességében
+                const flexGroup = document.createElement("div");
+                flexGroup.className = "flex items-center gap-2 w-full mt-1";
+
+                // Formázzuk a szövegmezőt (100% rugalmas kitöltés)
+                inp.setAttribute("placeholder", "te@email.hu");
+                inp.setAttribute("type", "email");
+                inp.style.cssText = "flex: 1 1 auto !important; width: 100% !important; background-color: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.15) !important; padding: 0.75rem 1.25rem !important; border-radius: 9999px !important; font-size: 0.875rem !important; color: #FFF2EF !important; outline: none !important; box-sizing: border-box !important;";
+
+                // Formázzuk a kerek gombot
+                if (sub.tagName === "INPUT") sub.setAttribute("value", "→");
+                if (sub.tagName === "BUTTON") sub.innerHTML = "→";
+                sub.style.cssText = "flex: 0 0 48px !important; width: 48px !important; height: 48px !important; border-radius: 9999px !important; background-color: #F7A5A5 !important; color: #1A2A4F !important; font-weight: bold !important; font-size: 1.25rem !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 0 !important; margin: 0 !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;";
+
+                flexGroup.appendChild(inp);
+                flexGroup.appendChild(sub);
+
+                // Eltüntetjük az Umbraco mélyen egymásba ágyazott girbe-gurba kereteit
+                const pageEl = nForm.querySelector(".umbraco-forms-page");
+                if (pageEl) pageEl.style.display = "none";
+
+                // Betesszük a tiszta sort közvetlenül a formba (a rejtett biztonsági tokenek mellé)
+                formEl.appendChild(flexGroup);
+            }
+        }
+    });
+</script>
+
+<style>
+    .footer-newsletter-form {
+        width: 100% !important;
+        display: block;
+    }
+    .footer-newsletter-form form {
+        display: block;
+        width: 100% !important;
+        margin: 0;
+        padding: 0;
+    }
+</style>
