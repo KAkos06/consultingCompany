@@ -50,7 +50,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Copyright Text
+		/// Copyright Text: A lábléc alján lévő jogi szöveg
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -58,7 +58,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string CopyrightText => this.Value<string>(_publishedValueFallback, "copyrightText");
 
 		///<summary>
-		/// Footer Description
+		/// Footer Description: A Footer bal oldalán megjelenő cégbemutatkozó szöveg
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -66,23 +66,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string FooterDescription => this.Value<string>(_publishedValueFallback, "footerDescription");
 
 		///<summary>
-		/// Header Nav Links
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("headerNavLinks")]
-		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel HeaderNavLinks => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "headerNavLinks");
-
-		///<summary>
-		/// Header CTA Button
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("headerCtaButton")]
-		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel HeaderCtaButton => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "headerCtaButton");
-
-		///<summary>
-		/// Header CTA Label (legacy fallback)
+		/// Header CTA Label: A jobb felső gomb szövege (pl. Kapcsolat)
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -90,7 +74,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string HeaderCtaLabel => this.Value<string>(_publishedValueFallback, "headerCtaLabel");
 
 		///<summary>
-		/// Header CTA Link (legacy fallback)
+		/// Header CTA Link: A kapcsolat gomb célpontja (pl. /kapcsolat)
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -98,7 +82,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string HeaderCtaLink => this.Value<string>(_publishedValueFallback, "headerCtaLink");
 
 		///<summary>
-		/// LinkedIn URL
+		/// LinkedIn URL: LinkedIn profil vagy oldal linkje
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -106,7 +90,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string LinkedinUrl => this.Value<string>(_publishedValueFallback, "linkedinUrl");
 
 		///<summary>
-		/// Logo Text
+		/// Logo Text: A Header bal felső sarkában megjelenő márkanév
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]

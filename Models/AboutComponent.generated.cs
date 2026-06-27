@@ -74,7 +74,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops Image => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "image");
 
 		///<summary>
-		/// Stat 1 Label
+		/// Stat 1 Label: Floating card stat title
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -82,7 +82,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Stat1Label => this.Value<string>(_publishedValueFallback, "stat1Label");
 
 		///<summary>
-		/// Stat 1 Value
+		/// Stat 1 Value: Floating card stat value (e.g. 15+)
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -90,7 +90,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Stat1Value => this.Value<string>(_publishedValueFallback, "stat1Value");
 
 		///<summary>
-		/// Subtitle
+		/// Subtitle: Short description paragraph
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -98,7 +98,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Subtitle => this.Value<string>(_publishedValueFallback, "subtitle");
 
 		///<summary>
-		/// Tag
+		/// Tag: Eyebrow tag text
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -106,7 +106,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Tag => this.Value<string>(_publishedValueFallback, "tag");
 
 		///<summary>
-		/// Title
+		/// Title: Main heading
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]

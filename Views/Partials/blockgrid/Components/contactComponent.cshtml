@@ -7,10 +7,8 @@
     var subtitle = content.Subtitle;
     var description = content.Description;
 
-    var contactInfos = new List<dynamic>();
-    if (!string.IsNullOrWhiteSpace(content.C1Label)) contactInfos.Add(new { iconVal = content.GetIconValue("c1Icon"), icon = content.C1Icon, label = content.C1Label, value = content.C1Value });
-    if (!string.IsNullOrWhiteSpace(content.C2Label)) contactInfos.Add(new { iconVal = content.GetIconValue("c2Icon"), icon = content.C2Icon, label = content.C2Label, value = content.C2Value });
-    if (!string.IsNullOrWhiteSpace(content.C3Label)) contactInfos.Add(new { iconVal = content.GetIconValue("c3Icon"), icon = content.C3Icon, label = content.C3Label, value = content.C3Value });
+    var contactBlocks = content.ContactValues;
+    var formGuid = content.Form;
 }
 
 <div id="contact" data-testid="contact-section" class="w-full">
@@ -30,58 +28,263 @@
         <div class="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-24">
             <div class="fade-up delay-1">
                 <div class="space-y-8 rounded-[32px] bg-white p-8 shadow-xl shadow-[#1A2A4F]/5 md:p-10">
-                    <p class="mb-8 text-sm leading-relaxed text-[#1A2A4F]/70">
-                        @description
-                    </p>
+                    @if (!string.IsNullOrWhiteSpace(description)) {
+                        <p class="mb-8 text-sm leading-relaxed text-[#1A2A4F]/70">
+                            @description
+                        </p>
+                    }
                     <div class="space-y-6">
-                        @foreach(var info in contactInfos) {
-                            <div class="flex items-start gap-4">
-                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#FFF2EF] text-[#1A2A4F]">
-                                    @if (info.iconVal != null && !info.iconVal.IsEmpty) {
-                                        @info.iconVal.Render(size: 20)
-                                    } else {
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                    }
-                                </div>
-                                <div>
-                                    <div class="text-xs font-semibold uppercase tracking-wider text-[#1A2A4F]/50">
-                                        @info.label
+                        @if (contactBlocks != null && contactBlocks.Any()) {
+                            foreach (var block in contactBlocks) {
+                                var item = (ContactItem)block.Content;
+                                var iconVal = block.Content.GetIconValue("icon");
+                                <div class="flex items-start gap-4">
+                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#FFF2EF] text-[#1A2A4F]">
+                                        @if (iconVal != null && !iconVal.IsEmpty) {
+                                            @iconVal.Render(size: 20)
+                                        } else {
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                        }
                                     </div>
-                                    <div class="mt-1 font-medium text-[#1A2A4F]">
-                                        @info.value
+                                    <div>
+                                        <div class="text-xs font-semibold uppercase tracking-wider text-[#1A2A4F]/50">
+                                            @item.Label
+                                        </div>
+                                        <div class="mt-1 font-medium text-[#1A2A4F]">
+                                            @item.Value
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         }
                     </div>
                 </div>
             </div>
 
             <div class="fade-up delay-2">
-                <form class="space-y-6 rounded-[32px] bg-gradient-to-br from-[#1A2A4F] to-[#1A2A4F]/90 p-8 shadow-2xl shadow-[#1A2A4F]/20 md:p-12">
-                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-[#FFF2EF]/80">Név</label>
-                            <input type="text" placeholder="Vezetéknév és Keresztnév" class="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-[#FFF2EF] placeholder:text-white/30 focus:border-[#F7A5A5] focus:outline-none focus:ring-1 focus:ring-[#F7A5A5] transition-all" />
+                @if (formGuid != null && formGuid != Guid.Empty) {
+                    <div class="rounded-[32px] bg-[#FFECE8] p-8 shadow-xl border border-[#F7A5A5]/20 md:p-12 text-[#1A2A4F] umbraco-forms-container">
+                        @await Component.InvokeAsync("RenderForm", new { formId = formGuid.Value, theme = "default", includeScripts = true })
+                    </div>
+                } else {
+                    <form class="space-y-6 rounded-[32px] bg-[#FFECE8] p-8 shadow-xl border border-[#F7A5A5]/20 md:p-12 text-[#1A2A4F]">
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-[#1A2A4F]">Név</label>
+                                <input type="text" placeholder="Vezetéknév Keresztnév" class="w-full rounded-2xl border border-[#1A2A4F]/10 bg-white px-5 py-4 text-[#1A2A4F] placeholder:text-[#1A2A4F]/40 focus:border-[#1A2A4F] focus:outline-none focus:ring-1 focus:ring-[#1A2A4F] transition-all" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-[#1A2A4F]">E-mail</label>
+                                <input type="email" placeholder="te@cegednev.hu" class="w-full rounded-2xl border border-[#1A2A4F]/10 bg-white px-5 py-4 text-[#1A2A4F] placeholder:text-[#1A2A4F]/40 focus:border-[#1A2A4F] focus:outline-none focus:ring-1 focus:ring-[#1A2A4F] transition-all" />
+                            </div>
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-medium text-[#FFF2EF]/80">Pozíció / Cég</label>
-                            <input type="text" placeholder="CEO, TechGroup" class="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-[#FFF2EF] placeholder:text-white/30 focus:border-[#F7A5A5] focus:outline-none focus:ring-1 focus:ring-[#F7A5A5] transition-all" />
+                            <label class="text-sm font-semibold text-[#1A2A4F]">Cég / Pozíció</label>
+                            <input type="text" placeholder="pl. CEO, Nordwell Group" class="w-full rounded-2xl border border-[#1A2A4F]/10 bg-white px-5 py-4 text-[#1A2A4F] placeholder:text-[#1A2A4F]/40 focus:border-[#1A2A4F] focus:outline-none focus:ring-1 focus:ring-[#1A2A4F] transition-all" />
                         </div>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-[#FFF2EF]/80">Email cím</label>
-                        <input type="email" placeholder="nev@cegnev.hu" class="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-[#FFF2EF] placeholder:text-white/30 focus:border-[#F7A5A5] focus:outline-none focus:ring-1 focus:ring-[#F7A5A5] transition-all" />
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-[#FFF2EF]/80">Hogyan segíthetünk?</label>
-                        <textarea rows="4" placeholder="Írd le röviden a jelenlegi helyzetet..." class="w-full resize-none rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-[#FFF2EF] placeholder:text-white/30 focus:border-[#F7A5A5] focus:outline-none focus:ring-1 focus:ring-[#F7A5A5] transition-all"></textarea>
-                    </div>
-                    <button type="button" class="mt-4 w-full rounded-full bg-[#F7A5A5] px-8 py-4 text-sm font-bold text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95">
-                        Üzenet küldése
-                    </button>
-                </form>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-[#1A2A4F]">Miben segíthetünk?</label>
+                            <textarea rows="2" style="height: 72px;" placeholder="Pár mondatban a helyzetről, kihívásokról..." class="w-full resize-none rounded-2xl border border-[#1A2A4F]/10 bg-white px-5 py-3 text-[#1A2A4F] placeholder:text-[#1A2A4F]/40 focus:border-[#1A2A4F] focus:outline-none focus:ring-1 focus:ring-[#1A2A4F] transition-all"></textarea>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-2">
+                            <span class="text-xs text-[#1A2A4F]/60">Üzeneted bizalmas. 24 órán belül válaszolunk.</span>
+                            <button type="button" class="w-full md:w-auto flex items-center justify-center gap-2 rounded-full bg-[#1A2A4F] px-8 py-4 text-sm font-bold text-white transition-all hover:bg-[#2A3A5F] active:scale-95 shadow-lg shadow-[#1A2A4F]/20">
+                                <span>Üzenet küldése</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            </button>
+                        </div>
+                    </form>
+                }
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const wrapper = document.querySelector(".umbraco-forms-container .umbraco-forms-container.col-md-12");
+        if (wrapper) {
+            const fields = Array.from(wrapper.querySelectorAll(".umbraco-forms-field"));
+            if (fields.length >= 4) {
+                // Eredeti DOM sorrend: 0: Név, 1: Pozíció, 2: Email, 3: Üzenet
+                // Átredezés DOM-ban: Név -> Email -> Pozíció -> Üzenet (tökéletes Tab sorrendhez)
+                wrapper.insertBefore(fields[2], fields[1]);
+
+                // Textarea magasság szigorú korlátozása kompakt méretre
+                const textareas = wrapper.querySelectorAll("textarea");
+                textareas.forEach(ta => {
+                    ta.setAttribute("rows", "2");
+                    ta.style.height = "72px";
+                    ta.style.minHeight = "72px";
+                    ta.style.maxHeight = "72px";
+                });
+
+                // Explicit TabIndex beállítás biztos ami biztos
+                const inputs = wrapper.querySelectorAll("input[type='text'], input[type='email'], textarea");
+                inputs.forEach((inp, idx) => inp.setAttribute("tabindex", idx + 1));
+                const submit = document.querySelector(".umbraco-forms-container input[type='submit'], .umbraco-forms-container button[type='submit']");
+                if (submit) submit.setAttribute("tabindex", inputs.length + 1);
+            }
+        }
+    });
+</script>
+
+<style>
+    .umbraco-forms-container {
+        color: #1A2A4F;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .umbraco-forms-container .umbraco-forms-page,
+    .umbraco-forms-container .umbraco-forms-fieldset,
+    .umbraco-forms-container .row-fluid,
+    .umbraco-forms-container .umbraco-forms-container.col-md-12 {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-sizing: border-box !important;
+    }
+    .umbraco-forms-container .umbraco-forms-container.col-md-12 {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+    }
+    @@media (max-width: 767px) {
+        .umbraco-forms-container .umbraco-forms-container.col-md-12 {
+            grid-template-columns: 1fr !important;
+        }
+        .umbraco-forms-container .umbraco-forms-field {
+            grid-column: span 1 !important;
+        }
+    }
+    /* JS átrendezés utáni DOM pozíciók */
+    .umbraco-forms-container .umbraco-forms-field:nth-child(1), /* Név */
+    .umbraco-forms-container .umbraco-forms-field:nth-child(2) { /* Email */
+        grid-column: span 1 !important;
+    }
+    .umbraco-forms-container .umbraco-forms-field:nth-child(3), /* Pozíció / Cég */
+    .umbraco-forms-container .umbraco-forms-field:nth-child(4), /* Üzenet */
+    .umbraco-forms-container .umbraco-forms-navigation { /* Gomb sáv */
+        grid-column: span 2 !important;
+        width: 100% !important;
+    }
+    .umbraco-forms-container .umbraco-forms-field,
+    .umbraco-forms-container .umbraco-forms-field-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        margin-bottom: 0 !important;
+    }
+    .umbraco-forms-container .umbraco-forms-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #1A2A4F;
+    }
+    .umbraco-forms-container input[type="text"],
+    .umbraco-forms-container input[type="email"],
+    .umbraco-forms-container input[type="tel"],
+    .umbraco-forms-container input[type="number"],
+    .umbraco-forms-container select {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 1rem !important;
+        border: 1px solid rgba(26, 42, 79, 0.1) !important;
+        background-color: #FFFFFF !important;
+        padding: 1rem 1.25rem !important;
+        color: #1A2A4F !important;
+        outline: none !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 4px rgba(26, 42, 79, 0.02) !important;
+        box-sizing: border-box !important;
+    }
+    .umbraco-forms-container textarea {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 72px !important;
+        min-height: 72px !important;
+        max-height: 72px !important;
+        border-radius: 1rem !important;
+        border: 1px solid rgba(26, 42, 79, 0.1) !important;
+        background-color: #FFFFFF !important;
+        padding: 0.625rem 1.25rem !important;
+        color: #1A2A4F !important;
+        outline: none !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 4px rgba(26, 42, 79, 0.02) !important;
+        box-sizing: border-box !important;
+        resize: none !important;
+    }
+    .umbraco-forms-container input[type="text"]::placeholder,
+    .umbraco-forms-container input[type="email"]::placeholder,
+    .umbraco-forms-container textarea::placeholder {
+        color: rgba(26, 42, 79, 0.4) !important;
+    }
+    .umbraco-forms-container input[type="text"]:focus,
+    .umbraco-forms-container input[type="email"]:focus,
+    .umbraco-forms-container textarea:focus {
+        border-color: #1A2A4F !important;
+        box-shadow: 0 0 0 1px #1A2A4F !important;
+    }
+    .umbraco-forms-container .umbraco-forms-navigation {
+        margin-top: 1rem;
+    }
+    @@media (max-width: 767px) {
+        .umbraco-forms-container .umbraco-forms-navigation {
+            grid-column: span 1 !important;
+        }
+    }
+    .umbraco-forms-container .umbraco-forms-navigation .col-md-12 {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 1.5rem !important;
+        width: 100% !important;
+        padding-top: 0.5rem;
+    }
+    .umbraco-forms-container .umbraco-forms-navigation .col-md-12::before {
+        content: "Üzeneted bizalmas. 24 órán belül válaszolunk.";
+        font-size: 0.75rem;
+        color: rgba(26, 42, 79, 0.6);
+    }
+    .umbraco-forms-container input[type="submit"],
+    .umbraco-forms-container button[type="submit"] {
+        width: auto !important;
+        min-width: 180px;
+        border-radius: 9999px !important;
+        background-color: #1A2A4F !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='22' y1='2' x2='11' y2='13'/%3E%3Cpolygon points='22 2 15 22 11 13 2 9 22 2'/%3E%3C/svg%3E");
+        background-position: right 1.5rem center;
+        background-repeat: no-repeat;
+        padding: 1rem 3.5rem 1rem 2rem !important;
+        font-size: 0.875rem !important;
+        font-weight: 700 !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 10px 15px -3px rgba(26, 42, 79, 0.2) !important;
+        margin-left: auto;
+    }
+    .umbraco-forms-container input[type="submit"]:hover,
+    .umbraco-forms-container button[type="submit"]:hover {
+        background-color: #2A3A5F !important;
+        box-shadow: 0 20px 25px -5px rgba(26, 42, 79, 0.3) !important;
+        transform: translateY(-1px);
+    }
+    .umbraco-forms-container input[type="submit"]:active,
+    .umbraco-forms-container button[type="submit"]:active {
+        transform: scale(0.98);
+    }
+    .umbraco-forms-container .field-validation-error {
+        display: block;
+        margin-top: 0.375rem;
+        font-size: 0.75rem;
+        color: #D9381E;
+        font-weight: 500;
+    }
+</style>

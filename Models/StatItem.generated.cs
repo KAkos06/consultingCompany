@@ -50,19 +50,19 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Number
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("number")]
-		public virtual string Number => this.Value<string>(_publishedValueFallback, "number");
-
-		///<summary>
-		/// Label
+		/// Label: Stat label (e.g. Client Satisfaction)
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("label")]
 		public virtual string Label => this.Value<string>(_publishedValueFallback, "label");
+
+		///<summary>
+		/// Number: Stat number or value (e.g. 98%, 150+)
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("number")]
+		public virtual string Number => this.Value<string>(_publishedValueFallback, "number");
 	}
 }

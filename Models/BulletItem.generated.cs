@@ -55,7 +55,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("icon")]
-		public virtual string Icon => this.Value<string>(_publishedValueFallback, "icon");
+		public virtual global::BetterIcons.Models.BetterIconsValue Icon => this.Value<global::BetterIcons.Models.BetterIconsValue>(_publishedValueFallback, "icon");
 
 		///<summary>
 		/// Text: Bullet point text

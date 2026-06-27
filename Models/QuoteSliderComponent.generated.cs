@@ -50,14 +50,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Autoplay
+		/// Autoplay: Enable automatic quote sliding (jumps periodically)
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[ImplementPropertyType("autoplay")]
 		public virtual bool Autoplay => this.Value<bool>(_publishedValueFallback, "autoplay");
 
 		///<summary>
-		/// Quotes
+		/// Quotes: List of quotes (minimum 2, maximum 4)
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]

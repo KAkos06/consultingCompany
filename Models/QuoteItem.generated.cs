@@ -50,7 +50,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Description
+		/// Description: Quote author and role
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -58,15 +58,15 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Description => this.Value<string>(_publishedValueFallback, "description");
 
 		///<summary>
-		/// Icon
+		/// Icon: Select icon
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("icon")]
-		public virtual string Icon => this.Value<string>(_publishedValueFallback, "icon");
+		public virtual global::BetterIcons.Models.BetterIconsValue Icon => this.Value<global::BetterIcons.Models.BetterIconsValue>(_publishedValueFallback, "icon");
 
 		///<summary>
-		/// Tag
+		/// Tag: Small eyebrow text
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -74,7 +74,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Tag => this.Value<string>(_publishedValueFallback, "tag");
 
 		///<summary>
-		/// Title
+		/// Title: Quote title / statement
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]

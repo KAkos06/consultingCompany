@@ -1,0 +1,68 @@
+{
+  "$type": "Umbraco.Forms.Core.Form, Umbraco.Forms.Core",
+  "id": "b2a8d3e1-1111-1111-1111-111111111111",
+  "name": "Kapcsolat Űrlap",
+  "created": "2026-06-27T00:00:00Z",
+  "pages": [
+    {
+      "$type": "Umbraco.Forms.Core.Page, Umbraco.Forms.Core",
+      "caption": "1. oldal",
+      "fieldSets": [
+        {
+          "$type": "Umbraco.Forms.Core.FieldSet, Umbraco.Forms.Core",
+          "caption": null,
+          "containers": [
+            {
+              "$type": "Umbraco.Forms.Core.FieldSetContainer, Umbraco.Forms.Core",
+              "width": 12,
+              "fields": [
+                {
+                  "$type": "Umbraco.Forms.Core.Field, Umbraco.Forms.Core",
+                  "id": "c1111111-1111-1111-1111-111111111111",
+                  "caption": "Név",
+                  "alias": "nev",
+                  "required": true,
+                  "fieldTypeId": "3f92e01b-29e2-4a30-bf33-9d043d7e7520"
+                },
+                {
+                  "$type": "Umbraco.Forms.Core.Field, Umbraco.Forms.Core",
+                  "id": "c2222222-2222-2222-2222-222222222222",
+                  "caption": "Pozíció / Cég",
+                  "alias": "pozicioCeg",
+                  "required": false,
+                  "fieldTypeId": "3f92e01b-29e2-4a30-bf33-9d043d7e7520"
+                },
+                {
+                  "$type": "Umbraco.Forms.Core.Field, Umbraco.Forms.Core",
+                  "id": "c3333333-3333-3333-3333-333333333333",
+                  "caption": "Email cím",
+                  "alias": "email",
+                  "required": true,
+                  "fieldTypeId": "3f92e01b-29e2-4a30-bf33-9d043d7e7520"
+                },
+                {
+                  "$type": "Umbraco.Forms.Core.Field, Umbraco.Forms.Core",
+                  "id": "c4444444-4444-4444-4444-444444444444",
+                  "caption": "Hogyan segíthetünk?",
+                  "alias": "uzenet",
+                  "required": true,
+                  "fieldTypeId": "023f09ac-1445-4bcb-b8fa-ab49f33bd046"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "$type": "Umbraco.Forms.Core.Workflow, Umbraco.Forms.Core",
+      "id": "w1111111-1111-1111-1111-111111111111",
+      "name": "Mentés adatbázisba",
+      "workflowTypeId": "d6a2c406-cf89-11de-848b-dff8b54909a8",
+      "executesOn": 0,
+      "active": true
+    }
+  ]
+}
