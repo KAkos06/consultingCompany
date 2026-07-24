@@ -7,20 +7,37 @@
     var subtitle = content.Subtitle;
 
     var testimonialBlocks = content.Testimonials;
+
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var eyebrowColor = isDark ? "text-white/50" : "text-[#1A2A4F]/50";
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var subtitleColor = isDark ? "text-white/70" : "text-[#1A2A4F]/70";
+    
+    var cardBg = isDark ? "bg-white/[0.07] border border-white/10 backdrop-blur shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)]" : "bg-white shadow-xl shadow-[#1A2A4F]/5";
+    var cardHover = isDark ? "hover:bg-white/[0.14] hover:border-[#F7A5A5]/60 hover:shadow-2xl hover:shadow-black/40" : "hover:shadow-2xl hover:shadow-[#1A2A4F]/10";
+    var iconColor = isDark ? "text-[#F7A5A5]" : "text-[#FFDBB6]";
+    var quoteColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    
+    var avatarRing = isDark ? "ring-white/20" : "ring-[#FFF2EF]";
+    var avatarPlaceholderBg = isDark ? "bg-[#F7A5A5] text-[#1A2A4F]" : "bg-[#1A2A4F] text-white";
+    var nameColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var roleColor = isDark ? "text-white/60" : "text-[#1A2A4F]/60";
 }
 
 <div id="testimonials" data-testid="testimonials-section" class="w-full">
     <div class="mx-auto max-w-6xl">
         <div class="mb-20 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div class="max-w-2xl fade-up">
-                <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
+                <span class="text-xs font-semibold uppercase tracking-[0.25em] @eyebrowColor">
                     @eyebrow
                 </span>
-                <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight text-[#1A2A4F] md:text-6xl">
+                <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight @titleColor md:text-6xl">
                     @Html.Raw(title)
                 </h2>
             </div>
-            <div class="max-w-md text-lg leading-relaxed text-[#1A2A4F]/70 fade-up delay-1">
+            <div class="max-w-md text-lg leading-relaxed @subtitleColor fade-up delay-1">
                 <p>
                     @subtitle
                 </p>
@@ -33,28 +50,28 @@
                 @foreach (var block in testimonialBlocks) {
                     var item = (TestimonialItem)block.Content;
                     var imageUrl = item.Image != null ? item.Image.Url() : "";
-                    <div data-testid="testimonial-@i" class="group relative rounded-[32px] bg-white p-10 shadow-xl shadow-[#1A2A4F]/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#1A2A4F]/10 fade-up delay-@i flex flex-col justify-between">
+                    <div data-testid="testimonial-@i" class="group relative rounded-[32px] p-8 md:p-10 @cardBg transition-all duration-500 hover:-translate-y-1 @cardHover fade-up delay-@i flex flex-col justify-between">
                         <div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-8 text-[#FFDBB6] transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-6"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1.5.5 1.5 1.714V15c0 3-4 6-4 6z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.5c0 2.214-.5 2.714-1.5 2.714V15c0 3-4 6-4 6z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-8 @iconColor transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-6"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1.5.5 1.5 1.714V15c0 3-4 6-4 6z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.5c0 2.214-.5 2.714-1.5 2.714V15c0 3-4 6-4 6z"/></svg>
                             
-                            <p class="mb-10 text-xl font-medium leading-relaxed text-[#1A2A4F]">
+                            <p class="mb-10 text-xl font-medium leading-relaxed @quoteColor">
                                 "@item.Quote"
                             </p>
                         </div>
                         
                         <div class="flex items-center gap-4 mt-auto">
                             @if (!string.IsNullOrEmpty(imageUrl)) {
-                                <img src="@imageUrl" alt="@item.Name" class="h-14 w-14 rounded-full object-cover ring-4 ring-[#FFF2EF]" />
+                                <img src="@imageUrl" alt="@item.Name" class="h-14 w-14 rounded-full object-cover ring-4 @avatarRing" />
                             } else {
-                                <div class="h-14 w-14 rounded-full bg-[#1A2A4F] ring-4 ring-[#FFF2EF] flex items-center justify-center text-white font-bold">
+                                <div class="h-14 w-14 rounded-full @avatarPlaceholderBg ring-4 @avatarRing flex items-center justify-center font-bold">
                                     @(string.IsNullOrEmpty(item.Name) ? "" : item.Name.Substring(0, 1).ToUpper())
                                 </div>
                             }
                             <div>
-                                <div class="font-[Outfit] font-bold text-[#1A2A4F]">
+                                <div class="font-[Outfit] font-bold @nameColor">
                                     @item.Name
                                 </div>
-                                <div class="text-sm font-medium text-[#1A2A4F]/60">
+                                <div class="text-sm font-medium @roleColor">
                                     @item.Role
                                 </div>
                             </div>

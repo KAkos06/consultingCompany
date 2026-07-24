@@ -18,10 +18,26 @@
     }
     
     var sliderId = "slider-" + Guid.NewGuid().ToString("N").Substring(0, 8);
+
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var sliderBg = isDark ? "text-white" : "text-[#1A2A4F]";
+    var tagColor = isDark ? "text-[#FFDBB6]" : "text-[#1A2A4F]/60";
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var descColor = isDark ? "opacity-70 text-[#FFF2EF]/80" : "opacity-70 text-[#1A2A4F]/80";
+    var iconBox = isDark ? "border-[#F7A5A5]/30 bg-[#F7A5A5]/20 text-[#F7A5A5]" : "border-[#1A2A4F]/10 bg-[#1A2A4F]/5 text-[#1A2A4F]";
+    var indicatorsBg = isDark ? "bg-black/20 border-white/10" : "bg-black/5 border-[#1A2A4F]/10";
+    var indicatorActive = isDark ? "bg-[#F7A5A5]" : "bg-[#1A2A4F]";
+    var indicatorInactive = isDark ? "bg-white/30" : "bg-[#1A2A4F]/20";
+    var btnBorder = isDark ? "border-white/15 hover:bg-white/10" : "border-[#1A2A4F]/15 hover:bg-[#1A2A4F]/5";
+    var nextBtn = isDark ? "bg-[#F7A5A5] text-[#1A2A4F] hover:bg-[#FFDBB6]" : "bg-[#1A2A4F] text-[#FFF2EF] hover:bg-[#1A2A4F]/90";
 }
 
-<div data-testid="quote-slider" class="relative rounded-3xl bg-[#1A2A4F] shadow-2xl shadow-[#1A2A4F]/20 overflow-hidden" id="@sliderId">
-    <div class="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'3\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.4\'/%3E%3C/svg%3E')"></div>
+<div data-testid="quote-slider" class="relative rounded-3xl overflow-hidden @sliderBg" id="@sliderId">
+    @if(isDark) {
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'3\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.4\'/%3E%3C/svg%3E')"></div>
+    }
 
     <div class="mx-auto flex max-w-6xl items-center gap-6 px-6 py-8">
         <div class="flex-1 overflow-hidden">
@@ -30,7 +46,7 @@
                     var slide = slides[i];
                     <div data-testid="quote-slide-@i" class="snap-start basis-full shrink-0 grow-0 pr-6 md:basis-1/2 transition-opacity">
                         <div class="flex items-start gap-4">
-                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#F7A5A5]/30 bg-[#F7A5A5]/20 text-[#F7A5A5]">
+                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border @iconBox">
                                 @if (slide.iconVal != null && !slide.iconVal.IsEmpty) {
                                     @slide.iconVal.Render(size: 20)
                                 } else if (slide.icon == "Award") {
@@ -52,13 +68,13 @@
                                 }
                             </div>
                             <div class="min-w-0">
-                                <div class="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#FFDBB6]">
+                                <div class="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] @tagColor">
                                     @slide.tag
                                 </div>
-                                <div class="line-clamp-2 text-sm font-semibold leading-snug text-[#FFF2EF]">
+                                <div class="line-clamp-2 text-sm font-semibold leading-snug @titleColor">
                                     @slide.title
                                 </div>
-                                <div class="mt-1 line-clamp-1 text-xs text-[#FFF2EF]/55">
+                                <div class="mt-1 line-clamp-1 text-xs @descColor">
                                     @slide.desc
                                 </div>
                             </div>
@@ -71,17 +87,17 @@
 
         <div class="flex shrink-0 items-center gap-4">
             @if (slides.Count > 1) {
-                <div class="hidden sm:flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-[#111E3A] border border-white/10 shadow-inner" id="@(sliderId)-indicators">
+                <div class="hidden sm:flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl border shadow-inner @indicatorsBg" id="@(sliderId)-indicators">
                     @for (var i = 0; i < slides.Count; i++) {
-                        <div data-index="@i" class="h-1 transition-all duration-300 rounded-full @(i == 0 ? "w-5 bg-[#F7A5A5]" : "w-2 bg-white/30")"></div>
+                        <div data-index="@i" class="h-1 transition-all duration-300 rounded-full @(i == 0 ? "w-5 " + indicatorActive : "w-2 " + indicatorInactive)"></div>
                     }
                 </div>
             }
             <div class="flex items-center gap-2">
-                <button id="@(sliderId)-prev" aria-label="Előző" class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-[#FFF2EF] transition-all hover:bg-white/10 active:scale-95">
+                <button id="@(sliderId)-prev" aria-label="Előző" class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border transition-all active:scale-95 @btnBorder">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                 </button>
-                <button id="@(sliderId)-next" aria-label="Következő" class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[#F7A5A5] text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95">
+                <button id="@(sliderId)-next" aria-label="Következő" class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full transition-all active:scale-95 @nextBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                 </button>
             </div>
@@ -101,12 +117,15 @@
         const totalSlides = indicators.length;
         const isAutoplay = @(content.Autoplay.ToString().ToLower());
 
+        const indicatorActive = '@Html.Raw(indicatorActive)';
+        const indicatorInactive = '@Html.Raw(indicatorInactive)';
+
         const updateUI = (activeIdx) => {
             indicators.forEach((ind, idx) => {
                 if (idx === activeIdx) {
-                    ind.className = "h-1 transition-all duration-300 rounded-full w-5 bg-[#F7A5A5]";
+                    ind.className = `h-1 transition-all duration-300 rounded-full w-5 ${indicatorActive}`;
                 } else {
-                    ind.className = "h-1 transition-all duration-300 rounded-full w-2 bg-white/30";
+                    ind.className = `h-1 transition-all duration-300 rounded-full w-2 ${indicatorInactive}`;
                 }
             });
         };

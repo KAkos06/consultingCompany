@@ -3,6 +3,14 @@
 @{
     var content = Model.Content;
     var statBlocks = content.Stats;
+
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var borderColor = isDark ? "border-white/10" : "border-[#1A2A4F]/10";
+    var divideColor = isDark ? "divide-white/10" : "divide-[#1A2A4F]/10";
+    var numColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]/80";
+    var labelColor = isDark ? "text-white/50" : "text-[#1A2A4F]/50";
 }
 
 <div data-testid="stats-section" class="w-full py-12">
@@ -15,8 +23,8 @@
             _ => "grid-cols-2 md:grid-cols-4 max-w-6xl"
         };
 
-        <div class="mx-auto max-w-6xl border-y border-[#1A2A4F]/10 py-12 px-4">
-            <div class="mx-auto grid @gridCols gap-8 divide-x divide-[#1A2A4F]/10 w-full">
+        <div class="mx-auto max-w-6xl border-y @borderColor py-12 px-4">
+            <div class="mx-auto grid @gridCols gap-8 divide-x @divideColor w-full">
                 @{ var i = 0; }
                 @foreach (var block in statBlocks) {
                     var stat = (StatItem)block.Content;
@@ -24,10 +32,10 @@
                     var spanClass = isOddLast ? "col-span-2 md:col-span-1" : "";
                     
                     <div data-testid="stat-@i" class="flex flex-col items-center justify-center text-center fade-up delay-@i @spanClass">
-                        <div class="mb-2 font-[Outfit] text-4xl font-bold tracking-tight text-[#1A2A4F] md:text-5xl">
+                        <div class="mb-2 font-[Outfit] text-4xl font-bold tracking-tight @numColor md:text-5xl">
                             @stat.Number
                         </div>
-                        <div class="text-sm font-semibold uppercase tracking-[0.15em] text-[#1A2A4F]/50">
+                        <div class="text-sm font-semibold uppercase tracking-[0.15em] @labelColor">
                             @stat.Label
                         </div>
                     </div>

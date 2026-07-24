@@ -15,12 +15,27 @@
     var ctaLinkObj = ctaBlock?.Content.Value<IEnumerable<global::Umbraco.Cms.Core.Models.Link>>("link")?.FirstOrDefault() ?? ctaBlock?.Content.Value<global::Umbraco.Cms.Core.Models.Link>("link");
     var ctaIcon = ctaBlock?.Content.Value<string>("icon");
     var ctaIconVal = ctaBlock?.Content.GetIconValue("icon");
+
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var imageShadow = isDark ? "shadow-black/40" : "shadow-[#1A2A4F]/15";
+    var floatingCardBg = isDark ? "border-white/10 bg-[#F7A5A5] shadow-black/30" : "border-[#1A2A4F]/5 bg-white shadow-[#1A2A4F]/10";
+    var floatingCardTitleColor = isDark ? "text-[#1A2A4F]/80" : "text-[#1A2A4F]/60";
+    var floatingCardValColor = "text-[#1A2A4F]";
+    var eyebrowColor = isDark ? "text-white/50" : "text-[#1A2A4F]/50";
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var descColor = isDark ? "text-white/70" : "text-[#1A2A4F]/70";
+    
+    var bulletBg = isDark ? "border-white/10 bg-white/10 text-[#FFF2EF]" : "border-[#1A2A4F]/5 bg-white text-[#1A2A4F]";
+    var bulletIcon = isDark ? "text-[#FFDBB6]" : "text-[#F7A5A5]";
+    var btnBg = isDark ? "bg-[#F7A5A5] text-[#1A2A4F] hover:bg-[#FFDBB6]" : "bg-[#1A2A4F] text-[#FFF2EF] hover:bg-[#1A2A4F]/90";
 }
 
 <div id="about" data-testid="about-section" class="w-full">
     <div class="mx-auto grid max-w-6xl items-center gap-16 lg:grid-cols-2">
         <div class="relative fade-up">
-            <div class="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-2xl shadow-[#1A2A4F]/15">
+            <div class="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-2xl @imageShadow">
                 @if (!string.IsNullOrEmpty(imageUrl)) {
                     <img src="@imageUrl" alt="Kép" data-testid="about-image" class="h-full w-full object-cover" />
                 }
@@ -28,19 +43,19 @@
             </div>
 
             @if (!string.IsNullOrWhiteSpace(floatingCardTitle) || !string.IsNullOrWhiteSpace(floatingCardValue)) {
-                <div class="absolute -bottom-8 -right-4 max-w-[240px] rounded-2xl border border-[#1A2A4F]/5 bg-white p-5 shadow-xl shadow-[#1A2A4F]/10 md:-right-10">
+                <div class="absolute -bottom-8 -right-4 max-w-[240px] rounded-2xl border p-5 shadow-xl md:-right-10 @floatingCardBg">
                     <div class="mb-2 flex items-center gap-2">
                         @for (var i = 0; i < 5; i++) {
                             <div class="h-2 w-2 rounded-full bg-[#F7A5A5]"></div>
                         }
                     </div>
                     @if (!string.IsNullOrWhiteSpace(floatingCardTitle)) {
-                        <div class="text-xs font-medium text-[#1A2A4F]/60">
+                        <div class="text-xs font-medium @floatingCardTitleColor">
                             @floatingCardTitle
                         </div>
                     }
                     @if (!string.IsNullOrWhiteSpace(floatingCardValue)) {
-                        <div class="mt-1 font-[Outfit] text-3xl font-bold text-[#1A2A4F]">
+                        <div class="mt-1 font-[Outfit] text-3xl font-bold @floatingCardValColor">
                             @floatingCardValue
                         </div>
                     }
@@ -52,15 +67,15 @@
 
         <div class="fade-up delay-1">
             @if (!string.IsNullOrWhiteSpace(eyebrow)) {
-                <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
+                <span class="text-xs font-semibold uppercase tracking-[0.25em] @eyebrowColor">
                     @eyebrow
                 </span>
             }
-            <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.08] tracking-tight text-[#1A2A4F] md:text-5xl">
+            <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.08] tracking-tight @titleColor md:text-5xl">
                 @Html.Raw(title)
             </h2>
             @if (!string.IsNullOrWhiteSpace(description)) {
-                <p class="mt-7 text-lg leading-relaxed text-[#1A2A4F]/70">
+                <p class="mt-7 text-lg leading-relaxed @descColor">
                     @description
                 </p>
             }
@@ -73,15 +88,15 @@
                         if (string.IsNullOrWhiteSpace(txt)) continue;
                         
                         var customIcon = item.Content.GetIconValue("icon");
-                        <div data-testid="about-bullet-@bulletIdx" class="flex items-center gap-3.5 rounded-2xl border border-[#1A2A4F]/5 bg-white px-5 py-4 shadow-sm transition-transform hover:translate-x-1">
+                        <div data-testid="about-bullet-@bulletIdx" class="flex items-center gap-3.5 rounded-2xl border px-5 py-4 shadow-sm transition-transform hover:translate-x-1 @bulletBg">
                             @if (customIcon != null && !customIcon.IsEmpty) {
-                                <span class="shrink-0 text-[#F7A5A5]">
+                                <span class="shrink-0 @bulletIcon">
                                     @customIcon.Render(size: 22)
                                 </span>
                             } else {
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-[#F7A5A5]"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 @bulletIcon"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                             }
-                            <span class="text-sm font-medium text-[#1A2A4F]">
+                            <span class="text-sm font-medium">
                                 @txt
                             </span>
                         </div>
@@ -91,7 +106,7 @@
             }
 
             @if (ctaLinkObj != null && !string.IsNullOrWhiteSpace(ctaLinkObj.Url)) {
-                <a href="@ctaLinkObj.Url" target="@(ctaLinkObj.Target ?? "_self")" data-testid="about-cta" class="group mt-10 inline-flex items-center gap-2.5 rounded-full bg-[#1A2A4F] px-7 py-4 text-sm font-semibold text-[#FFF2EF] shadow-lg shadow-[#1A2A4F]/20 transition-all hover:bg-[#1A2A4F]/90 hover:shadow-xl hover:-translate-y-0.5 active:scale-95">
+                <a href="@ctaLinkObj.Url" target="@(ctaLinkObj.Target ?? "_self")" data-testid="about-cta" class="group mt-10 inline-flex items-center gap-2.5 rounded-full px-7 py-4 text-sm font-semibold shadow-lg shadow-black/10 transition-all hover:shadow-xl hover:-translate-y-0.5 active:scale-95 @btnBg">
                     <span>@(!string.IsNullOrWhiteSpace(ctaLinkObj.Name) ? ctaLinkObj.Name : "Továbbiak")</span>
                     <span class="transition-transform group-hover:translate-x-1">
                         @if (ctaIconVal != null && !ctaIconVal.IsEmpty) {

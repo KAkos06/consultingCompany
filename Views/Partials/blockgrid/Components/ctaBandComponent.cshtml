@@ -13,30 +13,41 @@
     var secondaryBlock = content.SecondaryCta?.FirstOrDefault();
     var secondaryLink = secondaryBlock?.Content.Value<IEnumerable<global::Umbraco.Cms.Core.Models.Link>>("link")?.FirstOrDefault() ?? secondaryBlock?.Content.Value<global::Umbraco.Cms.Core.Models.Link>("link");
     var secondaryIconVal = secondaryBlock?.Content.GetIconValue("icon");
+
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var bandBg = "";
+    var eyebrowColor = isDark ? "text-[#FFDBB6]" : "text-[#1A2A4F]/60";
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var subtitleColor = isDark ? "text-[#FFF2EF]/75" : "text-[#1A2A4F]/70";
+    
+    var primaryBtnBg = isDark ? "bg-[#F7A5A5] text-[#1A2A4F] hover:bg-[#FFDBB6]" : "bg-[#1A2A4F] text-[#FFF2EF] hover:bg-[#1A2A4F]/90";
+    var secondaryBtn = isDark ? "border-white/20 text-[#FFF2EF] hover:bg-white/10" : "border-[#1A2A4F]/20 text-[#1A2A4F] hover:bg-[#1A2A4F]/5";
 }
 
 <div data-testid="cta-band" class="w-full">
-  <div class="mx-auto max-w-5xl rounded-[32px] bg-[#1A2A4F] px-6 py-16 text-center shadow-2xl shadow-[#1A2A4F]/20 md:px-12 md:py-24 fade-up">
+  <div class="mx-auto max-w-5xl rounded-[32px] px-6 py-16 text-center md:px-12 md:py-24 fade-up">
     <div class="mx-auto max-w-3xl">
       @if (!string.IsNullOrWhiteSpace(eyebrow)) {
-        <div class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FFDBB6]">
+        <div class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] @eyebrowColor">
           @eyebrow
         </div>
       }
       
-      <h2 class="mb-6 font-[Outfit] text-4xl font-bold leading-[1.1] text-[#FFF2EF] md:text-5xl">
+      <h2 class="mb-6 font-[Outfit] text-4xl font-bold leading-[1.1] @titleColor md:text-5xl">
         @Html.Raw(title)
       </h2>
       
       @if (!string.IsNullOrWhiteSpace(subtitle)) {
-        <p class="mb-10 text-lg leading-relaxed text-[#FFF2EF]/70 md:text-xl">
+        <p class="mb-10 text-lg leading-relaxed @subtitleColor md:text-xl">
           @subtitle
         </p>
       }
       
       <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
         @if (primaryLink != null && !string.IsNullOrWhiteSpace(primaryLink.Url)) {
-            <a href="@primaryLink.Url" target="@(primaryLink.Target ?? "_self")" class="group inline-flex items-center justify-center gap-2.5 w-full rounded-full bg-[#F7A5A5] px-8 py-4 text-sm font-bold text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95 sm:w-auto">
+            <a href="@primaryLink.Url" target="@(primaryLink.Target ?? "_self")" class="group inline-flex items-center justify-center gap-2.5 w-full rounded-full px-8 py-4 text-sm font-bold transition-all active:scale-95 sm:w-auto @primaryBtnBg">
                 <span>@(!string.IsNullOrWhiteSpace(primaryLink.Name) ? primaryLink.Name : "Kezdés")</span>
                 @if (primaryIconVal != null && !primaryIconVal.IsEmpty) {
                     <span class="transition-transform group-hover:translate-x-1">
@@ -46,7 +57,7 @@
             </a>
         }
         @if (secondaryLink != null && !string.IsNullOrWhiteSpace(secondaryLink.Url)) {
-            <a href="@secondaryLink.Url" target="@(secondaryLink.Target ?? "_self")" class="group inline-flex items-center justify-center gap-2.5 w-full rounded-full border border-[#FFF2EF]/20 bg-transparent px-8 py-4 text-sm font-semibold text-[#FFF2EF] transition-all hover:bg-[#FFF2EF]/10 active:scale-95 sm:w-auto">
+            <a href="@secondaryLink.Url" target="@(secondaryLink.Target ?? "_self")" class="group inline-flex items-center justify-center gap-2.5 w-full rounded-full border bg-transparent px-8 py-4 text-sm font-semibold transition-all active:scale-95 sm:w-auto @secondaryBtn">
                 <span>@(!string.IsNullOrWhiteSpace(secondaryLink.Name) ? secondaryLink.Name : "Részletek")</span>
                 @if (secondaryIconVal != null && !secondaryIconVal.IsEmpty) {
                     <span class="transition-transform group-hover:translate-x-1">

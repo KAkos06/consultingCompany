@@ -5,8 +5,6 @@
     var eyebrow = content.Eyebrow;
     var title = content.Title;
     var subtitle = content.Subtitle;
-    var variant = ViewData["bgName"]?.ToString() ?? "";
-    if (variant == "solidDark") { variant = "dark"; }
 
     var cards = new List<dynamic>();
     if (content.Services != null) {
@@ -37,38 +35,21 @@
         }
     }
 
-    var sectionWrapper = "w-full py-6";
-    var eyebrowColor = "text-[#1A2A4F]/50";
-    var titleColor = "text-[#1A2A4F]";
-    var subtitleColor = "text-[#1A2A4F]/70";
-    var cardBg = "bg-gradient-to-br from-white to-[#FFDBB6]/30 hover:border-[#F7A5A5]/60 hover:shadow-[0_24px_48px_-12px_rgba(26,42,79,0.15)]";
-    var cardTitleColor = "text-[#1A2A4F]";
-    var cardDescColor = "text-[#1A2A4F]/65";
-    var tagBadge = "bg-[#FFF2EF] text-[#1A2A4F]/50";
-    var iconBox = "bg-[#F7A5A5]/20 text-[#1A2A4F] group-hover:bg-[#F7A5A5]/60";
-    var linkColor = "text-[#1A2A4F] group-hover:text-[#F7A5A5]";
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
 
-    if (variant == "dark") {
-        sectionWrapper = "w-full rounded-[36px] bg-[#1A2A4F] px-6 py-16 md:px-12 md:py-24 shadow-2xl shadow-[#1A2A4F]/20 my-6";
-        eyebrowColor = "text-[#FFDBB6]";
-        titleColor = "text-[#FFF2EF]";
-        subtitleColor = "text-[#FFF2EF]/75";
-        cardBg = "bg-white/[0.07] border border-white/10 hover:border-[#F7A5A5]/60 hover:bg-white/[0.14] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)] backdrop-blur";
-        cardTitleColor = "text-[#FFF2EF]";
-        cardDescColor = "text-[#FFF2EF]/70";
-        tagBadge = "bg-white/10 text-[#FFF2EF]/80";
-        iconBox = "bg-[#F7A5A5] text-[#1A2A4F] group-hover:bg-[#FFDBB6]";
-        linkColor = "text-[#FFF2EF] group-hover:text-[#F7A5A5]";
-    } else if (variant == "warm") {
-        sectionWrapper = "w-full rounded-[36px] bg-gradient-to-br from-[#FFDBB6]/45 via-[#FFF2EF] to-[#F7A5A5]/25 px-6 py-16 md:px-12 md:py-24 border border-[#F7A5A5]/25 shadow-xl shadow-[#1A2A4F]/5 my-6";
-        eyebrowColor = "text-[#1A2A4F]/60";
-        titleColor = "text-[#1A2A4F]";
-        subtitleColor = "text-[#1A2A4F]/75";
-        cardBg = "bg-white/85 border border-white/60 hover:border-[#F7A5A5]/60 hover:bg-white hover:shadow-xl";
-    }
+    var eyebrowColor = isDark ? "text-[#FFDBB6]" : "text-[#1A2A4F]/50";
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var subtitleColor = isDark ? "text-[#FFF2EF]/75" : "text-[#1A2A4F]/70";
+    var cardBg = isDark ? "bg-white/[0.07] border border-white/10 hover:border-[#F7A5A5]/60 hover:bg-white/[0.14] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)] backdrop-blur text-white" : "bg-gradient-to-br from-white to-[#FFDBB6]/30 hover:border-[#F7A5A5]/60 hover:shadow-[0_24px_48px_-12px_rgba(26,42,79,0.15)] border border-transparent";
+    var cardTitleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var cardDescColor = isDark ? "text-[#FFF2EF]/70" : "text-[#1A2A4F]/65";
+    var tagBadge = isDark ? "bg-white/10 text-[#FFF2EF]/80" : "bg-[#FFF2EF] text-[#1A2A4F]/50";
+    var iconBox = isDark ? "bg-[#F7A5A5] text-[#1A2A4F] group-hover:bg-[#FFDBB6]" : "bg-[#F7A5A5]/20 text-[#1A2A4F] group-hover:bg-[#F7A5A5]/60";
+    var linkColor = isDark ? "text-[#FFF2EF] group-hover:text-[#F7A5A5]" : "text-[#1A2A4F] group-hover:text-[#F7A5A5]";
 }
 
-<div id="services" data-testid="services-section" class="@sectionWrapper">
+<div id="services" data-testid="services-section" class="w-full">
   <div class="mx-auto max-w-6xl">
     <div class="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       <div class="max-w-2xl fade-up">
@@ -91,7 +72,7 @@
     <div data-testid="services-grid" class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
       @for (var i = 0; i < cards.Count; i++) {
         var card = cards[i];
-        <div data-testid="service-card-@i" class="group relative flex flex-col rounded-3xl border border-transparent p-7 transition-all @cardBg fade-up delay-@i @(!string.IsNullOrEmpty(card.url) ? "hover:-translate-y-1 cursor-pointer" : "")">
+        <div data-testid="service-card-@i" class="group relative flex flex-col rounded-3xl p-7 transition-all @cardBg fade-up delay-@i @(!string.IsNullOrEmpty(card.url) ? "hover:-translate-y-1 cursor-pointer" : "")">
           <div class="mb-6 flex items-start justify-between shrink-0">
             <div class="flex h-14 w-14 items-center justify-center rounded-2xl transition-colors @iconBox">
               @if (card.iconVal != null && !card.iconVal.IsEmpty) {

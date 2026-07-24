@@ -23,20 +23,36 @@
             }
         }
     }
+
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var eyebrowColor = isDark ? "text-white/50" : "text-[#1A2A4F]/50";
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var subtitleColor = isDark ? "text-white/70" : "text-[#1A2A4F]/70";
+    
+    var timelineLine = isDark ? "from-white/10 via-white/20" : "from-[#1A2A4F]/10 via-[#1A2A4F]/20";
+    var circleBg = isDark ? "bg-[#1A2A4F] text-[#FFF2EF] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)] ring-white/10" : "bg-white text-[#1A2A4F] shadow-[#1A2A4F]/5 ring-[#FFF2EF]";
+    var cardBg = isDark ? "bg-white/[0.07] border border-white/10 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)] backdrop-blur text-white hover:shadow-black/50 hover:bg-white/10" : "bg-white shadow-[#1A2A4F]/5 hover:shadow-2xl hover:shadow-[#1A2A4F]/10 text-[#1A2A4F]";
+    var cardTitle = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var cardDesc = isDark ? "text-white/70" : "text-[#1A2A4F]/70";
+    
+    var bottomStripBg = isDark ? "bg-white/10 border border-white/20 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)] backdrop-blur" : "bg-gradient-to-br from-[#1A2A4F] to-[#1A2A4F]/90 shadow-[#1A2A4F]/20";
+    var btnBg = isDark ? "bg-[#F7A5A5] text-[#1A2A4F] hover:bg-[#FFDBB6]" : "bg-[#F7A5A5] text-[#1A2A4F] hover:bg-[#FFDBB6]";
 }
 
 <div id="methodology" data-testid="methodology-section" class="w-full">
     <div class="mx-auto max-w-6xl">
         <div class="mb-20 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div class="max-w-2xl fade-up">
-                <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
+                <span class="text-xs font-semibold uppercase tracking-[0.25em] @eyebrowColor">
                     @eyebrow
                 </span>
-                <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight text-[#1A2A4F] md:text-6xl">
+                <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight @titleColor md:text-6xl">
                     @Html.Raw(title)
                 </h2>
             </div>
-            <div class="max-w-md text-lg leading-relaxed text-[#1A2A4F]/70 fade-up delay-1">
+            <div class="max-w-md text-lg leading-relaxed @subtitleColor fade-up delay-1">
                 <p>
                     @subtitle
                 </p>
@@ -44,23 +60,23 @@
         </div>
 
         <div class="relative mx-auto max-w-5xl">
-            <div class="absolute left-[39px] top-10 hidden h-[calc(100%-80px)] w-px bg-gradient-to-b from-[#1A2A4F]/10 via-[#1A2A4F]/20 to-transparent md:block"></div>
+            <div class="absolute left-[39px] top-10 hidden h-[calc(100%-80px)] w-px bg-gradient-to-b to-transparent md:block @timelineLine"></div>
 
             <div class="flex flex-col gap-12">
                 @for (var i = 0; i < steps.Count; i++) {
                     var step = steps[i];
                     <div data-testid="step-@i" class="group relative flex flex-col gap-6 md:flex-row md:gap-16 fade-up delay-@i">
                         <div class="relative z-10 flex shrink-0 items-start">
-                            <div class="flex h-20 w-20 items-center justify-center rounded-full bg-white text-3xl font-bold tracking-tighter text-[#1A2A4F] shadow-xl shadow-[#1A2A4F]/5 ring-8 ring-[#FFF2EF] transition-transform duration-500 group-hover:scale-110">
+                            <div class="flex h-20 w-20 items-center justify-center rounded-full text-3xl font-bold tracking-tighter shadow-xl ring-8 transition-transform duration-500 group-hover:scale-110 @circleBg">
                                 @step.n
                             </div>
                         </div>
 
-                        <div class="relative flex-1 rounded-[32px] bg-white p-8 shadow-lg shadow-[#1A2A4F]/5 transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-[#1A2A4F]/10 md:p-12">
-                            <h3 class="mb-4 font-[Outfit] text-3xl font-bold text-[#1A2A4F]">
+                        <div class="relative flex-1 rounded-[32px] p-8 shadow-lg transition-all duration-500 md:p-12 @cardBg">
+                            <h3 class="mb-4 font-[Outfit] text-3xl font-bold @cardTitle">
                                 @step.title
                             </h3>
-                            <p class="text-lg leading-relaxed text-[#1A2A4F]/70">
+                            <p class="text-lg leading-relaxed @cardDesc">
                                 @step.desc
                             </p>
                         </div>
@@ -70,7 +86,7 @@
         </div>
 
         @if(!string.IsNullOrEmpty(bTitle) || !string.IsNullOrEmpty(bDesc)) {
-            <div class="mt-24 rounded-[32px] bg-gradient-to-br from-[#1A2A4F] to-[#1A2A4F]/90 p-8 shadow-2xl shadow-[#1A2A4F]/20 md:p-12 fade-up">
+            <div class="mt-24 rounded-[32px] p-8 shadow-2xl md:p-12 fade-up @bottomStripBg">
                 <div class="flex flex-col items-center justify-between gap-8 md:flex-row md:gap-12">
                     <div class="text-center md:text-left">
                         <h3 class="font-[Outfit] text-2xl font-bold text-[#FFF2EF] md:text-3xl">
@@ -81,7 +97,7 @@
                         </p>
                     </div>
                     @if(ctaLinkObj != null && !string.IsNullOrWhiteSpace(ctaLinkObj.Url)) {
-                        <a href="@ctaLinkObj.Url" target="@(ctaLinkObj.Target ?? "_self")" data-testid="methodology-cta" class="group shrink-0 inline-flex items-center gap-2.5 rounded-full bg-[#F7A5A5] px-8 py-4 text-sm font-bold text-[#1A2A4F] transition-all hover:bg-[#FFDBB6] active:scale-95">
+                        <a href="@ctaLinkObj.Url" target="@(ctaLinkObj.Target ?? "_self")" data-testid="methodology-cta" class="group shrink-0 inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-sm font-bold transition-all active:scale-95 @btnBg">
                             @if(ctaIconVal != null && !ctaIconVal.IsEmpty) {
                                 @ctaIconVal.Render(size: 18)
                             } else if(!string.IsNullOrWhiteSpace(ctaIcon)) {

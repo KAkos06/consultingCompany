@@ -9,27 +9,50 @@
 
     var contactBlocks = content.ContactValues;
     var formGuid = content.Form;
+
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var eyebrowColor = isDark ? "text-white/50" : "text-[#1A2A4F]/50";
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var subtitleColor = isDark ? "text-white/70" : "text-[#1A2A4F]/70";
+    
+    var infoCardBg = isDark ? "bg-white/[0.07] border border-white/10 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)] backdrop-blur text-white" : "bg-white shadow-xl shadow-[#1A2A4F]/5";
+    var infoTextColor = isDark ? "text-white/70" : "text-[#1A2A4F]/70";
+    var iconBoxBg = isDark ? "bg-[#F7A5A5] text-[#1A2A4F]" : "bg-[#FFF2EF] text-[#1A2A4F]";
+    var labelColor = isDark ? "text-white/50" : "text-[#1A2A4F]/50";
+    var valueColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    
+    var formBg = isDark ? "bg-white/[0.05] border-white/10 text-white shadow-black/30 backdrop-blur" : "bg-[#FFECE8] border-[#F7A5A5]/20 text-[#1A2A4F] shadow-xl";
+
+    var cssText = isDark ? "#FFF2EF" : "#1A2A4F";
+    var cssTextRgb = isDark ? "255, 242, 239" : "26, 42, 79";
+    var cssInputBg = isDark ? "rgba(255,255,255,0.05)" : "#FFFFFF";
+    var cssInputBorder = isDark ? "rgba(255,255,255,0.15)" : "rgba(26, 42, 79, 0.1)";
+    var cssBtnBg = isDark ? "#F7A5A5" : "#1A2A4F";
+    var cssBtnText = isDark ? "#1A2A4F" : "#FFFFFF";
+    var cssBtnHover = isDark ? "#FFDBB6" : "#2A3A5F";
 }
 
 <div id="contact" data-testid="contact-section" class="w-full">
     <div class="mx-auto max-w-6xl">
         <div class="mb-16 max-w-2xl fade-up">
-            <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A2A4F]/50">
+            <span class="text-xs font-semibold uppercase tracking-[0.25em] @eyebrowColor">
                 @eyebrow
             </span>
-            <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight text-[#1A2A4F] md:text-6xl">
+            <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight @titleColor md:text-6xl">
                 @Html.Raw(title)
             </h2>
-            <p class="mt-6 text-lg leading-relaxed text-[#1A2A4F]/70">
+            <p class="mt-6 text-lg leading-relaxed @subtitleColor">
                 @subtitle
             </p>
         </div>
 
         <div class="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-24">
             <div class="fade-up delay-1">
-                <div class="space-y-8 rounded-[32px] bg-white p-8 shadow-xl shadow-[#1A2A4F]/5 md:p-10">
+                <div class="space-y-8 rounded-[32px] p-8 md:p-10 @infoCardBg">
                     @if (!string.IsNullOrWhiteSpace(description)) {
-                        <p class="mb-8 text-sm leading-relaxed text-[#1A2A4F]/70">
+                        <p class="mb-8 text-sm leading-relaxed @infoTextColor">
                             @description
                         </p>
                     }
@@ -39,7 +62,7 @@
                                 var item = (ContactItem)block.Content;
                                 var iconVal = block.Content.GetIconValue("icon");
                                 <div class="flex items-start gap-4">
-                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#FFF2EF] text-[#1A2A4F]">
+                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl @iconBoxBg">
                                         @if (iconVal != null && !iconVal.IsEmpty) {
                                             @iconVal.Render(size: 20)
                                         } else {
@@ -47,10 +70,10 @@
                                         }
                                     </div>
                                     <div>
-                                        <div class="text-xs font-semibold uppercase tracking-wider text-[#1A2A4F]/50">
+                                        <div class="text-xs font-semibold uppercase tracking-wider @labelColor">
                                             @item.Label
                                         </div>
-                                        <div class="mt-1 font-medium text-[#1A2A4F]">
+                                        <div class="mt-1 font-medium @valueColor">
                                             @item.Value
                                         </div>
                                     </div>
@@ -61,34 +84,34 @@
                 </div>
             </div>
 
-            <div class="fade-up delay-2">
+            <div class="fade-up delay-2" style="--form-text: @cssText; --form-text-rgb: @cssTextRgb; --form-input-bg: @cssInputBg; --form-input-border: @cssInputBorder; --form-btn-bg: @cssBtnBg; --form-btn-text: @cssBtnText; --form-btn-hover: @cssBtnHover;">
                 @if (formGuid != null && formGuid != Guid.Empty) {
-                    <div class="rounded-[32px] bg-[#FFECE8] p-8 shadow-xl border border-[#F7A5A5]/20 md:p-12 text-[#1A2A4F] umbraco-forms-container">
+                    <div class="rounded-[32px] p-8 border md:p-12 @formBg umbraco-forms-container">
                         @await Component.InvokeAsync("RenderForm", new { formId = formGuid.Value, theme = "default", includeScripts = true })
                     </div>
                 } else {
-                    <form class="space-y-6 rounded-[32px] bg-[#FFECE8] p-8 shadow-xl border border-[#F7A5A5]/20 md:p-12 text-[#1A2A4F]">
+                    <form class="space-y-6 rounded-[32px] p-8 border md:p-12 @formBg">
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div class="space-y-2">
-                                <label class="text-sm font-semibold text-[#1A2A4F]">Név</label>
-                                <input type="text" placeholder="Vezetéknév Keresztnév" class="w-full rounded-2xl border border-[#1A2A4F]/10 bg-white px-5 py-4 text-[#1A2A4F] placeholder:text-[#1A2A4F]/40 focus:border-[#1A2A4F] focus:outline-none focus:ring-1 focus:ring-[#1A2A4F] transition-all" />
+                                <label class="text-sm font-semibold" style="color: var(--form-text);">Név</label>
+                                <input type="text" placeholder="Vezetéknév Keresztnév" class="w-full rounded-2xl border px-5 py-4 transition-all" style="background-color: var(--form-input-bg); border-color: var(--form-input-border); color: var(--form-text);" />
                             </div>
                             <div class="space-y-2">
-                                <label class="text-sm font-semibold text-[#1A2A4F]">E-mail</label>
-                                <input type="email" placeholder="te@cegednev.hu" class="w-full rounded-2xl border border-[#1A2A4F]/10 bg-white px-5 py-4 text-[#1A2A4F] placeholder:text-[#1A2A4F]/40 focus:border-[#1A2A4F] focus:outline-none focus:ring-1 focus:ring-[#1A2A4F] transition-all" />
+                                <label class="text-sm font-semibold" style="color: var(--form-text);">E-mail</label>
+                                <input type="email" placeholder="te@cegednev.hu" class="w-full rounded-2xl border px-5 py-4 transition-all" style="background-color: var(--form-input-bg); border-color: var(--form-input-border); color: var(--form-text);" />
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-semibold text-[#1A2A4F]">Cég / Pozíció</label>
-                            <input type="text" placeholder="pl. CEO, Nordwell Group" class="w-full rounded-2xl border border-[#1A2A4F]/10 bg-white px-5 py-4 text-[#1A2A4F] placeholder:text-[#1A2A4F]/40 focus:border-[#1A2A4F] focus:outline-none focus:ring-1 focus:ring-[#1A2A4F] transition-all" />
+                            <label class="text-sm font-semibold" style="color: var(--form-text);">Cég / Pozíció</label>
+                            <input type="text" placeholder="pl. CEO, Nordwell Group" class="w-full rounded-2xl border px-5 py-4 transition-all" style="background-color: var(--form-input-bg); border-color: var(--form-input-border); color: var(--form-text);" />
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-semibold text-[#1A2A4F]">Miben segíthetünk?</label>
-                            <textarea rows="2" style="height: 72px;" placeholder="Pár mondatban a helyzetről, kihívásokról..." class="w-full resize-none rounded-2xl border border-[#1A2A4F]/10 bg-white px-5 py-3 text-[#1A2A4F] placeholder:text-[#1A2A4F]/40 focus:border-[#1A2A4F] focus:outline-none focus:ring-1 focus:ring-[#1A2A4F] transition-all"></textarea>
+                            <label class="text-sm font-semibold" style="color: var(--form-text);">Miben segíthetünk?</label>
+                            <textarea rows="2" style="height: 72px; background-color: var(--form-input-bg); border-color: var(--form-input-border); color: var(--form-text);" placeholder="Pár mondatban a helyzetről, kihívásokról..." class="w-full resize-none rounded-2xl border px-5 py-3 transition-all"></textarea>
                         </div>
                         <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-2">
-                            <span class="text-xs text-[#1A2A4F]/60">Üzeneted bizalmas. 24 órán belül válaszolunk.</span>
-                            <button type="button" class="w-full md:w-auto flex items-center justify-center gap-2 rounded-full bg-[#1A2A4F] px-8 py-4 text-sm font-bold text-white transition-all hover:bg-[#2A3A5F] active:scale-95 shadow-lg shadow-[#1A2A4F]/20">
+                            <span class="text-xs" style="color: rgba(var(--form-text-rgb), 0.6);">Üzeneted bizalmas. 24 órán belül válaszolunk.</span>
+                            <button type="button" class="w-full md:w-auto flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-bold transition-all active:scale-95 shadow-lg" style="background-color: var(--form-btn-bg); color: var(--form-btn-text);">
                                 <span>Üzenet küldése</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                             </button>
@@ -131,7 +154,7 @@
 
 <style>
     .umbraco-forms-container {
-        color: #1A2A4F;
+        color: var(--form-text);
         width: 100% !important;
         box-sizing: border-box !important;
     }
@@ -182,7 +205,7 @@
         margin-bottom: 0.5rem;
         font-size: 0.875rem;
         font-weight: 600;
-        color: #1A2A4F;
+        color: var(--form-text);
     }
     .umbraco-forms-container input[type="text"],
     .umbraco-forms-container input[type="email"],
@@ -192,13 +215,13 @@
         width: 100% !important;
         max-width: 100% !important;
         border-radius: 1rem !important;
-        border: 1px solid rgba(26, 42, 79, 0.1) !important;
-        background-color: #FFFFFF !important;
+        border: 1px solid var(--form-input-border) !important;
+        background-color: var(--form-input-bg) !important;
         padding: 1rem 1.25rem !important;
-        color: #1A2A4F !important;
+        color: var(--form-text) !important;
         outline: none !important;
         transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(26, 42, 79, 0.02) !important;
+        box-shadow: 0 2px 4px rgba(var(--form-text-rgb), 0.02) !important;
         box-sizing: border-box !important;
     }
     .umbraco-forms-container textarea {
@@ -208,26 +231,26 @@
         min-height: 72px !important;
         max-height: 72px !important;
         border-radius: 1rem !important;
-        border: 1px solid rgba(26, 42, 79, 0.1) !important;
-        background-color: #FFFFFF !important;
+        border: 1px solid var(--form-input-border) !important;
+        background-color: var(--form-input-bg) !important;
         padding: 0.625rem 1.25rem !important;
-        color: #1A2A4F !important;
+        color: var(--form-text) !important;
         outline: none !important;
         transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(26, 42, 79, 0.02) !important;
+        box-shadow: 0 2px 4px rgba(var(--form-text-rgb), 0.02) !important;
         box-sizing: border-box !important;
         resize: none !important;
     }
     .umbraco-forms-container input[type="text"]::placeholder,
     .umbraco-forms-container input[type="email"]::placeholder,
     .umbraco-forms-container textarea::placeholder {
-        color: rgba(26, 42, 79, 0.4) !important;
+        color: rgba(var(--form-text-rgb), 0.4) !important;
     }
     .umbraco-forms-container input[type="text"]:focus,
     .umbraco-forms-container input[type="email"]:focus,
     .umbraco-forms-container textarea:focus {
-        border-color: #1A2A4F !important;
-        box-shadow: 0 0 0 1px #1A2A4F !important;
+        border-color: var(--form-text) !important;
+        box-shadow: 0 0 0 1px var(--form-text) !important;
     }
     .umbraco-forms-container .umbraco-forms-navigation {
         margin-top: 1rem;
@@ -249,31 +272,31 @@
     .umbraco-forms-container .umbraco-forms-navigation .col-md-12::before {
         content: "Üzeneted bizalmas. 24 órán belül válaszolunk.";
         font-size: 0.75rem;
-        color: rgba(26, 42, 79, 0.6);
+        color: rgba(var(--form-text-rgb), 0.6);
     }
     .umbraco-forms-container input[type="submit"],
     .umbraco-forms-container button[type="submit"] {
         width: auto !important;
         min-width: 180px;
         border-radius: 9999px !important;
-        background-color: #1A2A4F !important;
+        background-color: var(--form-text) !important;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='22' y1='2' x2='11' y2='13'/%3E%3Cpolygon points='22 2 15 22 11 13 2 9 22 2'/%3E%3C/svg%3E");
         background-position: right 1.5rem center;
         background-repeat: no-repeat;
         padding: 1rem 3.5rem 1rem 2rem !important;
         font-size: 0.875rem !important;
         font-weight: 700 !important;
-        color: #FFFFFF !important;
+        color: var(--form-btn-text) !important;
         border: none !important;
         cursor: pointer !important;
         transition: all 0.2s ease !important;
-        box-shadow: 0 10px 15px -3px rgba(26, 42, 79, 0.2) !important;
+        box-shadow: 0 10px 15px -3px rgba(var(--form-text-rgb), 0.2) !important;
         margin-left: auto;
     }
     .umbraco-forms-container input[type="submit"]:hover,
     .umbraco-forms-container button[type="submit"]:hover {
-        background-color: #2A3A5F !important;
-        box-shadow: 0 20px 25px -5px rgba(26, 42, 79, 0.3) !important;
+        background-color: var(--form-btn-hover) !important;
+        box-shadow: 0 20px 25px -5px rgba(var(--form-text-rgb), 0.3) !important;
         transform: translateY(-1px);
     }
     .umbraco-forms-container input[type="submit"]:active,
@@ -288,3 +311,4 @@
         font-weight: 500;
     }
 </style>
+

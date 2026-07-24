@@ -19,30 +19,44 @@
             }
         }
     }
+
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var subtitleColor = isDark ? "text-[#FFF2EF]/75" : "text-[#1A2A4F]/75";
+    var tagBg = isDark ? "border-white/15 bg-white/10 text-[#FFF2EF]" : "border-[#1A2A4F]/10 bg-white shadow-sm text-[#1A2A4F]";
+    var primaryBtn = isDark ? "bg-[#F7A5A5] text-[#1A2A4F] shadow-[#F7A5A5]/20 hover:bg-[#FFDBB6]" : "bg-[#1A2A4F] text-[#FFF2EF] shadow-[#1A2A4F]/20 hover:bg-[#1A2A4F]/90";
+    var secondaryBtn = isDark ? "border-white/25 text-[#FFF2EF] hover:bg-white/10" : "border-[#1A2A4F]/20 text-[#1A2A4F] hover:bg-black/5";
+    var statNumber = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var statLabel = isDark ? "text-[#FFF2EF]/60" : "text-[#1A2A4F]/60";
+    var statBorder = isDark ? "border-white/15" : "border-[#1A2A4F]/15";
+    var blurBall1 = isDark ? "bg-[#F7A5A5]/20" : "bg-[#F7A5A5]/40";
+    var blurBall2 = isDark ? "bg-[#FFDBB6]/15" : "bg-[#FFDBB6]/30";
 }
 
 <div data-testid="hero-section" class="relative w-full">
-    <div class="absolute top-32 -left-20 h-72 w-72 rounded-full bg-[#F7A5A5]/20 blur-3xl"></div>
-    <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-[#FFDBB6]/15 blur-3xl"></div>
+    <div class="absolute top-32 -left-20 h-72 w-72 rounded-full blur-3xl @blurBall1"></div>
+    <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full blur-3xl @blurBall2"></div>
 
     <div class="relative mx-auto max-w-7xl px-6 pb-28 pt-40 md:pb-36 md:pt-48">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="max-w-3xl">
                 @if (!string.IsNullOrEmpty(tag)) {
-                    <div data-testid="hero-eyebrow" class="fade-up mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-[#FFF2EF] backdrop-blur">
+                    <div data-testid="hero-eyebrow" class="fade-up mb-7 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium backdrop-blur @tagBg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#F7A5A5" stroke="#F7A5A5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                         @tag
                     </div>
                 }
 
                 @if (!string.IsNullOrEmpty(title)) {
-                    <h1 data-testid="hero-title" class="fade-up delay-1 font-[Outfit] text-5xl font-bold leading-[1.05] tracking-tight text-[#FFF2EF] md:text-7xl">
+                    <h1 data-testid="hero-title" class="fade-up delay-1 font-[Outfit] text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl @titleColor">
                         @title
                     </h1>
                 }
 
                 @if (!string.IsNullOrEmpty(subtitle)) {
-                    <div data-testid="hero-subtitle" class="fade-up delay-2 mt-8 max-w-2xl text-lg leading-relaxed text-[#FFF2EF]/75 md:text-xl [&>p]:!my-0">
+                    <div data-testid="hero-subtitle" class="fade-up delay-2 mt-8 max-w-2xl text-lg leading-relaxed md:text-xl [&>p]:!my-0 @subtitleColor">
                         @Html.Raw(subtitle)
                     </div>
                 }
@@ -53,12 +67,12 @@
                         foreach (var btn in buttons) {
                             if (btn != null && !string.IsNullOrEmpty(btn.Url)) {
                                 if (btnIndex == 0) {
-                                    <a href="@btn.Url" target="@btn.Target" data-testid="hero-cta-primary" class="group inline-flex items-center gap-2 rounded-full bg-[#F7A5A5] px-7 py-4 text-base font-semibold text-[#1A2A4F] shadow-xl shadow-[#F7A5A5]/20 transition-all hover:bg-[#FFDBB6] active:scale-95">
+                                    <a href="@btn.Url" target="@btn.Target" data-testid="hero-cta-primary" class="group inline-flex items-center gap-2 rounded-full px-7 py-4 text-base font-semibold shadow-xl transition-all active:scale-95 @primaryBtn">
                                         @btn.Name
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                                     </a>
                                 } else {
-                                    <a href="@btn.Url" target="@btn.Target" data-testid="hero-cta-secondary" class="inline-flex items-center gap-2 rounded-full border border-white/25 px-7 py-4 text-base font-medium text-[#FFF2EF] transition-colors hover:bg-white/10">
+                                    <a href="@btn.Url" target="@btn.Target" data-testid="hero-cta-secondary" class="inline-flex items-center gap-2 rounded-full border px-7 py-4 text-base font-medium transition-colors @secondaryBtn">
                                         @btn.Name
                                     </a>
                                 }
@@ -71,11 +85,11 @@
                 @if (stats.Count > 0) {
                     <div data-testid="hero-stats" class="fade-up delay-4 mt-16 grid max-w-2xl grid-cols-3 gap-6">
                         @foreach (var stat in stats) {
-                            <div class="border-l border-white/15 pl-5">
-                                <div class="font-[Outfit] text-3xl font-bold text-[#FFF2EF] md:text-4xl">
+                            <div class="border-l pl-5 @statBorder">
+                                <div class="font-[Outfit] text-3xl font-bold md:text-4xl @statNumber">
                                     @stat.n
                                 </div>
-                                <div class="mt-1 text-xs text-[#FFF2EF]/60 md:text-sm">
+                                <div class="mt-1 text-xs md:text-sm @statLabel">
                                     @stat.l
                                 </div>
                             </div>
