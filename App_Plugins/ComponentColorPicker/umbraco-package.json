@@ -1,0 +1,18 @@
+{
+  "name": "ComponentColorPicker",
+  "version": "1.0.0",
+  "extensions": [
+    {
+      "type": "propertyEditorUi",
+      "alias": "My.PropertyEditorUi.ComponentColor",
+      "name": "Component Color Picker UI",
+      "js": "/App_Plugins/ComponentColorPicker/picker.js",
+      "meta": {
+        "label": "Component Color Picker",
+        "icon": "icon-colorpicker",
+        "group": "common",
+        "propertyEditorSchemaAlias": "Umbraco.Plain.String"
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem>
 @{
     var paddingName = Model.Settings?.Value<string>("padding") ?? Model.Content.Value<string>("padding");
@@ -12,6 +12,12 @@
     if (bgName == "cream") { bgClass = "bg-[#FFF2EF] text-[#1A2A4F]"; }
     else if (bgName == "warm") { bgClass = "text-[#1A2A4F] bg-gradient-to-br from-[#FFDBB6]/55 via-[#FFF2EF] to-[#F7A5A5]/30"; }
     else if (bgName == "dark" || bgName == "solidDark") { bgClass = "bg-[#1A2A4F] text-[#FFF2EF]"; }
+    ViewData["bgName"] = bgName;
+
+    var widthName = Model.Settings?.Value<string>("width") ?? Model.Content.Value<string>("width");
+    var widthClass = "max-w-7xl px-4 sm:px-6 lg:px-8";
+    if (widthName == "full") { widthClass = "w-full"; }
+    else if (widthName == "center") { widthClass = "max-w-5xl px-4 sm:px-6 lg:px-8"; }
 }
 
 <section class="w-full relative overflow-hidden @bgClass @paddingClass">
@@ -29,7 +35,7 @@
         <div aria-hidden="true" class="absolute inset-0 opacity-[0.07] pointer-events-none mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'3\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.4\'/%3E%3C/svg%3E');"></div>
     }
 
-    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="relative mx-auto @widthClass">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
                 @{

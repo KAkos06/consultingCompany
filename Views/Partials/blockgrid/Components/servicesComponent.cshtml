@@ -5,7 +5,8 @@
     var eyebrow = content.Eyebrow;
     var title = content.Title;
     var subtitle = content.Subtitle;
-    var variant = content.Variant ?? content.Value<string>("variant") ?? "";
+    var variant = ViewData["bgName"]?.ToString() ?? "";
+    if (variant == "solidDark") { variant = "dark"; }
 
     var cards = new List<dynamic>();
     if (content.Services != null) {
