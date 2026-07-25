@@ -2,10 +2,12 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem>
 @{
     var paddingName = Model.Settings?.Value<string>("padding") ?? Model.Content.Value<string>("padding");
-    var paddingClass = "py-16 md:py-24";
-    if (paddingName == "none") { paddingClass = "py-0"; }
-    else if (paddingName == "small") { paddingClass = "py-8 md:py-12"; }
-    else if (paddingName == "large") { paddingClass = "py-24 md:py-32"; }
+    var ptVar = "4rem"; var pbVar = "4rem";
+    var ptMdVar = "6rem"; var pbMdVar = "6rem";
+
+    if (paddingName == "none") { ptVar = "0px"; pbVar = "0px"; ptMdVar = "0px"; pbMdVar = "0px"; }
+    else if (paddingName == "small") { ptVar = "2rem"; pbVar = "2rem"; ptMdVar = "3rem"; pbMdVar = "3rem"; }
+    else if (paddingName == "large") { ptVar = "6rem"; pbVar = "6rem"; ptMdVar = "8rem"; pbMdVar = "8rem"; }
 
     var bgName = Model.Settings?.Value<string>("backgroundColor") ?? Model.Content.Value<string>("backgroundColor");
     var bgClass = "bg-transparent";
@@ -20,7 +22,20 @@
     else if (widthName == "center") { widthClass = "max-w-5xl px-4 sm:px-6 lg:px-8"; }
 }
 
-<section class="w-full relative overflow-hidden @bgClass @paddingClass">
+<style>
+    #section-@Model.Content.Key {
+        padding-top: var(--section-pt);
+        padding-bottom: var(--section-pb);
+    }
+    @@media (min-width: 768px) {
+        #section-@Model.Content.Key {
+            padding-top: var(--section-pt-md);
+            padding-bottom: var(--section-pb-md);
+        }
+    }
+</style>
+<section id="section-@Model.Content.Key" class="w-full relative overflow-hidden @bgClass"
+         style="--section-pt: @ptVar; --section-pb: @pbVar; --section-pt-md: @ptMdVar; --section-pb-md: @pbMdVar;">
     @if (bgName == "cream") {
         <div aria-hidden="true" class="absolute inset-0 opacity-[0.07] pointer-events-none" style="background-image: radial-gradient(circle, #1A2A4F 1px, transparent 1px); background-size: 24px 24px;"></div>
         <div aria-hidden="true" class="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full bg-[#FFDBB6]/35 blur-3xl pointer-events-none"></div>
@@ -36,6 +51,7 @@
     }
 
     <div class="relative mx-auto @widthClass">
+        @await Html.PartialAsync("blockgrid/Components/_Header", Model.Content, ViewData)
         @{
             var fullArea = Model.Areas.FirstOrDefault(x => x.Alias == "full");
             if (fullArea != null) {

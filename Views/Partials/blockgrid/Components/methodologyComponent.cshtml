@@ -2,9 +2,6 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<MethodologyComponent>>
 @{
     var content = Model.Content;
-    var eyebrow = content.Eyebrow;
-    var title = content.Title;
-    var subtitle = content.Subtitle;
     var bTitle = content.BottomStripTitle;
     var bDesc = content.BottomStripDesc;
     var ctaBlock = content.BottomStripCta?.FirstOrDefault();
@@ -43,21 +40,6 @@
 
 <div id="methodology" data-testid="methodology-section" class="w-full">
     <div class="mx-auto max-w-6xl">
-        <div class="mb-20 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-            <div class="max-w-2xl fade-up">
-                <span class="text-xs font-semibold uppercase tracking-[0.25em] @eyebrowColor">
-                    @eyebrow
-                </span>
-                <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight @titleColor md:text-6xl">
-                    @Html.Raw(title)
-                </h2>
-            </div>
-            <div class="max-w-md text-lg leading-relaxed @subtitleColor fade-up delay-1">
-                <p>
-                    @subtitle
-                </p>
-            </div>
-        </div>
 
         <div class="relative mx-auto max-w-5xl">
             <div class="absolute left-[39px] top-10 hidden h-[calc(100%-80px)] w-px bg-gradient-to-b to-transparent md:block @timelineLine"></div>

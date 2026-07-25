@@ -2,9 +2,6 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ServicesComponent>>
 @{
     var content = Model.Content;
-    var eyebrow = content.Eyebrow;
-    var title = content.Title;
-    var subtitle = content.Subtitle;
 
     var cards = new List<dynamic>();
     if (content.Services != null) {
@@ -51,23 +48,6 @@
 
 <div id="services" data-testid="services-section" class="w-full">
   <div class="mx-auto max-w-6xl">
-    <div class="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-      <div class="max-w-2xl fade-up">
-        @if (!string.IsNullOrEmpty(eyebrow)) {
-            <span class="text-xs font-semibold uppercase tracking-[0.25em] @eyebrowColor">
-              @eyebrow
-            </span>
-        }
-        <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight @titleColor md:text-6xl">
-          @Html.Raw(title)
-        </h2>
-      </div>
-      @if (!string.IsNullOrEmpty(subtitle)) {
-          <div class="max-w-md text-lg leading-relaxed @subtitleColor fade-up delay-1">
-            <p>@subtitle</p>
-          </div>
-      }
-    </div>
 
     <div data-testid="services-grid" class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
       @for (var i = 0; i < cards.Count; i++) {

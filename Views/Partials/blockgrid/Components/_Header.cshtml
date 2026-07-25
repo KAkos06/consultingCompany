@@ -1,0 +1,126 @@
+@using Umbraco.Cms.Core.Models.PublishedContent;
+@using Umbraco.Extensions;
+@model IPublishedElement
+
+@{
+    var showHeaderOptions = Model.Value<bool>("showHeaderOptions");
+    if (!showHeaderOptions) {
+        return;
+    }
+
+    var align = Model.Value<string>("textAlignment") ?? "Left";
+    var layout = Model.Value<string>("headerLayout") ?? "Stacked";
+    var isSideBySide = layout == "SideBySide";
+
+    var alignClass = align == "Center" ? "text-center" : align == "Right" ? "text-right" : "text-left";
+    var flexAlignClass = align == "Center" ? "justify-center" : align == "Right" ? "justify-end" : "justify-start";
+    var containerClass = isSideBySide ? "max-w-7xl mx-auto" : "max-w-[800px] " + (align == "Center" ? "mx-auto" : align == "Right" ? "ml-auto" : "");
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var subtitleColor = isDark ? "text-[#FFF2EF]/75" : "text-[#1A2A4F]/75";
+    var tagBg = isDark ? "border-white/15 bg-white/10 text-[#FFF2EF]" : "border-[#1A2A4F]/10 bg-white shadow-sm text-[#1A2A4F]";
+
+    string ParseJsonProp(string json, out string style) {
+        style = "";
+        if (string.IsNullOrWhiteSpace(json)) return "";
+        if (json.Trim().StartsWith("{")) {
+            try {
+                using (var doc = System.Text.Json.JsonDocument.Parse(json)) {
+                    if (doc.RootElement.TryGetProperty("style", out var sProp)) style = sProp.GetString();
+                    if (doc.RootElement.TryGetProperty("text", out var tProp)) return tProp.GetString();
+                }
+            } catch { }
+        }
+        return json;
+    }
+
+    var headingObj = Model.Value<object>("heading")?.ToString();
+    var heading = ParseJsonProp(headingObj, out var hStyle);
+    if (string.IsNullOrEmpty(hStyle)) hStyle = "H2";
+    
+    var secHeadingObj = Model.Value<object>("secondaryHeading")?.ToString();
+    var secondaryHeading = ParseJsonProp(secHeadingObj, out var secStyle);
+    if (string.IsNullOrEmpty(secStyle)) secStyle = "M";
+
+    var introductionObj = Model.Value("introduction");
+    var introduction = introductionObj?.ToString();
+
+    string GetHeadingClass(string style) {
+        switch (style) {
+            case "H1": return "text-5xl md:text-7xl md:leading-[1.05]";
+            case "H2": return "text-4xl md:text-5xl";
+            case "H3": return "text-3xl md:text-4xl";
+            case "H4": return "text-2xl md:text-3xl";
+            case "H5": return "text-xl md:text-2xl";
+            case "H6": return "text-lg md:text-xl";
+            case "L": return "text-base font-medium";
+            case "M": return "text-sm font-medium";
+            case "S": return "text-xs font-medium";
+            default: return "text-4xl md:text-5xl";
+        }
+    }
+
+    string GetSecondaryClass(string style) {
+        switch (style) {
+            case "H1": return "text-2xl px-6 py-3";
+            case "H2": return "text-xl px-5 py-3";
+            case "H3": return "text-lg px-5 py-2";
+            case "H4": return "text-base px-4 py-2";
+            case "H5": return "text-sm px-3 py-1";
+            case "H6": return "text-xs px-3 py-1";
+            case "L": return "text-base px-4 py-2";
+            case "M": return "text-sm px-3 py-1";
+            case "S": return "text-xs px-2 py-1";
+            default: return "text-sm px-4 py-2";
+        }
+    }
+
+    string GetTag(string style) {
+        return (style == "S" || style == "M" || style == "L") ? "div" : style.ToLower();
+    }
+}
+
+<div class="mb-10 w-full @alignClass @containerClass">
+    @if (!string.IsNullOrEmpty(secondaryHeading)) {
+        var sTag = GetTag(secStyle);
+        <div class="flex @flexAlignClass w-full">
+            @Html.Raw($"<{sTag} class=\"fade-up inline-flex items-center gap-2 rounded-full border font-medium backdrop-blur mb-6 {tagBg} {GetSecondaryClass(secStyle)}\">")
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#F7A5A5" stroke="#F7A5A5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                @secondaryHeading
+            @Html.Raw($"</{sTag}>")
+        </div>
+    }
+
+    @if (isSideBySide) {
+        <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+            @if (!string.IsNullOrEmpty(heading)) {
+                <div>
+                    @{ var hTag = GetTag(hStyle); }
+                    @Html.Raw($"<{hTag} class=\"fade-up delay-1 font-[Outfit] font-bold leading-[1.1] tracking-tight {titleColor} {GetHeadingClass(hStyle)}\">")
+                        @heading
+                    @Html.Raw($"</{hTag}>")
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(introduction)) {
+                <div class="fade-up delay-2 text-lg leading-relaxed md:text-xl [&>p]:!my-0 @subtitleColor">
+                    @Html.Raw(introduction)
+                </div>
+            }
+        </div>
+    } else {
+        @if (!string.IsNullOrEmpty(heading)) {
+            var hTag = GetTag(hStyle);
+            @Html.Raw($"<{hTag} class=\"fade-up delay-1 font-[Outfit] font-bold leading-[1.1] tracking-tight {titleColor} {GetHeadingClass(hStyle)}\">")
+                @heading
+            @Html.Raw($"</{hTag}>")
+        }
+
+        @if (!string.IsNullOrWhiteSpace(introduction)) {
+            <div class="fade-up delay-2 mt-6 text-lg leading-relaxed md:text-xl [&>p]:!my-0 @subtitleColor">
+                @Html.Raw(introduction)
+            </div>
+        }
+    }
+</div>

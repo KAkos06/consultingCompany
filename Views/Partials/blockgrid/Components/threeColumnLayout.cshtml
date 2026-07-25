@@ -36,6 +36,7 @@
     }
 
     <div class="relative mx-auto @widthClass">
+        @await Html.PartialAsync("blockgrid/Components/_Header", Model.Content, ViewData)
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
                 @{

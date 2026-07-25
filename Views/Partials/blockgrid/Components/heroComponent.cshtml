@@ -4,9 +4,6 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<HeroComponent>>
 @{
     var content = Model.Content;
-    var tag = content.Tag;
-    var title = content.Title;
-    var subtitle = content.Description?.ToHtmlString();
     var buttons = content.Buttons ?? Enumerable.Empty<Link>();
     
     var stats = new List<dynamic>();
@@ -22,6 +19,30 @@
 
     var bgName = ViewData["bgName"]?.ToString() ?? "";
     var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var image = content.HasProperty("image") ? content.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("image") : null;
+    var hasImage = image != null;
+
+    var breadcrumbs = new List<dynamic>();
+    var currentPage = Umbraco.AssignedContentItem;
+    if (content.HasProperty("showBreadcrumb") && content.Value<bool>("showBreadcrumb") && currentPage != null)
+    {
+        // Get ancestors from root to current page, but ignore the very first level (e.g., 'Site')
+        var ancestors = currentPage.AncestorsOrSelf().Reverse().Where(x => x.Level > 1).ToList();
+        
+        // Only show breadcrumb if we have at least 2 levels (e.g., Home Page + Current Page)
+        if (ancestors.Count > 1)
+        {
+            foreach (var a in ancestors)
+            {
+                breadcrumbs.Add(new { label = a.Name, to = a.Url() });
+            }
+        }
+    }
+
+    var breadcrumbText = isDark ? "text-[#FFF2EF]/60" : "text-[#1A2A4F]/60";
+    var breadcrumbHover = isDark ? "hover:text-[#F7A5A5]" : "hover:text-[#1A2A4F]";
+    var breadcrumbCurrent = isDark ? "text-[#FFDBB6]" : "text-[#1A2A4F]";
 
     var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
     var subtitleColor = isDark ? "text-[#FFF2EF]/75" : "text-[#1A2A4F]/75";
@@ -39,26 +60,30 @@
     <div class="absolute top-32 -left-20 h-72 w-72 rounded-full blur-3xl @blurBall1"></div>
     <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full blur-3xl @blurBall2"></div>
 
-    <div class="relative mx-auto max-w-7xl px-6 pb-28 pt-40 md:pb-36 md:pt-48">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div class="max-w-3xl">
-                @if (!string.IsNullOrEmpty(tag)) {
-                    <div data-testid="hero-eyebrow" class="fade-up mb-7 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium backdrop-blur @tagBg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#F7A5A5" stroke="#F7A5A5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        @tag
-                    </div>
-                }
-
-                @if (!string.IsNullOrEmpty(title)) {
-                    <h1 data-testid="hero-title" class="fade-up delay-1 font-[Outfit] text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl @titleColor">
-                        @title
-                    </h1>
-                }
-
-                @if (!string.IsNullOrEmpty(subtitle)) {
-                    <div data-testid="hero-subtitle" class="fade-up delay-2 mt-8 max-w-2xl text-lg leading-relaxed md:text-xl [&>p]:!my-0 @subtitleColor">
-                        @Html.Raw(subtitle)
-                    </div>
+    <div class="relative mx-auto max-w-7xl px-6 pb-8 pt-2 md:pb-12 md:pt-4">
+        <div class="grid grid-cols-1 @(hasImage ? "lg:grid-cols-2" : "") gap-12 items-center">
+            <div class="@(hasImage ? "max-w-3xl" : "max-w-full")">
+                @if (breadcrumbs.Count > 0) {
+                    <nav data-testid="hero-breadcrumb" class="fade-up flex items-center gap-1.5 text-xs mb-7 @breadcrumbText">
+                        @for (var i = 0; i < breadcrumbs.Count; i++) {
+                            var b = breadcrumbs[i];
+                            var isLast = i == breadcrumbs.Count - 1;
+                            <span class="flex items-center gap-1.5">
+                                @if (!string.IsNullOrEmpty(b.to) && !isLast) {
+                                    <a href="@b.to" class="transition-colors @breadcrumbHover">
+                                        @b.label
+                                    </a>
+                                } else {
+                                    <span class="@(isLast ? breadcrumbCurrent + " font-medium" : breadcrumbText)">
+                                        @b.label
+                                    </span>
+                                }
+                                @if (!isLast) {
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="m9 18 6-6-6-6"/></svg>
+                                }
+                            </span>
+                        }
+                    </nav>
                 }
 
                 <div class="fade-up delay-3 mt-10 flex flex-wrap gap-4">
@@ -97,6 +122,12 @@
                     </div>
                 }
             </div>
+
+            @if (hasImage) {
+                <div class="relative fade-up delay-2">
+                    <img src="@image.Url()" alt="@(content.Value<string>("heading") ?? "Hero image")" class="w-full h-auto rounded-2xl shadow-2xl" />
+                </div>
+            }
         </div>
     </div>
 </div>

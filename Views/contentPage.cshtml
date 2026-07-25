@@ -1,0 +1,15 @@
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ContentPage>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "Master.cshtml";
+}
+
+@if (Model.HasProperty("bodyGrid") && Model.HasValue("bodyGrid"))
+{
+    var bodyGrid = Model.Value<Umbraco.Cms.Core.Models.Blocks.BlockGridModel>("bodyGrid");
+    if (bodyGrid != null)
+    {
+        @Html.GetBlockGridHtml(bodyGrid)
+    }
+}

@@ -2,9 +2,6 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ContactComponent>>
 @{
     var content = Model.Content;
-    var eyebrow = content.Eyebrow;
-    var title = content.Title;
-    var subtitle = content.Subtitle;
     var description = content.Description;
 
     var contactBlocks = content.ContactValues;
@@ -36,17 +33,6 @@
 
 <div id="contact" data-testid="contact-section" class="w-full">
     <div class="mx-auto max-w-6xl">
-        <div class="mb-16 max-w-2xl fade-up">
-            <span class="text-xs font-semibold uppercase tracking-[0.25em] @eyebrowColor">
-                @eyebrow
-            </span>
-            <h2 class="mt-4 font-[Outfit] text-4xl font-bold leading-[1.05] tracking-tight @titleColor md:text-6xl">
-                @Html.Raw(title)
-            </h2>
-            <p class="mt-6 text-lg leading-relaxed @subtitleColor">
-                @subtitle
-            </p>
-        </div>
 
         <div class="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-24">
             <div class="fade-up delay-1">

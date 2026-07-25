@@ -71,6 +71,16 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+/* Ensure the first section on the page clears the fixed navbar */
+main .umb-block-grid__layout-item:first-child > section {
+    padding-top: calc(var(--section-pt, 0px) + 104px) !important;
+}
+@media (min-width: 768px) {
+    main .umb-block-grid__layout-item:first-child > section {
+        padding-top: calc(var(--section-pt-md, 0px) + 104px) !important;
+    }
+}
+
 /* Center-expanding underline animation for nav links */
 .nav-link {
     position: relative;

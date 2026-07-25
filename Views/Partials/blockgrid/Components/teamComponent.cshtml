@@ -1,0 +1,63 @@
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem>
+@{
+    var content = Model.Content;
+    var members = content.Value<Umbraco.Cms.Core.Models.Blocks.BlockListModel>("teamMembers");
+
+    var bgName = ViewData["bgName"]?.ToString() ?? "";
+    var isDark = bgName == "dark" || bgName == "solidDark";
+
+    var eyebrowColor = isDark ? "text-[#FFDBB6]" : "text-[#1A2A4F]/60";
+    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var subtitleColor = isDark ? "text-[#FFF2EF]/75" : "text-[#1A2A4F]/70";
+    
+    var cardBg = isDark ? "bg-white/[0.05] border border-white/10 backdrop-blur" : "bg-white border border-transparent shadow-xl shadow-[#1A2A4F]/5";
+    var cardHover = isDark ? "hover:border-[#F7A5A5]/60 hover:bg-white/[0.08]" : "hover:shadow-2xl hover:border-[#1A2A4F]/10";
+    var nameColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
+    var roleColor = isDark ? "text-[#F7A5A5]" : "text-[#1A2A4F]/60"; // Accented role color
+    var descColor = isDark ? "text-[#FFF2EF]/70" : "text-[#1A2A4F]/70";
+    var avatarRing = isDark ? "ring-white/10 group-hover:ring-[#F7A5A5]/50" : "ring-[#1A2A4F]/5 group-hover:ring-[#1A2A4F]/20";
+    var placeholderBg = isDark ? "bg-[#1A2A4F] text-white" : "bg-gray-100 text-[#1A2A4F]";
+}
+<div data-testid="team-component" class="w-full py-12 md:py-24">
+    <div class="mx-auto max-w-6xl px-4">
+
+        @if (members != null && members.Any()) {
+            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                @{ var index = 0; }
+                @foreach (var block in members) {
+                    var item = block.Content;
+                    var mName = item.Value<string>("name");
+                    var mRole = item.Value<string>("role");
+                    var mDesc = item.Value<string>("description");
+                    var imageProp = item.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>("image");
+                    var imageUrl = imageProp != null ? imageProp.MediaUrl() : "";
+                    
+                    <div class="group flex flex-col items-center rounded-[32px] p-8 text-center transition-all duration-300 hover:-translate-y-2 @cardBg @cardHover fade-up delay-@index">
+                        <div class="mb-6 overflow-hidden rounded-full ring-4 transition-all duration-300 @avatarRing">
+                            @if (!string.IsNullOrEmpty(imageUrl)) {
+                                <img src="@imageUrl" alt="@mName" class="h-40 w-40 object-cover transition-transform duration-500 group-hover:scale-110" />
+                            } else {
+                                <div class="flex h-40 w-40 items-center justify-center text-4xl font-bold @placeholderBg">
+                                    @(string.IsNullOrWhiteSpace(mName) ? "?" : mName.Substring(0, 1).ToUpper())
+                                </div>
+                            }
+                        </div>
+                        <h3 class="mb-1 font-[Outfit] text-2xl font-bold @nameColor">
+                            @mName
+                        </h3>
+                        <div class="mb-4 text-sm font-semibold uppercase tracking-wider @roleColor">
+                            @mRole
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(mDesc)) {
+                            <p class="text-sm leading-relaxed @descColor">
+                                @mDesc
+                            </p>
+                        }
+                    </div>
+                    index++;
+                }
+            </div>
+        }
+    </div>
+</div>

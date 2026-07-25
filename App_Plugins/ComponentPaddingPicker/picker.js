@@ -22,28 +22,28 @@ export default class ComponentPaddingPicker extends UmbElementMixin(LitElement) 
             <div class="picker">
                 <label>
                     <input type="radio" name="padding" value="none" .checked=${this.value === 'none'} @change=${this.#onChange}>
-                    <div class="box none">
+                    <div class="box pad-none">
                         <div class="inner">Content</div>
                     </div>
                     <span>None</span>
                 </label>
                 <label>
                     <input type="radio" name="padding" value="small" .checked=${this.value === 'small'} @change=${this.#onChange}>
-                    <div class="box small">
+                    <div class="box pad-small">
                         <div class="inner">Content</div>
                     </div>
                     <span>Small</span>
                 </label>
                 <label>
                     <input type="radio" name="padding" value="medium" .checked=${this.value === 'medium' || !this.value} @change=${this.#onChange}>
-                    <div class="box medium">
+                    <div class="box pad-medium">
                         <div class="inner">Content</div>
                     </div>
                     <span>Medium</span>
                 </label>
                 <label>
                     <input type="radio" name="padding" value="large" .checked=${this.value === 'large'} @change=${this.#onChange}>
-                    <div class="box large">
+                    <div class="box pad-large">
                         <div class="inner">Content</div>
                     </div>
                     <span>Large</span>
@@ -96,17 +96,17 @@ export default class ComponentPaddingPicker extends UmbElementMixin(LitElement) 
         }
         
         /* Padding variations */
-        .none { justify-content: stretch; }
-        .none .inner { height: 100%; border-radius: 0; }
+        .pad-none { justify-content: stretch; }
+        .pad-none .inner { height: 100%; border-radius: 0; }
         
-        .small { justify-content: center; padding: 10px 0; }
-        .small .inner { height: 76px; }
+        .pad-small { justify-content: center; padding: 10px 0; }
+        .pad-small .inner { height: 76px; }
         
-        .medium { justify-content: center; padding: 25px 0; }
-        .medium .inner { height: 46px; }
+        .pad-medium { justify-content: center; padding: 25px 0; }
+        .pad-medium .inner { height: 46px; }
         
-        .large { justify-content: center; padding: 40px 0; }
-        .large .inner { height: 16px; color: transparent; }
+        .pad-large { justify-content: center; padding: 40px 0; }
+        .pad-large .inner { height: 20px; line-height: 1; }
 
         span {
             font-size: 12px;
