@@ -81,7 +81,6 @@
                         </div>
                     </div>
                 }
-                <div class="shrink-0 basis-full md:basis-1/2 pointer-events-none opacity-0" aria-hidden="true"></div>
             </div>
         </div>
 
@@ -114,11 +113,42 @@
         const nextBtn = document.getElementById('@(sliderId)-next');
         if (!container || !indicators.length) return;
 
-        const totalSlides = indicators.length;
         const isAutoplay = @(content.Autoplay.ToString().ToLower());
+        const speedProp = @((content.HasProperty("scrollSpeed") && content.Value<int>("scrollSpeed") > 0) ? content.Value<int>("scrollSpeed") : 5);
+        const speedMs = speedProp * 1000;
 
         const indicatorActive = '@Html.Raw(indicatorActive)';
         const indicatorInactive = '@Html.Raw(indicatorInactive)';
+
+        const originalSlides = Array.from(container.children);
+        const totalSlides = originalSlides.length;
+
+        if (totalSlides <= 1) return;
+
+        // Clone for infinite loop
+        const firstClone1 = originalSlides[0].cloneNode(true);
+        const firstClone2 = originalSlides[1] ? originalSlides[1].cloneNode(true) : originalSlides[0].cloneNode(true);
+        const lastClone = originalSlides[totalSlides - 1].cloneNode(true);
+        
+        firstClone1.setAttribute('aria-hidden', 'true');
+        firstClone2.setAttribute('aria-hidden', 'true');
+        lastClone.setAttribute('aria-hidden', 'true');
+        
+        container.appendChild(firstClone1);
+        container.appendChild(firstClone2);
+        container.insertBefore(lastClone, originalSlides[0]);
+
+        let slideWidth = 0;
+        
+        // Initial setup without animation
+        container.style.scrollSnapType = 'none';
+        requestAnimationFrame(() => {
+            slideWidth = container.children[0].clientWidth || container.clientWidth;
+            container.scrollTo({ left: slideWidth, behavior: 'auto' });
+            requestAnimationFrame(() => {
+                container.style.scrollSnapType = 'x mandatory';
+            });
+        });
 
         const updateUI = (activeIdx) => {
             indicators.forEach((ind, idx) => {
@@ -130,52 +160,54 @@
             });
         };
 
+        let scrollTimeout;
         const onScroll = () => {
-            const containerLeft = container.getBoundingClientRect().left;
-            let closestIdx = 0;
-            let minDiff = Infinity;
+            clearTimeout(scrollTimeout);
+            slideWidth = container.children[0].clientWidth || container.clientWidth;
+            const currentScroll = container.scrollLeft;
+            
+            let activeIdx = Math.round(currentScroll / slideWidth) - 1;
+            if (activeIdx < 0) activeIdx = totalSlides - 1;
+            if (activeIdx >= totalSlides) activeIdx = 0;
+            updateUI(activeIdx);
 
-            Array.from(container.children).forEach((child, idx) => {
-                if (idx < totalSlides) {
-                    const childLeft = child.getBoundingClientRect().left;
-                    const diff = Math.abs(childLeft - containerLeft);
-                    if (diff < minDiff) {
-                        minDiff = diff;
-                        closestIdx = idx;
-                    }
+            scrollTimeout = setTimeout(() => {
+                const snappedIndex = Math.round(container.scrollLeft / slideWidth);
+                if (snappedIndex === 0) {
+                    container.style.scrollSnapType = 'none';
+                    container.scrollTo({ left: totalSlides * slideWidth, behavior: 'auto' });
+                    container.offsetHeight; // force reflow
+                    container.style.scrollSnapType = 'x mandatory';
+                } else if (snappedIndex >= totalSlides + 1) {
+                    container.style.scrollSnapType = 'none';
+                    // We might have scrolled past totalSlides + 1 if the user flicked hard
+                    const excess = snappedIndex - (totalSlides + 1);
+                    container.scrollTo({ left: (1 + excess) * slideWidth, behavior: 'auto' });
+                    container.offsetHeight; // force reflow
+                    container.style.scrollSnapType = 'x mandatory';
                 }
-            });
-
-            updateUI(closestIdx);
+            }, 150);
         };
-
-        const getSlideWidth = () => container.children[0]?.clientWidth || 300;
 
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
-                const maxScroll = container.scrollWidth - container.clientWidth;
-                if (container.scrollLeft >= maxScroll - 15) {
-                    container.scrollTo({ left: 0, behavior: 'smooth' });
-                } else {
-                    container.scrollBy({ left: getSlideWidth(), behavior: 'smooth' });
-                }
+                slideWidth = container.children[0].clientWidth || container.clientWidth;
+                container.scrollBy({ left: slideWidth, behavior: 'smooth' });
             });
         }
 
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
-                if (container.scrollLeft <= 15) {
-                    container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
-                } else {
-                    container.scrollBy({ left: -getSlideWidth(), behavior: 'smooth' });
-                }
+                slideWidth = container.children[0].clientWidth || container.clientWidth;
+                container.scrollBy({ left: -slideWidth, behavior: 'smooth' });
             });
         }
 
         indicators.forEach((ind, idx) => {
             ind.style.cursor = 'pointer';
             ind.addEventListener('click', () => {
-                container.scrollTo({ left: idx * getSlideWidth(), behavior: 'smooth' });
+                slideWidth = container.children[0].clientWidth || container.clientWidth;
+                container.scrollTo({ left: (idx + 1) * slideWidth, behavior: 'smooth' });
             });
         });
 
@@ -185,7 +217,7 @@
             stopAutoplay();
             timer = setInterval(() => {
                 if (nextBtn) nextBtn.click();
-            }, 5000);
+            }, speedMs);
         };
         const stopAutoplay = () => {
             if (timer) clearInterval(timer);
@@ -202,7 +234,8 @@
         }
 
         container.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
+        // Trigger initial UI update
+        updateUI(0);
     };
 
     if (document.readyState === 'loading') {

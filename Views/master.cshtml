@@ -1,15 +1,22 @@
 @using Umbraco.Cms.Web.Common.PublishedModels;
-@using Umbraco.Forms.Web
+@using Umbraco.Forms.Web;
+@using Umbraco.Extensions;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
 	Layout = null;
+    var seoTitle = Model.HasProperty("seoTitle") ? Model.Value<string>("seoTitle") : null;
+    var displayTitle = !string.IsNullOrWhiteSpace(seoTitle) ? seoTitle : Model.Name;
+    var seoDesc = Model.HasProperty("seoDescription") ? Model.Value<string>("seoDescription") : null;
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@Model.Name - Executive Insights</title>
+    <title>@displayTitle - Executive Insights</title>
+    @if(!string.IsNullOrWhiteSpace(seoDesc)) {
+        <meta name="description" content="@seoDesc" />
+    }
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +34,8 @@
     <!-- Header Component -->
     @await Html.PartialAsync("Header")
 
-    <main class="min-h-screen">
+    <main class="min-h-screen relative">
+        @await Html.PartialAsync("Breadcrumb")
         @RenderBody()
     </main>
 

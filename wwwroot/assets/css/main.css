@@ -166,6 +166,11 @@ main .umb-block-grid__layout-item:first-child > section {
     animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Ensure empty paragraphs from rich text editors do not collapse */
+.prose p:empty::before {
+    content: "\00a0";
+}
+
 .delay-1 { animation-delay: 0.1s; }
 .delay-2 { animation-delay: 0.25s; }
 .delay-3 { animation-delay: 0.4s; }

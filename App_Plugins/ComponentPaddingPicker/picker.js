@@ -35,7 +35,7 @@ export default class ComponentPaddingPicker extends UmbElementMixin(LitElement) 
                     <span>Small</span>
                 </label>
                 <label>
-                    <input type="radio" name="padding" value="medium" .checked=${this.value === 'medium' || !this.value} @change=${this.#onChange}>
+                    <input type="radio" name="padding" value="medium" .checked=${this.value === 'medium'} @change=${this.#onChange}>
                     <div class="box pad-medium">
                         <div class="inner">Content</div>
                     </div>

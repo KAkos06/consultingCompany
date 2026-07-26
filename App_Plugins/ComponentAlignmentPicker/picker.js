@@ -21,7 +21,7 @@ export default class ComponentAlignmentPicker extends UmbElementMixin(LitElement
         return html`
             <div class="picker">
                 <label>
-                    <input type="radio" name="alignment" value="Left" .checked=${this.value === 'Left' || !this.value} @change=${this.#onChange}>
+                    <input type="radio" name="alignment" value="Left" .checked=${this.value === 'Left'} @change=${this.#onChange}>
                     <div class="box">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 10H3M21 6H3M21 14H3M17 18H3"/></svg>
                     </div>

@@ -21,7 +21,7 @@ export default class ComponentColorPicker extends UmbElementMixin(LitElement) {
         return html`
             <div class="picker">
                 <label>
-                    <input type="radio" name="color" value="cream" .checked=${this.value === 'cream' || !this.value} @change=${this.#onChange}>
+                    <input type="radio" name="color" value="cream" .checked=${this.value === 'cream'} @change=${this.#onChange}>
                     <div class="box cream"></div>
                     <span>Cream</span>
                 </label>

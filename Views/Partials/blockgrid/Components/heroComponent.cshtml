@@ -1,48 +1,22 @@
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Core.Models.Blocks;
 @using Umbraco.Extensions;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<HeroComponent>>
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlockGridItem>
 @{
     var content = Model.Content;
-    var buttons = content.Buttons ?? Enumerable.Empty<Link>();
+    var slides = content.Value<BlockListModel>("slides");
     
-    var stats = new List<dynamic>();
-    if (content.Stats != null) {
-        foreach (var block in content.Stats) {
-            var num = block.Content.Value<string>("number");
-            var lbl = block.Content.Value<string>("label");
-            if (!string.IsNullOrWhiteSpace(num)) {
-                stats.Add(new { n = num, l = lbl });
-            }
-        }
+    if (slides == null || !slides.Any()) {
+        return;
     }
+    
+    var autoScroll = content.HasProperty("autoScroll") && content.Value<bool>("autoScroll");
+    var scrollSpeed = content.HasProperty("scrollSpeed") ? content.Value<int>("scrollSpeed") : 5;
+    if (scrollSpeed < 5) scrollSpeed = 5;
 
     var bgName = ViewData["bgName"]?.ToString() ?? "";
     var isDark = bgName == "dark" || bgName == "solidDark";
-
-    var image = content.HasProperty("image") ? content.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("image") : null;
-    var hasImage = image != null;
-
-    var breadcrumbs = new List<dynamic>();
-    var currentPage = Umbraco.AssignedContentItem;
-    if (content.HasProperty("showBreadcrumb") && content.Value<bool>("showBreadcrumb") && currentPage != null)
-    {
-        // Get ancestors from root to current page, but ignore the very first level (e.g., 'Site')
-        var ancestors = currentPage.AncestorsOrSelf().Reverse().Where(x => x.Level > 1).ToList();
-        
-        // Only show breadcrumb if we have at least 2 levels (e.g., Home Page + Current Page)
-        if (ancestors.Count > 1)
-        {
-            foreach (var a in ancestors)
-            {
-                breadcrumbs.Add(new { label = a.Name, to = a.Url() });
-            }
-        }
-    }
-
-    var breadcrumbText = isDark ? "text-[#FFF2EF]/60" : "text-[#1A2A4F]/60";
-    var breadcrumbHover = isDark ? "hover:text-[#F7A5A5]" : "hover:text-[#1A2A4F]";
-    var breadcrumbCurrent = isDark ? "text-[#FFDBB6]" : "text-[#1A2A4F]";
 
     var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
     var subtitleColor = isDark ? "text-[#FFF2EF]/75" : "text-[#1A2A4F]/75";
@@ -54,80 +28,272 @@
     var statBorder = isDark ? "border-white/15" : "border-[#1A2A4F]/15";
     var blurBall1 = isDark ? "bg-[#F7A5A5]/20" : "bg-[#F7A5A5]/40";
     var blurBall2 = isDark ? "bg-[#FFDBB6]/15" : "bg-[#FFDBB6]/30";
+    var indicatorActive = isDark ? "bg-[#F7A5A5]" : "bg-[#1A2A4F]";
+    var indicatorInactive = isDark ? "bg-white/30" : "bg-[#1A2A4F]/20";
+    var arrowBg = isDark ? "border-white/15 bg-black/20 text-white hover:bg-white/10 hover:border-white/30" : "border-[#1A2A4F]/15 bg-black/5 text-[#1A2A4F] hover:bg-[#1A2A4F]/10";
+    
+    var sliderId = "hero-slider-" + Guid.NewGuid().ToString("N").Substring(0, 8);
 }
 
-<div data-testid="hero-section" class="relative w-full">
-    <div class="absolute top-32 -left-20 h-72 w-72 rounded-full blur-3xl @blurBall1"></div>
-    <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full blur-3xl @blurBall2"></div>
+<div data-testid="hero-section" class="relative w-full" id="@sliderId">
+    <div class="absolute top-32 -left-20 h-72 w-72 rounded-full blur-3xl @blurBall1 pointer-events-none"></div>
+    <div class="absolute bottom-10 right-10 h-96 w-96 rounded-full blur-3xl @blurBall2 pointer-events-none"></div>
 
-    <div class="relative mx-auto max-w-7xl px-6 pb-8 pt-2 md:pb-12 md:pt-4">
-        <div class="grid grid-cols-1 @(hasImage ? "lg:grid-cols-2" : "") gap-12 items-center">
-            <div class="@(hasImage ? "max-w-3xl" : "max-w-full")">
-                @if (breadcrumbs.Count > 0) {
-                    <nav data-testid="hero-breadcrumb" class="fade-up flex items-center gap-1.5 text-xs mb-7 @breadcrumbText">
-                        @for (var i = 0; i < breadcrumbs.Count; i++) {
-                            var b = breadcrumbs[i];
-                            var isLast = i == breadcrumbs.Count - 1;
-                            <span class="flex items-center gap-1.5">
-                                @if (!string.IsNullOrEmpty(b.to) && !isLast) {
-                                    <a href="@b.to" class="transition-colors @breadcrumbHover">
-                                        @b.label
-                                    </a>
-                                } else {
-                                    <span class="@(isLast ? breadcrumbCurrent + " font-medium" : breadcrumbText)">
-                                        @b.label
-                                    </span>
-                                }
-                                @if (!isLast) {
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="m9 18 6-6-6-6"/></svg>
-                                }
-                            </span>
-                        }
-                    </nav>
-                }
-
-                <div class="fade-up delay-3 mt-10 flex flex-wrap gap-4">
-                    @{
-                        var btnIndex = 0;
-                        foreach (var btn in buttons) {
-                            if (btn != null && !string.IsNullOrEmpty(btn.Url)) {
-                                if (btnIndex == 0) {
-                                    <a href="@btn.Url" target="@btn.Target" data-testid="hero-cta-primary" class="group inline-flex items-center gap-2 rounded-full px-7 py-4 text-base font-semibold shadow-xl transition-all active:scale-95 @primaryBtn">
-                                        @btn.Name
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                                    </a>
-                                } else {
-                                    <a href="@btn.Url" target="@btn.Target" data-testid="hero-cta-secondary" class="inline-flex items-center gap-2 rounded-full border px-7 py-4 text-base font-medium transition-colors @secondaryBtn">
-                                        @btn.Name
-                                    </a>
-                                }
-                                btnIndex++;
-                            }
+    <div class="relative mx-auto max-w-7xl">
+        <div class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide hide-scrollbars transition-opacity duration-300" style="scrollbar-width: none; -ms-overflow-style: none;" id="@(sliderId)-container">
+            @foreach (var slideBlock in slides) {
+                var s = slideBlock.Content;
+                
+                var tag = s.Value<string>("tag");
+                var title = s.Value<string>("title");
+                var desc = s.Value<string>("subtitle");
+                var buttons = s.Value<IEnumerable<Link>>("buttons") ?? Enumerable.Empty<Link>();
+                var statsList = s.Value<BlockListModel>("stats");
+                var image = s.Value<MediaWithCrops>("image");
+                var hasImage = image != null;
+                
+                var stats = new List<dynamic>();
+                if (statsList != null) {
+                    foreach (var block in statsList) {
+                        var num = block.Content.Value<string>("number");
+                        var lbl = block.Content.Value<string>("label");
+                        if (!string.IsNullOrWhiteSpace(num)) {
+                            stats.Add(new { n = num, l = lbl });
                         }
                     }
-                </div>
-
-                @if (stats.Count > 0) {
-                    <div data-testid="hero-stats" class="fade-up delay-4 mt-16 grid max-w-2xl grid-cols-3 gap-6">
-                        @foreach (var stat in stats) {
-                            <div class="border-l pl-5 @statBorder">
-                                <div class="font-[Outfit] text-3xl font-bold md:text-4xl @statNumber">
-                                    @stat.n
-                                </div>
-                                <div class="mt-1 text-xs md:text-sm @statLabel">
-                                    @stat.l
-                                </div>
-                            </div>
-                        }
-                    </div>
                 }
-            </div>
 
-            @if (hasImage) {
-                <div class="relative fade-up delay-2">
-                    <img src="@image.Url()" alt="@(content.Value<string>("heading") ?? "Hero image")" class="w-full h-auto rounded-2xl shadow-2xl" />
+                <div class="snap-start basis-full shrink-0 grow-0 w-full relative">
+                    <div class="px-6 pb-16 pt-2 md:pb-24 md:pt-4">
+                        <div class="grid grid-cols-1 @(hasImage ? "lg:grid-cols-2" : "") gap-12 items-center">
+                            <div class="@(hasImage ? "max-w-3xl" : "max-w-full")">
+                                
+                                @if (!string.IsNullOrWhiteSpace(tag)) {
+                                    <div class="fade-up inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium @tagBg mb-6">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-[#F7A5A5]"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                        @tag
+                                    </div>
+                                }
+                                
+                                @if (!string.IsNullOrWhiteSpace(title)) {
+                                    <h1 class="fade-up delay-1 font-[Outfit] text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl @titleColor">
+                                        @Html.Raw(title.Replace("\n", "<br/>"))
+                                    </h1>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(desc)) {
+                                    <p class="fade-up delay-2 mt-6 max-w-2xl text-lg md:text-xl leading-relaxed @subtitleColor">
+                                        @Html.Raw(desc.Replace("\n", "<br/>"))
+                                    </p>
+                                }
+
+                                @if (buttons.Any()) {
+                                    <div class="fade-up delay-3 mt-10 flex flex-wrap gap-4">
+                                        @{
+                                            var btnIndex = 0;
+                                            foreach (var btn in buttons) {
+                                                if (btn != null && !string.IsNullOrEmpty(btn.Url)) {
+                                                    if (btnIndex == 0) {
+                                                        <a href="@btn.Url" target="@btn.Target" data-testid="hero-cta-primary" class="group inline-flex items-center gap-2 rounded-full px-7 py-4 text-base font-semibold shadow-xl transition-all active:scale-95 @primaryBtn">
+                                                            @btn.Name
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                        </a>
+                                                    } else {
+                                                        <a href="@btn.Url" target="@btn.Target" data-testid="hero-cta-secondary" class="inline-flex items-center gap-2 rounded-full border px-7 py-4 text-base font-medium transition-colors @secondaryBtn">
+                                                            @btn.Name
+                                                        </a>
+                                                    }
+                                                    btnIndex++;
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                }
+
+                                @if (stats.Count > 0) {
+                                    <div data-testid="hero-stats" class="fade-up delay-4 mt-16 grid max-w-2xl grid-cols-3 gap-6">
+                                        @foreach (var stat in stats) {
+                                            <div class="border-l pl-5 @statBorder">
+                                                <div class="font-[Outfit] text-3xl font-bold md:text-4xl @statNumber">
+                                                    @stat.n
+                                                </div>
+                                                <div class="mt-1 text-xs md:text-sm @statLabel">
+                                                    @stat.l
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+
+                            @if (hasImage) {
+                                <div class="relative fade-up delay-2 mt-12 lg:mt-0">
+                                    <img src="@image.Url()" alt="@title" class="w-full h-auto rounded-2xl shadow-2xl" />
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             }
         </div>
+        
+        @if (slides.Count > 1) {
+            <!-- Navigation Arrows -->
+            <button id="@(sliderId)-prev" aria-label="Előző" class="hidden md:flex absolute top-[calc(50%-2rem)] -left-4 lg:-left-12 z-20 h-12 w-12 items-center justify-center rounded-full border backdrop-blur-md transition-all @arrowBg group shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button id="@(sliderId)-next" aria-label="Következő" class="hidden md:flex absolute top-[calc(50%-2rem)] -right-4 lg:-right-12 z-20 h-12 w-12 items-center justify-center rounded-full border backdrop-blur-md transition-all @arrowBg group shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            
+            <!-- Dots Indicators -->
+            <div class="absolute bottom-4 left-0 right-0 z-20 flex justify-center">
+                <div class="flex items-center gap-2 px-4 py-2.5 rounded-full border shadow-sm backdrop-blur-md @(isDark ? "bg-black/20 border-white/10" : "bg-black/5 border-[#1A2A4F]/10")" id="@(sliderId)-indicators">
+                    @for (var i = 0; i < slides.Count; i++) {
+                        <div data-index="@i" class="h-1.5 transition-all duration-300 rounded-full @(i == 0 ? "w-6 " + indicatorActive : "w-2 " + indicatorInactive)"></div>
+                    }
+                </div>
+            </div>
+            
+            <script>
+            (() => {
+                const init = () => {
+                    const container = document.getElementById('@(sliderId)-container');
+                    const indicators = document.querySelectorAll('#@(sliderId)-indicators > div');
+                    const prevBtn = document.getElementById('@(sliderId)-prev');
+                    const nextBtn = document.getElementById('@(sliderId)-next');
+                    if (!container || !indicators.length) return;
+
+                    const isAutoplay = @(autoScroll.ToString().ToLower());
+                    const speedMs = @(scrollSpeed * 1000);
+
+                    const indicatorActive = '@Html.Raw(indicatorActive)';
+                    const indicatorInactive = '@Html.Raw(indicatorInactive)';
+
+                    const originalSlides = Array.from(container.children);
+                    const totalSlides = originalSlides.length;
+
+                    if (totalSlides <= 1) return;
+
+                    // Clone for infinite loop
+                    const firstClone = originalSlides[0].cloneNode(true);
+                    const lastClone = originalSlides[totalSlides - 1].cloneNode(true);
+                    firstClone.setAttribute('aria-hidden', 'true');
+                    lastClone.setAttribute('aria-hidden', 'true');
+                    
+                    container.appendChild(firstClone);
+                    container.insertBefore(lastClone, originalSlides[0]);
+
+                    let slideWidth = 0;
+                    
+                    // Initial setup without animation
+                    container.style.scrollSnapType = 'none';
+                    requestAnimationFrame(() => {
+                        slideWidth = container.children[0].clientWidth || container.clientWidth;
+                        container.scrollTo({ left: slideWidth, behavior: 'auto' });
+                        requestAnimationFrame(() => {
+                            container.style.scrollSnapType = 'x mandatory';
+                        });
+                    });
+
+                    const updateUI = (activeIdx) => {
+                        indicators.forEach((ind, idx) => {
+                            if (idx === activeIdx) {
+                                ind.className = `h-1.5 transition-all duration-300 rounded-full w-6 ${indicatorActive}`;
+                            } else {
+                                ind.className = `h-1.5 transition-all duration-300 rounded-full w-2 ${indicatorInactive}`;
+                            }
+                        });
+                    };
+
+                    let scrollTimeout;
+                    const onScroll = () => {
+                        clearTimeout(scrollTimeout);
+                        slideWidth = container.children[0].clientWidth || container.clientWidth;
+                        const currentScroll = container.scrollLeft;
+                        
+                        let activeIdx = Math.round(currentScroll / slideWidth) - 1;
+                        if (activeIdx < 0) activeIdx = totalSlides - 1;
+                        if (activeIdx >= totalSlides) activeIdx = 0;
+                        updateUI(activeIdx);
+
+                        scrollTimeout = setTimeout(() => {
+                            const snappedIndex = Math.round(container.scrollLeft / slideWidth);
+                            if (snappedIndex === 0) {
+                                container.style.scrollSnapType = 'none';
+                                container.scrollTo({ left: totalSlides * slideWidth, behavior: 'auto' });
+                                container.offsetHeight; // force reflow
+                                container.style.scrollSnapType = 'x mandatory';
+                            } else if (snappedIndex === totalSlides + 1) {
+                                container.style.scrollSnapType = 'none';
+                                container.scrollTo({ left: 1 * slideWidth, behavior: 'auto' });
+                                container.offsetHeight; // force reflow
+                                container.style.scrollSnapType = 'x mandatory';
+                            }
+                        }, 150);
+                    };
+
+                    if (nextBtn) {
+                        nextBtn.addEventListener('click', () => {
+                            slideWidth = container.children[0].clientWidth || container.clientWidth;
+                            container.scrollBy({ left: slideWidth, behavior: 'smooth' });
+                        });
+                    }
+
+                    if (prevBtn) {
+                        prevBtn.addEventListener('click', () => {
+                            slideWidth = container.children[0].clientWidth || container.clientWidth;
+                            container.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+                        });
+                    }
+
+                    indicators.forEach((ind, idx) => {
+                        ind.style.cursor = 'pointer';
+                        ind.addEventListener('click', () => {
+                            slideWidth = container.children[0].clientWidth || container.clientWidth;
+                            container.scrollTo({ left: (idx + 1) * slideWidth, behavior: 'smooth' });
+                        });
+                    });
+
+                    let timer = null;
+                    const startAutoplay = () => {
+                        if (!isAutoplay) return;
+                        stopAutoplay();
+                        timer = setInterval(() => {
+                            if (nextBtn) nextBtn.click();
+                        }, speedMs);
+                    };
+                    const stopAutoplay = () => {
+                        if (timer) clearInterval(timer);
+                    };
+
+                    if (isAutoplay) {
+                        const sliderEl = document.getElementById('@sliderId');
+                        if (sliderEl) {
+                            sliderEl.addEventListener('mouseenter', stopAutoplay);
+                            sliderEl.addEventListener('mouseleave', startAutoplay);
+                            sliderEl.addEventListener('touchstart', stopAutoplay, { passive: true });
+                        }
+                        startAutoplay();
+                    }
+
+                    container.addEventListener('scroll', onScroll, { passive: true });
+                    // Trigger initial UI update
+                    updateUI(0);
+                };
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', init);
+                } else {
+                    init();
+                }
+            })();
+            </script>
+            <style>
+            .hide-scrollbars::-webkit-scrollbar {
+              display: none;
+            }
+            </style>
+        }
     </div>
 </div>

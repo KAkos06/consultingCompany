@@ -1,0 +1,49 @@
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Extensions;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var currentPage = Model;
+    if (currentPage == null || !currentPage.HasProperty("showBreadcrumb") || !currentPage.Value<bool>("showBreadcrumb"))
+    {
+        return;
+    }
+
+    var customName = currentPage.Value<string>("breadcrumbName");
+    var currentLabel = !string.IsNullOrWhiteSpace(customName) ? customName : currentPage.Name;
+
+    var ancestors = currentPage.Ancestors().Where(x => x.Level > 1).ToArray();
+    Array.Reverse(ancestors);
+    
+    var breadcrumbs = new List<dynamic>();
+    if (ancestors.Length > 0 || currentPage.Level > 1)
+    {
+        foreach (var a in ancestors)
+        {
+            breadcrumbs.Add(new { label = a.Name, to = a.Url() });
+        }
+        breadcrumbs.Add(new { label = currentLabel, to = currentPage.Url() });
+    }
+
+    if (breadcrumbs.Count <= 1) // Don't show breadcrumb if it's just the current page on Level 2 (e.g. Home Page)
+    {
+        return;
+    }
+}
+
+<div class="absolute top-[100px] left-0 right-0 z-40 pointer-events-none">
+    <div class="mx-auto max-w-7xl px-6">
+        <nav aria-label="Breadcrumb" class="pointer-events-auto inline-flex items-center gap-1.5 text-xs text-white/80 bg-[#1A2A4F]/70 backdrop-blur-md px-4 py-2 rounded-full shadow-sm">
+            @for (var i = 0; i < breadcrumbs.Count; i++) {
+                var b = breadcrumbs[i];
+                var isLast = i == breadcrumbs.Count - 1;
+                
+                if (!isLast) {
+                    <a href="@b.to" class="hover:text-white transition-colors">@b.label</a>
+                    <span class="opacity-50">/</span>
+                } else {
+                    <span class="text-white font-medium" aria-current="page">@b.label</span>
+                }
+            }
+        </nav>
+    </div>
+</div>

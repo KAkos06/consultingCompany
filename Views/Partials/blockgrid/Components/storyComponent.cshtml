@@ -11,10 +11,10 @@
     var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
     var proseColor = isDark ? "prose-invert prose-p:text-[#FFF2EF]/80 prose-headings:text-[#FFF2EF] prose-a:text-[#F7A5A5] prose-strong:text-[#FFF2EF]" : "prose-p:text-[#1A2A4F]/80 prose-headings:text-[#1A2A4F] prose-a:text-[#1A2A4F] hover:prose-a:text-[#F7A5A5] prose-strong:text-[#1A2A4F]";
 }
-<div data-testid="story-component" class="w-full py-12 md:py-24">
-    <div class="mx-auto max-w-4xl px-4">
+<div data-testid="story-component" class="w-full mt-6 md:mt-10">
+    <div>
         @if (htmlContent != null && !string.IsNullOrWhiteSpace(htmlContent.ToString())) {
-            <div class="prose prose-lg mx-auto @proseColor fade-up delay-1">
+            <div class="prose prose-lg max-w-5xl @proseColor fade-up delay-1">
                 @htmlContent
             </div>
         }

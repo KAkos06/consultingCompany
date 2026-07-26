@@ -28,7 +28,7 @@ export default class ComponentWidthPicker extends UmbElementMixin(LitElement) {
                     <span>Center</span>
                 </label>
                 <label>
-                    <input type="radio" name="width" value="wide" .checked=${this.value === 'wide' || !this.value} @change=${this.#onChange}>
+                    <input type="radio" name="width" value="wide" .checked=${this.value === 'wide'} @change=${this.#onChange}>
                     <div class="box wide">
                         <div class="inner"></div>
                     </div>
