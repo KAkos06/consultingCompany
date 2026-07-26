@@ -1,0 +1,19 @@
+{
+  "name": "ComponentBackgroundEditor",
+  "version": "1.0.0",
+  "extensions": [
+    {
+      "type": "propertyEditorUi",
+      "alias": "My.PropertyEditorUi.BackgroundSettings",
+      "name": "Background Settings Editor",
+      "elementName": "my-background-editor",
+      "js": "/App_Plugins/ComponentBackgroundEditor/picker.js",
+      "meta": {
+        "label": "Background Settings Editor",
+        "propertyEditorSchemaAlias": "Umbraco.Plain.String",
+        "icon": "icon-picture",
+        "group": "common"
+      }
+    }
+  ]
+}

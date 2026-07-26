@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+    <rect width="400" height="300" fill="#1b253b" rx="8" ry="8" />
+    <pattern id="dots" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+        <circle cx="2" cy="2" r="1.5" fill="#2a354d"/>
+    </pattern>
+    <rect x="40" y="30" width="120" height="60" fill="url(#dots)"/>
+    <rect x="240" y="210" width="120" height="60" fill="url(#dots)"/>
+    <path d="M 330 40 L 345 55 M 345 40 L 330 55" stroke="#e58319" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="80" cy="280" r="30" stroke="#e58319" stroke-width="4" fill="none"/>
+    <g transform="translate(40, 60) rotate(-1)">
+        <path d="M 160 20 L 160 160" stroke="#ffffff" stroke-width="3" stroke-dasharray="4,4"/>
+        <circle cx="160" cy="40" r="5" fill="#ffffff"/>
+        <rect x="180" y="30" width="120" height="20" fill="none" stroke="#ffffff" stroke-width="2" rx="2"/>
+        
+        <circle cx="160" cy="80" r="5" fill="#ffffff"/>
+        <rect x="20" y="70" width="120" height="20" fill="none" stroke="#ffffff" stroke-width="2" rx="2"/>
+        
+        <circle cx="160" cy="120" r="5" fill="#ffffff"/>
+        <rect x="180" y="110" width="120" height="20" fill="none" stroke="#ffffff" stroke-width="2" rx="2"/>
+    </g>
+</svg>

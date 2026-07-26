@@ -18,9 +18,46 @@
     var widthClass = "max-w-7xl px-4 sm:px-6 lg:px-8";
     if (widthName == "full") { widthClass = "w-full"; }
     else if (widthName == "center") { widthClass = "max-w-5xl px-4 sm:px-6 lg:px-8"; }
+
+    var anchorStr = Model.Settings?.Value<string>("anchor") ?? Model.Content.Value<string>("anchor");
+    var sectionId = !string.IsNullOrWhiteSpace(anchorStr) ? anchorStr.Replace("#", "").Trim() : $"section-{Model.Content.Key}";
+
+    var bgSettingsJson = Model.Settings?.Value<string>("backgroundSettings") ?? Model.Content.Value<string>("backgroundSettings");
+    var bgImageUrl = "";
+    var bgOpacity = 1.0;
+    var bgParallax = false;
+
+    if (!string.IsNullOrWhiteSpace(bgSettingsJson)) {
+        try {
+            var bgData = System.Text.Json.JsonDocument.Parse(bgSettingsJson).RootElement;
+            if (bgData.TryGetProperty("image", out var imgProp)) {
+                var mediaKey = imgProp.GetString();
+                if (!string.IsNullOrEmpty(mediaKey) && Guid.TryParse(mediaKey, out var mediaGuid)) {
+                    var mediaItem = Umbraco.Media(mediaGuid);
+                    if (mediaItem != null) {
+                        bgImageUrl = mediaItem.Url();
+                    }
+                }
+            }
+            if (bgData.TryGetProperty("opacity", out var opacityProp) && opacityProp.TryGetInt32(out var opVal)) {
+                bgOpacity = opVal / 100.0;
+            }
+            if (bgData.TryGetProperty("parallax", out var parallaxProp)) {
+                bgParallax = parallaxProp.ValueKind == System.Text.Json.JsonValueKind.True;
+            }
+        } catch {}
+    }
 }
 
-<section class="w-full relative overflow-hidden @bgClass @paddingClass">
+<section id="@sectionId" class="w-full relative overflow-hidden @bgClass @paddingClass">
+    @if (!string.IsNullOrEmpty(bgImageUrl)) {
+        <div aria-hidden="true" class="absolute inset-0 z-0 @(bgParallax ? "bg-fixed" : "")" 
+             style="background-image: url('@bgImageUrl'); background-size: cover; background-position: center;">
+        </div>
+        <div aria-hidden="true" class="absolute inset-0 pointer-events-none z-0 @bgClass" 
+             style="opacity: @bgOpacity.ToString(System.Globalization.CultureInfo.InvariantCulture);">
+        </div>
+    }
     @if (bgName == "cream") {
         <div aria-hidden="true" class="absolute inset-0 opacity-[0.07] pointer-events-none" style="background-image: radial-gradient(circle, #1A2A4F 1px, transparent 1px); background-size: 24px 24px;"></div>
         <div aria-hidden="true" class="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full bg-[#FFDBB6]/35 blur-3xl pointer-events-none"></div>
@@ -35,7 +72,7 @@
         <div aria-hidden="true" class="absolute inset-0 opacity-[0.07] pointer-events-none mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'3\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.4\'/%3E%3C/svg%3E');"></div>
     }
 
-    <div class="relative mx-auto @widthClass">
+    <div class="relative z-10 mx-auto @widthClass">
         @await Html.PartialAsync("blockgrid/Components/_Header", Model.Content, ViewData)
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             <div>
