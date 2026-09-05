@@ -63,7 +63,7 @@ $template = @"
 </ContentType>
 "@
 
-$outDir = "c:\Users\Akos\Documents\GitHub\consultingCompany\ExecutiveInsightsUmbraco\uSync\v17\ContentTypes\"
+$outDir = "c:\Users\Akos\Documents\GitHub\consultingCompany\ExecutiveInsightUmbraco\uSync\v17\ContentTypes\"
 
 foreach ($comp in $components) {
     $xml = $template.Replace("{Key}", $comp.Key).Replace("{Alias}", $comp.Alias).Replace("{Name}", $comp.Name).Replace("{Icon}", $comp.Icon)

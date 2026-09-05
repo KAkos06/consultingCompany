@@ -60,7 +60,7 @@ export default function About({ variant = "warm" }) {
             <span className="italic font-medium">egyetlen küldetés.</span>
           </h2>
           <p className="text-[#1A2A4F]/70 text-lg leading-relaxed mt-7">
-            Az Executive Insights 2013-ban indult azzal a meggyőződéssel, hogy a
+            Az Executive Insight 2013-ban indult azzal a meggyőződéssel, hogy a
             legjobb vezetők sem dolgoznak egyedül. A magyar és közép-európai
             piac felső vezetőivel dolgozunk együtt — diszkréten, mélyen és
             mérhető eredménnyel.

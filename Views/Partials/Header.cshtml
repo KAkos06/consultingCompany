@@ -9,7 +9,7 @@
         ?? siteRoot?.Children.FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings")
         ?? siteRoot?.SiblingsAndSelf().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings");
     
-    var brandName = settings?.Value<string>("logoText") ?? "Executive Insights";
+    var brandName = settings?.Value<string>("logoText") ?? "Executive Insight";
     var navBlocks = settings?.Value<BlockListModel>("headerNavLinks");
     var ctaBlocks = settings?.Value<BlockListModel>("headerCtaButton");
     

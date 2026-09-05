@@ -38,7 +38,7 @@ export default function Hero() {
             data-testid="hero-subtitle"
             className="fade-up delay-2 mt-8 text-lg md:text-xl text-[#FFF2EF]/75 max-w-2xl leading-relaxed"
           >
-            Az Executive Insights tapasztalt mentorok hálózata, akik C-szintű
+            Az Executive Insight tapasztalt mentorok hálózata, akik C-szintű
             vezetőket és vezetői csapatokat kísérnek a növekedés legkritikusabb
             pillanataiban.
           </p>

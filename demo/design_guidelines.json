@@ -1,7 +1,7 @@
 {
   "theme": "Light",
   "archetype": "5 (Luxury Hybrid)",
-  "brand_name": "Executive Insights",
+  "brand_name": "Executive Insight",
   "colors": {
     "primary": "#1A2A4F",
     "secondary": "#F7A5A5",
@@ -28,7 +28,7 @@
     "header": {
       "type": "Floating Rounded Top Navigation",
       "classes": "fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl bg-white/95 backdrop-blur-md rounded-full shadow-[0_8px_32px_rgba(26,42,79,0.12)] z-50 px-6 py-4 flex items-center justify-between",
-      "logo": "Text logo 'Executive Insights', font-bold text-xl text-[#1A2A4F]",
+      "logo": "Text logo 'Executive Insight', font-bold text-xl text-[#1A2A4F]",
       "nav_links": {
         "items": ["Szolgáltatások", "Rólunk", "Módszertan", "Esettanulmányok"],
         "hover_effect": "relative group. Add an absolute block at bottom-[-4px] left-1/2 -translate-x-1/2 w-0 h-[2px] bg-[#F7A5A5] transition-all duration-300 ease-out group-hover:w-[50%]"

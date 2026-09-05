@@ -73,7 +73,7 @@ export default function AboutPage() {
           { label: "Kezdőlap", to: "/" },
           { label: "Rólunk" },
         ]}
-        eyebrow="Az Executive Insights csapata"
+        eyebrow="Az Executive Insight csapata"
         title="12 év, 240+ vezető,"
         highlight="egyetlen küldetés."
         description="Tapasztalt mentorok hálózata, akik a magyar és közép-európai piac C-szintű vezetőit kísérik a növekedés legkritikusabb pillanataiban — diszkréten, mélyen, mérhető eredménnyel."
@@ -99,7 +99,7 @@ export default function AboutPage() {
                 <em>„Miért nincs Magyarországon olyan coaching cég, ahova mi magunk is mennénk?”</em>
               </p>
               <p>
-                A válaszuk lett az Executive Insights. Nem trénerek vagyunk, nem
+                A válaszuk lett az Executive Insight. Nem trénerek vagyunk, nem
                 gyors fejlesztési programokat árulunk. Olyan vezetőket kísérünk,
                 akiknek a hétköznapi döntései sok ember életét befolyásolják — és
                 akiknek ehhez kérdéseik vannak, amit máshol nem tudnak feltenni.

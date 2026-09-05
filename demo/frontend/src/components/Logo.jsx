@@ -43,7 +43,7 @@ export default function Logo({ size = 44, variant = "light", className = "" }) {
       />
       <img
         src={LOGO_URL}
-        alt="Executive Insights"
+        alt="Executive Insight"
         className="w-full h-full object-contain relative"
         style={{ filter: imgFilter }}
         draggable={false}

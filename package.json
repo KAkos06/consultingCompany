@@ -1,5 +1,5 @@
 {
-  "name": "executive-insights-umbraco",
+  "name": "executive-insight-umbraco",
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",

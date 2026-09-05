@@ -8,7 +8,7 @@
         ?? siteRoot?.Children.FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings")
         ?? siteRoot?.SiblingsAndSelf().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings");
     
-    var brandName = settings?.Value<string>("logoText") ?? "Executive Insights";
+    var brandName = settings?.Value<string>("logoText") ?? "Executive Insight";
     var footerDesc = settings?.Value<string>("footerDescription") ?? "Vezetői coaching és stratégiai mentorálás C-szintű vezetőknek és vezetői csapatoknak — Budapesten és online.";
     var compTitle = settings?.Value<string>("footerCompanyTitle") ?? "Cég";
     var compLinks = settings?.Value<IEnumerable<Link>>("footerCompanyLinks");
@@ -19,7 +19,7 @@
     var newsText = settings?.Value<string>("footerNewsletterText") ?? "Havi egy mély insight a vezetésről. Spam nélkül.";
     var newsFormGuid = settings?.Value<Guid?>("footerNewsletterForm") ?? Model.Value<Guid?>("footerNewsletterForm");
     
-    var copyText = settings?.Value<string>("copyrightText") ?? "© 2025 Executive Insights Kft. Minden jog fenntartva.";
+    var copyText = settings?.Value<string>("copyrightText") ?? "© 2025 Executive Insight Kft. Minden jog fenntartva.";
     var bottomLinks = settings?.Value<IEnumerable<Link>>("footerBottomLinks");
     
     var linkedinUrl = settings?.Value<string>("linkedinUrl");

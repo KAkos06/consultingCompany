@@ -1,7 +1,7 @@
-# Executive Insights — Vezetői Coaching Landing
+# Executive Insight — Vezetői Coaching Landing
 
 ## Original Problem Statement
-Hungarian landing page for "Executive Insights" executive coaching firm.
+Hungarian landing page for "Executive Insight" executive coaching firm.
 - Color palette (mandatory): https://colorhunt.co/palette/1a2a4ff7a5a5ffdbb6fff2ef
 - Floating rounded top menu: logo+name left, menu+contact CTA right
 - Mega menus on hover/focus

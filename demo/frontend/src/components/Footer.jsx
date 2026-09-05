@@ -15,7 +15,7 @@ export default function Footer() {
             <div className="flex items-center gap-3 mb-5">
               <Logo size={48} variant="dark" />
               <span className="font-[Outfit] font-bold text-xl">
-                Executive Insights
+                Executive Insight
               </span>
             </div>
             <p className="text-[#FFF2EF]/65 leading-relaxed max-w-sm">
@@ -90,7 +90,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pt-8 text-xs text-[#FFF2EF]/50">
-          <div>© 2025 Executive Insights Kft. Minden jog fenntartva.</div>
+          <div>© 2025 Executive Insight Kft. Minden jog fenntartva.</div>
           <div className="flex gap-6">
             <a href="#" className="hover:text-[#F7A5A5] transition-colors">Adatvédelem</a>
             <a href="#" className="hover:text-[#F7A5A5] transition-colors">ÁSZF</a>

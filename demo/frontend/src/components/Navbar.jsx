@@ -155,7 +155,7 @@ export default function Navbar() {
           >
             <Logo size={44} />
             <span className="font-[Outfit] font-bold text-[#1A2A4F] text-base sm:text-lg tracking-tight whitespace-nowrap">
-              Executive Insights
+              Executive Insight
             </span>
           </Link>
 
@@ -240,7 +240,7 @@ export default function Navbar() {
           <Link to="/" className="flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
             <Logo size={42} />
             <span className="font-[Outfit] font-bold text-[#1A2A4F] text-lg tracking-tight">
-              Executive Insights
+              Executive Insight
             </span>
           </Link>
           <button
