@@ -1,0 +1,34 @@
+@using ExecutiveInsightUmbraco.Services.Seo;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISeoService SeoService
+
+@{
+    var seo = SeoService.GetMetadata(Model);
+}
+
+<title>@seo.Title</title>
+@if (!string.IsNullOrWhiteSpace(seo.Description))
+{
+    <meta name="description" content="@seo.Description" />
+}
+@if (!string.IsNullOrWhiteSpace(seo.CanonicalUrl))
+{
+    <link rel="canonical" href="@seo.CanonicalUrl" />
+}
+<meta name="robots" content="@seo.Robots" />
+
+<!-- Open Graph / Social Meta Tags -->
+<meta property="og:title" content="@seo.SocialTitle" />
+@if (!string.IsNullOrWhiteSpace(seo.SocialDescription))
+{
+    <meta property="og:description" content="@seo.SocialDescription" />
+}
+@if (!string.IsNullOrWhiteSpace(seo.SocialImageUrl))
+{
+    <meta property="og:image" content="@seo.SocialImageUrl" />
+}
+@if (!string.IsNullOrWhiteSpace(seo.SocialUrl))
+{
+    <meta property="og:url" content="@seo.SocialUrl" />
+}
+<meta property="og:type" content="@seo.SocialType" />
