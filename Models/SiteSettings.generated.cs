@@ -162,6 +162,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string LogoText => this.Value<string>(_publishedValueFallback, "logoText");
 
 		///<summary>
+		/// Site Logo: Logo image displayed next to the site title in the header. Fallback to monogram if empty.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("siteLogo")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops SiteLogo => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "siteLogo");
+
+		///<summary>
 		/// Twitter URL
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]

@@ -10,6 +10,7 @@
         ?? siteRoot?.SiblingsAndSelf().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings");
     
     var brandName = settings?.Value<string>("logoText") ?? "Executive Insight";
+    var siteLogo = settings?.Value<MediaWithCrops>("siteLogo");
     var navBlocks = settings?.Value<BlockListModel>("headerNavLinks");
     var ctaBlocks = settings?.Value<BlockListModel>("headerCtaButton");
     
@@ -72,9 +73,13 @@
 <header id="main-navbar" class="nav-shell nav-floating fixed top-0 left-1/2 -translate-x-1/2 z-50 bg-white/95 backdrop-blur-md shadow-[0_8px_32px_rgba(26,42,79,0.18)] py-3 border border-[#1A2A4F]/5">
   <div class="nav-shell-inner flex items-center justify-between">
     <a href="/" class="flex items-center gap-3 shrink-0 group" style="text-decoration: none;">
-      <div class="w-10 h-10 rounded-full bg-[#1A2A4F] text-[#FFDBB6] flex items-center justify-center font-bold text-xl font-[Outfit] group-hover:scale-105 transition-transform">
-        EI
-      </div>
+      @if (siteLogo != null && !string.IsNullOrWhiteSpace(siteLogo.Url())) {
+        <img src="@siteLogo.Url()" alt="@brandName" class="h-10 w-auto max-h-10 max-w-[140px] object-contain group-hover:scale-105 transition-transform" />
+      } else {
+        <div class="w-10 h-10 rounded-full bg-[#1A2A4F] text-[#FFDBB6] flex items-center justify-center font-bold text-xl font-[Outfit] group-hover:scale-105 transition-transform">
+          EI
+        </div>
+      }
       <span class="font-[Outfit] font-bold text-[#1A2A4F] text-lg tracking-tight">
         @brandName
       </span>
