@@ -1,0 +1,9 @@
+http://185.187.72.85 {
+    redir https://185.187.72.85.sslip.io{uri} permanent
+}
+
+185.187.72.85.sslip.io {
+    encode zstd gzip
+    reverse_proxy umbraco:8080
+}
+

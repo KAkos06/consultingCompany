@@ -1,0 +1,25 @@
+{
+  "$schema": "../../umbraco-package-schema.json",
+  "name": "SubmissionsViewer",
+  "version": "1.0.0",
+  "extensions": [
+    {
+      "type": "dashboard",
+      "alias": "ExecutiveInsight.Dashboard.Submissions",
+      "name": "Űrlapok és Megkeresések",
+      "element": "/App_Plugins/SubmissionsViewer/dashboard.js",
+      "elementName": "submissions-dashboard",
+      "weight": 5,
+      "meta": {
+        "label": "Megkeresések",
+        "pathname": "submissions"
+      },
+      "conditions": [
+        {
+          "alias": "Umb.Condition.SectionAlias",
+          "match": "Umb.Section.Content"
+        }
+      ]
+    }
+  ]
+}

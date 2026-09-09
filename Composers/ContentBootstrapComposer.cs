@@ -25,21 +25,30 @@ public class ContentBootstrapHandler : INotificationHandler<UmbracoApplicationSt
     private readonly IContentService _contentService;
     private readonly IWebHostEnvironment _env;
     private readonly ILogger<ContentBootstrapHandler> _logger;
+    private readonly IConfiguration _configuration;
 
     public ContentBootstrapHandler(
         IMediaService mediaService,
         IContentService contentService,
         IWebHostEnvironment env,
-        ILogger<ContentBootstrapHandler> logger)
+        ILogger<ContentBootstrapHandler> logger,
+        IConfiguration configuration)
     {
         _mediaService = mediaService;
         _contentService = contentService;
         _env = env;
         _logger = logger;
+        _configuration = configuration;
     }
 
     public void Handle(UmbracoApplicationStartedNotification notification)
     {
+        if (!_configuration.GetValue<bool>("BootstrapContent"))
+        {
+            _logger.LogInformation("Content bootstrap is disabled.");
+            return;
+        }
+
         EnsureMedia();
         EnsureContentNodes();
         SyncContentFiles();

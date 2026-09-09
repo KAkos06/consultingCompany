@@ -1,0 +1,15 @@
+.git
+.vs
+bin
+obj
+demo
+cms
+frontend
+caddy
+*.sqlite.db*
+umbraco/Data/*.sqlite.db*
+umbraco/Logs
+.env
+docker-compose.yml
+node_modules
+.next

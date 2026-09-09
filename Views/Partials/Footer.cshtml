@@ -27,7 +27,7 @@
     var twitterUrl = settings?.Value<string>("twitterUrl");
     var instagramUrl = settings?.Value<string>("instagramUrl");
     
-    var hasNewsForm = newsFormGuid != null && newsFormGuid != Guid.Empty;
+    var hasNewsForm = !string.IsNullOrWhiteSpace(newsTitle);
 }
 
 <!-- Modern Dark Navy Footer -->
@@ -109,7 +109,13 @@
           @newsText
         </p>
         <div class="footer-newsletter-form">
-          @await Component.InvokeAsync("RenderForm", new { formId = newsFormGuid.Value, theme = "default", includeScripts = false })
+          <form id="footer-newsletter-form" class="flex items-center gap-2 w-full mt-1">
+            <input type="email" id="footer-newsletter-email" name="email" required placeholder="te@email.hu" class="w-full rounded-full border px-5 py-3 text-sm transition-all text-[#FFF2EF] outline-none" style="flex: 1 1 auto; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15);" />
+            <button type="submit" id="footer-newsletter-submit" class="shrink-0 w-12 h-12 rounded-full bg-[#F7A5A5] text-[#1A2A4F] font-bold text-xl flex items-center justify-center transition-all hover:bg-[#FFDBB6] active:scale-95 shadow-md cursor-pointer" title="Feliratkozás">
+              →
+            </button>
+          </form>
+          <div id="footer-newsletter-status" class="mt-2 text-xs transition-all hidden"></div>
         </div>
       </div>
       }
@@ -131,50 +137,46 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const nForm = document.querySelector(".footer-newsletter-form");
-        if (nForm) {
-            const formEl = nForm.querySelector("form");
-            const inp = nForm.querySelector("input[type='text'], input[type='email']");
-            const sub = nForm.querySelector("input[type='submit'], button[type='submit']");
+        const form = document.getElementById("footer-newsletter-form");
+        const emailInput = document.getElementById("footer-newsletter-email");
+        const statusEl = document.getElementById("footer-newsletter-status");
+        const submitBtn = document.getElementById("footer-newsletter-submit");
 
-            if (formEl && inp && sub) {
-                // Hozunk létre egy tiszta flex konténert az oszlop teljes szélességében
-                const flexGroup = document.createElement("div");
-                flexGroup.className = "flex items-center gap-2 w-full mt-1";
+        if (form && emailInput && statusEl && submitBtn) {
+            form.addEventListener("submit", async function(e) {
+                e.preventDefault();
+                const email = emailInput.value.trim();
+                if (!email) return;
 
-                // Formázzuk a szövegmezőt (100% rugalmas kitöltés)
-                inp.setAttribute("placeholder", "te@email.hu");
-                inp.setAttribute("type", "email");
-                inp.style.cssText = "flex: 1 1 auto !important; width: 100% !important; background-color: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.15) !important; padding: 0.75rem 1.25rem !important; border-radius: 9999px !important; font-size: 0.875rem !important; color: #FFF2EF !important; outline: none !important; box-sizing: border-box !important;";
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.6";
+                statusEl.className = "mt-2 text-xs text-[#FFDBB6]";
+                statusEl.textContent = "Feliratkozás folyamatban...";
+                statusEl.classList.remove("hidden");
 
-                // Formázzuk a kerek gombot
-                if (sub.tagName === "INPUT") sub.setAttribute("value", "→");
-                if (sub.tagName === "BUTTON") sub.innerHTML = "→";
-                sub.style.cssText = "flex: 0 0 48px !important; width: 48px !important; height: 48px !important; border-radius: 9999px !important; background-color: #F7A5A5 !important; color: #1A2A4F !important; font-weight: bold !important; font-size: 1.25rem !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 0 !important; margin: 0 !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;";
-
-                flexGroup.appendChild(inp);
-                flexGroup.appendChild(sub);
-
-                // Eltüntetjük az Umbraco mélyen egymásba ágyazott girbe-gurba kereteit
-                const pageEl = nForm.querySelector(".umbraco-forms-page");
-                if (pageEl) pageEl.style.display = "none";
-
-                // Betesszük a tiszta sort közvetlenül a formba (a rejtett biztonsági tokenek mellé)
-                formEl.appendChild(flexGroup);
-            }
+                try {
+                    const res = await fetch("/api/forms/newsletter", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: email })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        statusEl.className = "mt-2 text-xs text-[#86efac]";
+                        statusEl.textContent = data.message || "Köszönjük! Sikeres feliratkozás.";
+                        emailInput.value = "";
+                    } else {
+                        statusEl.className = "mt-2 text-xs text-[#fca5a5]";
+                        statusEl.textContent = data.message || "Hiba történt a feliratkozás során.";
+                    }
+                } catch (err) {
+                    statusEl.className = "mt-2 text-xs text-[#fca5a5]";
+                    statusEl.textContent = "Hálózati hiba történt. Kérjük próbálja újra.";
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "1";
+                }
+            });
         }
     });
 </script>
-
-<style>
-    .footer-newsletter-form {
-        width: 100% !important;
-        display: block;
-    }
-    .footer-newsletter-form form {
-        display: block;
-        width: 100% !important;
-        margin: 0;
-        padding: 0;
-    }
-</style>
