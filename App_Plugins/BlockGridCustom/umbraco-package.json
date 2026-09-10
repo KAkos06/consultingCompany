@@ -1,0 +1,102 @@
+{
+  "name": "BlockGridCustom",
+  "version": "1.0.0",
+  "extensions": [
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.HeroView",
+      "name": "Hero Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/hero.js",
+      "forContentTypeAlias": "heroComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.AboutView",
+      "name": "About Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/about.js",
+      "forContentTypeAlias": "aboutComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.ServicesView",
+      "name": "Services Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/services.js",
+      "forContentTypeAlias": "servicesComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.QuoteSliderView",
+      "name": "QuoteSlider Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/quoteslider.js",
+      "forContentTypeAlias": "quoteSliderComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.MethodologyView",
+      "name": "Methodology Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/methodology.js",
+      "forContentTypeAlias": "methodologyComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.TestimonialsView",
+      "name": "Testimonials Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/testimonials.js",
+      "forContentTypeAlias": "testimonialsComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.StatsView",
+      "name": "Stats Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/stats.js",
+      "forContentTypeAlias": "statsComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.ContactView",
+      "name": "Contact Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/contact.js",
+      "forContentTypeAlias": "contactComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.CtaBandView",
+      "name": "CtaBand Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/ctaband.js",
+      "forContentTypeAlias": "ctaBandComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.StoryView",
+      "name": "Story Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/story.js",
+      "forContentTypeAlias": "storyComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.TeamView",
+      "name": "Team Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/team.js",
+      "forContentTypeAlias": "teamComponent",
+      "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "blockEditorCustomView",
+      "alias": "BlockGridCustom.TimelineView",
+      "name": "Timeline Component Custom View",
+      "element": "/App_Plugins/BlockGridCustom/views/timeline.js",
+      "forContentTypeAlias": "timelineComponent",
+      "forBlockEditor": "block-grid"
+    }
+  ]
+}

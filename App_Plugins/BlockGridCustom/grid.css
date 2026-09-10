@@ -1,0 +1,187 @@
+/* ==========================================================================
+   Umbraco Block Grid Core Engine (Inlined for adopted stylesheet reliability)
+   ========================================================================== */
+
+.umb-block-grid__layout-container {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--umb-block-grid--grid-columns, 1), minmax(0, 1fr));
+    grid-auto-flow: row;
+    grid-auto-rows: minmax(50px, min-content);
+    column-gap: var(--umb-block-grid--column-gap, 0);
+    row-gap: var(--umb-block-grid--row-gap, 0);
+}
+
+.umb-block-grid__layout-item {
+    position: relative;
+    grid-column-end: span min(calc(var(--umb-block-grid--item-column-span, 1) * 3), var(--umb-block-grid--grid-columns));
+    grid-row: span var(--umb-block-grid--item-row-span, 1);
+}
+
+.umb-block-grid__area-container,
+.umb-block-grid__block--view::part(area-container) {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--umb-block-grid--area-grid-columns, var(--umb-block-grid--grid-columns, 1)), minmax(0, 1fr));
+    grid-auto-flow: row;
+    grid-auto-rows: minmax(50px, min-content);
+    column-gap: var(--umb-block-grid--areas-column-gap, 0);
+    row-gap: var(--umb-block-grid--areas-row-gap, 0);
+}
+
+.umb-block-grid__area {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    grid-column-end: span min(calc(var(--umb-block-grid--area-column-span, 1) * 3), var(--umb-block-grid--area-grid-columns));
+    grid-row: span var(--umb-block-grid--area-row-span, 1);
+}
+
+@media (min-width: 1024px) {
+    .umb-block-grid__layout-item {
+        grid-column-end: span min(var(--umb-block-grid--item-column-span, 1), var(--umb-block-grid--grid-columns));
+    }
+    .umb-block-grid__area {
+        grid-column-end: span min(var(--umb-block-grid--area-column-span, 1), var(--umb-block-grid--area-grid-columns));
+    }
+}
+
+/* ==========================================================================
+   Root Layout Container: Sections Styling (Translucent Subtle Blue)
+   ========================================================================== */
+
+/* Larger gap between sections */
+:host(:not([area-key])) .umb-block-grid__layout-container {
+    row-gap: 28px !important;
+}
+
+/* Section card container */
+:host(:not([area-key])) .umb-block-grid__layout-item {
+    --uui-color-surface: rgba(49, 109, 202, 0.05) !important;
+    --uui-color-border: rgba(49, 109, 202, 0.28) !important;
+    background: rgba(49, 109, 202, 0.04) !important;
+    border: 1px solid rgba(49, 109, 202, 0.28) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    transition: all 160ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:host(:not([area-key])) .umb-block-grid__layout-item:hover {
+    background: rgba(49, 109, 202, 0.08) !important;
+    border-color: rgba(49, 109, 202, 0.48) !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* Section Header (Icon and Label formatting) */
+:host(:not([area-key])) uui-ref-node {
+    --uui-color-surface: transparent !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(49, 109, 202, 0.16) !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+:host(:not([area-key])) uui-ref-node #open-part {
+    min-height: 52px !important;
+    padding: 8px 14px !important;
+    align-items: center !important;
+}
+
+:host(:not([area-key])) uui-ref-node #icon,
+:host(:not([area-key])) umb-icon {
+    color: #316dca !important;
+    opacity: 0.85 !important;
+}
+
+:host(:not([area-key])) uui-ref-node #name,
+:host(:not([area-key])) umb-ufm-render {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: var(--uui-color-text, #eeeeef) !important;
+    line-height: 1.3 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1px !important;
+}
+
+:host(:not([area-key])) umb-ufm-render br {
+    display: none !important;
+}
+
+/* Layout tag (e.g. "(One Column Layout)"): smaller font size, muted grey, placed on a new line below the name */
+:host(:not([area-key])) umb-ufm-render em,
+:host(:not([area-key])) umb-ufm-render i,
+:host(:not([area-key])) uui-ref-node em,
+:host(:not([area-key])) uui-ref-node i {
+    display: block !important;
+    font-size: 11px !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    color: var(--uui-color-text-alt, #8c8c8e) !important;
+    opacity: 0.75 !important;
+    margin-left: 0 !important;
+    margin-top: 1px !important;
+    letter-spacing: 0.2px !important;
+}
+
+/* ==========================================================================
+   Areas inside Sections
+   ========================================================================== */
+
+.umb-block-grid__area-container,
+.umb-block-grid__block--view::part(area-container) {
+    padding: 12px 14px 14px 14px !important;
+    column-gap: 16px !important;
+    row-gap: 16px !important;
+    background: transparent !important;
+}
+
+.umb-block-grid__area {
+    background: rgba(49, 109, 202, 0.02) !important;
+    border: 1.5px dashed rgba(49, 109, 202, 0.32) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    min-height: 90px !important;
+    box-sizing: border-box !important;
+    transition: all 160ms ease !important;
+}
+
+.umb-block-grid__area:hover {
+    background: rgba(49, 109, 202, 0.04) !important;
+    border-color: rgba(49, 109, 202, 0.55) !important;
+}
+
+/* ==========================================================================
+   Components inside Areas: Translucent Subtle Green
+   ========================================================================== */
+
+:host([area-key]) .umb-block-grid__layout-container {
+    row-gap: 12px !important;
+    column-gap: 12px !important;
+}
+
+:host([area-key]) .umb-block-grid__layout-item {
+    --uui-color-surface: rgba(46, 160, 67, 0.06) !important;
+    --uui-color-border: rgba(46, 160, 67, 0.28) !important;
+    background: rgba(46, 160, 67, 0.04) !important;
+    border-radius: 8px !important;
+    transition: all 160ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:host([area-key]) .umb-block-grid__layout-item:hover {
+    background: rgba(46, 160, 67, 0.10) !important;
+    border-color: rgba(46, 160, 67, 0.55) !important;
+}
+
+/* Component Fallback Node (if custom view is not active) */
+:host([area-key]) uui-ref-node {
+    --uui-color-surface: rgba(46, 160, 67, 0.06) !important;
+    --uui-color-border: rgba(46, 160, 67, 0.28) !important;
+    border-radius: 8px !important;
+}
+
+:host([area-key]) uui-ref-node #icon,
+:host([area-key]) umb-icon {
+    color: #2ea043 !important;
+}
