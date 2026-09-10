@@ -16,7 +16,7 @@ param(
     [string]$UserName = "admin",
     [int]$Port = 22,
     [string]$RemotePath = "/opt/consultingcompany",
-    [string]$Domain = ""
+    [string]$Domain = "executiveinsight.hu"
 )
 
 $ErrorActionPreference = "Stop"
@@ -237,7 +237,7 @@ sed -i "s|CADDY_SITE_ADDRESS=.*|CADDY_SITE_ADDRESS=$SITE_DOMAINS|g" .env
 sed -i "s|OPENIDDICT_DISABLE_TRANSPORT_SECURITY_REQUIREMENT=.*|OPENIDDICT_DISABLE_TRANSPORT_SECURITY_REQUIREMENT=true|g" .env
 
 cat << EOF > deploy/Caddyfile
-http://$HOST_NAME {
+http://$HOST_NAME, http://185.187.72.85.sslip.io {
     redir https://$EFFECTIVE_DOMAIN{uri} permanent
 }
 

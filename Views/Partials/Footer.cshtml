@@ -124,12 +124,13 @@
     <!-- Bottom Bar -->
     <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-xs text-[#FFF2EF]/50">
       <div>@copyText</div>
-      <div class="flex gap-6">
+      <div class="flex flex-wrap items-center gap-6">
         @if(bottomLinks != null) {
           foreach(var link in bottomLinks) {
             <a href="@link.Url" target="@link.Target" class="hover:text-[#F7A5A5] transition-colors">@link.Name</a>
           }
         }
+        <button type="button" data-cookie-settings class="hover:text-[#F7A5A5] transition-colors cursor-pointer bg-transparent border-0 p-0 text-xs text-[#FFF2EF]/60 hover:underline">Süti beállítások</button>
       </div>
     </div>
   </div>

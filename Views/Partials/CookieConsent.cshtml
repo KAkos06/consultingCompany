@@ -1,0 +1,322 @@
+@* 
+    Cookie Consent (GDPR / ePrivacy) Banner & Settings Component
+    Executive Insight - Stílusos, márkaazonos, jogszabályoknak megfelelő süti-kezelő
+*@
+
+<!-- Cookie Banner Wrapper -->
+<div id="ei-cookie-banner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-xl z-[9999] transition-all duration-300 transform translate-y-8 opacity-0 pointer-events-none" style="display: none;">
+    <div class="bg-[#1A2A4F] text-[#FFF2EF] border border-white/15 shadow-2xl rounded-2xl sm:rounded-3xl p-5 sm:p-6 backdrop-blur-xl bg-opacity-95">
+        
+        <!-- View 1: Summary / Compact View -->
+        <div id="ei-cookie-view-summary">
+            <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-lg shrink-0">
+                        🍪
+                    </div>
+                    <div>
+                        <h3 class="font-[Outfit] font-bold text-base sm:text-lg text-white leading-tight">
+                            Sütik (Cookie-k) használata
+                        </h3>
+                        <span class="text-[11px] font-semibold text-[#FFDBB6] uppercase tracking-wider">
+                            Adatvédelem & Felhasználói élmény
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-[#FFF2EF]/80 leading-relaxed mb-4">
+                Weboldalunk sütiket (cookie-kat) használ a biztonságos és zökkenőmentes böngészés, a látogatottsági statisztikák készítése, valamint a releváns tartalmak biztosítása érdekében. A működéshez elengedhetetlen sütik mindig aktívak, a továbbiak elfogadásáról Ön dönthet.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-1 border-t border-white/10">
+                <button type="button" id="ei-cookie-btn-settings" class="order-3 sm:order-1 text-xs text-[#FFDBB6] hover:underline flex items-center justify-center sm:justify-start gap-1 py-1.5 font-medium cursor-pointer transition-colors">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Beállítások testreszabása
+                </button>
+
+                <div class="order-1 sm:order-2 flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-2">
+                    <button type="button" id="ei-cookie-btn-necessary" class="px-3.5 py-2 text-xs sm:text-sm font-medium rounded-xl border border-white/20 text-white/90 hover:bg-white/10 hover:text-white transition-all text-center cursor-pointer">
+                        Csak a szükségesek
+                    </button>
+                    <button type="button" id="ei-cookie-btn-accept-all" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl bg-[#F7A5A5] text-[#1A2A4F] hover:bg-[#FFDBB6] transition-all text-center cursor-pointer shadow-md">
+                        Összes elfogadása
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 2: Detailed Custom Settings View -->
+        <div id="ei-cookie-view-settings" class="hidden">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+                <div class="flex items-center gap-2">
+                    <button type="button" id="ei-cookie-btn-back" class="p-1 -ml-1 text-white/70 hover:text-white rounded-lg transition-colors cursor-pointer" title="Vissza">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h3 class="font-[Outfit] font-bold text-base sm:text-lg text-white">
+                        Süti beállítások részletei
+                    </h3>
+                </div>
+                <span class="text-[11px] text-white/60">
+                    GDPR megfelelés
+                </span>
+            </div>
+
+            <!-- Categories -->
+            <div class="space-y-3 max-h-60 overflow-y-auto pr-1 text-xs text-[#FFF2EF]/80">
+                <!-- 1. Necessary -->
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-semibold text-white flex items-center gap-1.5">
+                            Elengedhetetlen (Szükséges)
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">
+                            Mindig aktív
+                        </span>
+                    </div>
+                    <p class="text-[11px] text-[#FFF2EF]/70 leading-relaxed">
+                        A weboldal alapvető működéséhez, a biztonságos kapcsolat fenntartásához és a kiválasztott süti-preferenciák megjegyzéséhez kötelező sütik. Kikapcsolásukkal az oldal nem működne megfelelően.
+                    </p>
+                </div>
+
+                <!-- 2. Analytics -->
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                    <div class="flex items-center justify-between mb-1">
+                        <label for="ei-cookie-opt-analytics" class="font-semibold text-white cursor-pointer select-none">
+                            Statisztikai & Elemzési sütik
+                        </label>
+                        <input type="checkbox" id="ei-cookie-opt-analytics" checked class="w-4 h-4 rounded accent-[#F7A5A5] cursor-pointer" />
+                    </div>
+                    <p class="text-[11px] text-[#FFF2EF]/70 leading-relaxed">
+                        Névtelen látogatottsági adatokat gyűjtenek az oldal használatáról (pl. leglátogatottabb témák, hibák), így segítve a tartalmak és funkciók folyamatos tökéletesítését.
+                    </p>
+                </div>
+
+                <!-- 3. Marketing -->
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                    <div class="flex items-center justify-between mb-1">
+                        <label for="ei-cookie-opt-marketing" class="font-semibold text-white cursor-pointer select-none">
+                            Marketing & Célzó sütik
+                        </label>
+                        <input type="checkbox" id="ei-cookie-opt-marketing" class="w-4 h-4 rounded accent-[#F7A5A5] cursor-pointer" />
+                    </div>
+                    <p class="text-[11px] text-[#FFF2EF]/70 leading-relaxed">
+                        Személyre szabott tartalmak és releváns információk megjelenítését támogatják, megakadályozva a nem kívánt ismétlődéseket.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Settings Actions -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 mt-4 pt-3 border-t border-white/10">
+                <button type="button" id="ei-cookie-btn-cancel-settings" class="text-xs text-white/60 hover:text-white text-center py-1 cursor-pointer">
+                    Mégse
+                </button>
+                <div class="flex items-center gap-2 justify-end">
+                    <button type="button" id="ei-cookie-btn-accept-all-custom" class="px-3 py-2 text-xs font-medium rounded-xl border border-white/20 text-white hover:bg-white/10 transition-colors cursor-pointer">
+                        Mindet elfogadom
+                    </button>
+                    <button type="button" id="ei-cookie-btn-save" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl bg-[#F7A5A5] text-[#1A2A4F] hover:bg-[#FFDBB6] transition-all cursor-pointer shadow-md">
+                        Kijelöltek mentése
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Floating Cookie Settings Reopen Badge -->
+<button type="button" id="ei-cookie-reopen-badge" class="fixed bottom-4 left-4 z-40 p-2.5 rounded-full bg-[#1A2A4F]/90 text-white/80 hover:text-white border border-white/20 shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer hidden items-center gap-2 group" title="Süti beállítások módosítása">
+    <span class="text-base group-hover:rotate-12 transition-transform">🍪</span>
+    <span class="text-xs font-medium pr-1.5 hidden group-hover:inline-block transition-all">Sütik</span>
+</button>
+
+<script>
+(function() {
+    const STORAGE_KEY = "ei_cookie_consent_v1";
+    const COOKIE_NAME = "ei_cookie_consent";
+
+    const banner = document.getElementById("ei-cookie-banner");
+    const viewSummary = document.getElementById("ei-cookie-view-summary");
+    const viewSettings = document.getElementById("ei-cookie-view-settings");
+    const badge = document.getElementById("ei-cookie-reopen-badge");
+
+    const btnAcceptAll = document.getElementById("ei-cookie-btn-accept-all");
+    const btnAcceptNecessary = document.getElementById("ei-cookie-btn-necessary");
+    const btnSettings = document.getElementById("ei-cookie-btn-settings");
+    const btnBack = document.getElementById("ei-cookie-btn-back");
+    const btnCancelSettings = document.getElementById("ei-cookie-btn-cancel-settings");
+    const btnSave = document.getElementById("ei-cookie-btn-save");
+    const btnAcceptAllCustom = document.getElementById("ei-cookie-btn-accept-all-custom");
+
+    const optAnalytics = document.getElementById("ei-cookie-opt-analytics");
+    const optMarketing = document.getElementById("ei-cookie-opt-marketing");
+
+    // Read stored consent
+    function getStoredConsent() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        return null;
+    }
+
+    // Save consent
+    function setConsent(consent) {
+        const payload = {
+            necessary: true,
+            analytics: !!consent.analytics,
+            marketing: !!consent.marketing,
+            timestamp: new Date().toISOString()
+        };
+
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        } catch (e) {}
+
+        // 1 year cookie
+        try {
+            const expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
+            document.cookie = COOKIE_NAME + "=" + encodeURIComponent(JSON.stringify(payload)) + "; expires=" + expires + "; path=/; SameSite=Lax; Secure";
+        } catch (e) {}
+
+        window.eiCookieConsent = payload;
+        window.dispatchEvent(new CustomEvent("cookieConsentChanged", { detail: payload }));
+
+        hideBanner();
+        showBadge();
+    }
+
+    function showBanner(openDirectToSettings) {
+        if (!banner) return;
+        
+        if (openDirectToSettings) {
+            viewSummary.classList.add("hidden");
+            viewSettings.classList.remove("hidden");
+        } else {
+            viewSummary.classList.remove("hidden");
+            viewSettings.classList.add("hidden");
+        }
+
+        banner.style.display = "block";
+        // Force reflow for transition
+        banner.offsetHeight;
+        banner.classList.remove("translate-y-8", "opacity-0", "pointer-events-none");
+        banner.classList.add("translate-y-0", "opacity-100", "pointer-events-auto");
+
+        hideBadge();
+    }
+
+    function hideBanner() {
+        if (!banner) return;
+        banner.classList.remove("translate-y-0", "opacity-100", "pointer-events-auto");
+        banner.classList.add("translate-y-8", "opacity-0", "pointer-events-none");
+        setTimeout(function() {
+            banner.style.display = "none";
+        }, 320);
+    }
+
+    function showBadge() {
+        if (!badge) return;
+        badge.classList.remove("hidden");
+        badge.classList.add("flex");
+    }
+
+    function hideBadge() {
+        if (!badge) return;
+        badge.classList.add("hidden");
+        badge.classList.remove("flex");
+    }
+
+    // Initialize state
+    document.addEventListener("DOMContentLoaded", function() {
+        const current = getStoredConsent();
+        if (current) {
+            window.eiCookieConsent = current;
+            showBadge();
+            if (optAnalytics) optAnalytics.checked = !!current.analytics;
+            if (optMarketing) optMarketing.checked = !!current.marketing;
+        } else {
+            // Show banner after short delay for smoother page entrance
+            setTimeout(function() {
+                showBanner(false);
+            }, 600);
+        }
+
+        // Global opener trigger (e.g. for footer links)
+        document.querySelectorAll("[data-cookie-settings], .open-cookie-settings").forEach(function(el) {
+            el.addEventListener("click", function(e) {
+                e.preventDefault();
+                showBanner(true);
+            });
+        });
+    });
+
+    // Event listeners
+    if (btnAcceptAll) {
+        btnAcceptAll.addEventListener("click", function() {
+            setConsent({ necessary: true, analytics: true, marketing: true });
+        });
+    }
+
+    if (btnAcceptAllCustom) {
+        btnAcceptAllCustom.addEventListener("click", function() {
+            setConsent({ necessary: true, analytics: true, marketing: true });
+        });
+    }
+
+    if (btnAcceptNecessary) {
+        btnAcceptNecessary.addEventListener("click", function() {
+            setConsent({ necessary: true, analytics: false, marketing: false });
+        });
+    }
+
+    if (btnSettings) {
+        btnSettings.addEventListener("click", function() {
+            viewSummary.classList.add("hidden");
+            viewSettings.classList.remove("hidden");
+        });
+    }
+
+    if (btnBack) {
+        btnBack.addEventListener("click", function() {
+            viewSettings.classList.add("hidden");
+            viewSummary.classList.remove("hidden");
+        });
+    }
+
+    if (btnCancelSettings) {
+        btnCancelSettings.addEventListener("click", function() {
+            viewSettings.classList.add("hidden");
+            viewSummary.classList.remove("hidden");
+        });
+    }
+
+    if (btnSave) {
+        btnSave.addEventListener("click", function() {
+            setConsent({
+                necessary: true,
+                analytics: optAnalytics ? optAnalytics.checked : false,
+                marketing: optMarketing ? optMarketing.checked : false
+            });
+        });
+    }
+
+    if (badge) {
+        badge.addEventListener("click", function() {
+            showBanner(true);
+        });
+    }
+
+    // Expose helper to window
+    window.openCookieSettings = function() {
+        showBanner(true);
+    };
+})();
+</script>

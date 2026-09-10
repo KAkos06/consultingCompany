@@ -6,12 +6,12 @@
     {
       "type": "dashboard",
       "alias": "ExecutiveInsight.Dashboard.Submissions",
-      "name": "Űrlapok és Megkeresések",
-      "element": "/App_Plugins/SubmissionsViewer/dashboard.js",
+      "name": "Forms & Inquiries",
+      "element": "/App_Plugins/SubmissionsViewer/dashboard.js?v=3",
       "elementName": "submissions-dashboard",
       "weight": 5,
       "meta": {
-        "label": "Megkeresések",
+        "label": "Inquiries",
         "pathname": "submissions"
       },
       "conditions": [

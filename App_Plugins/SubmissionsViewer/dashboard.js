@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
+import { UMB_AUTH_CONTEXT } from "@umbraco-cms/backoffice/auth";
 
 export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
     static properties = {
@@ -19,19 +20,41 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
         this.loading = false;
         this.filterText = "";
         this.selectedContact = null;
+        this._auth = null;
+
+        this.consumeContext(UMB_AUTH_CONTEXT, (auth) => {
+            this._auth = auth;
+            if (auth) {
+                this.loadData();
+            }
+        });
     }
 
     connectedCallback() {
         super.connectedCallback();
-        this.loadData();
+        if (this._auth) {
+            this.loadData();
+        }
+    }
+
+    async getAuthHeaders() {
+        const headers = { "Content-Type": "application/json" };
+        if (this._auth) {
+            const token = await this._auth.getLatestToken();
+            if (token) {
+                headers["Authorization"] = `Bearer ${token}`;
+            }
+        }
+        return headers;
     }
 
     async loadData() {
         this.loading = true;
         try {
+            const headers = await this.getAuthHeaders();
             const [contactsRes, newsRes] = await Promise.all([
-                fetch("/umbraco/api/submissions/contacts", { credentials: "include" }),
-                fetch("/umbraco/api/submissions/newsletters", { credentials: "include" })
+                fetch("/umbraco/api/submissions/contacts", { headers, credentials: "include" }),
+                fetch("/umbraco/api/submissions/newsletters", { headers, credentials: "include" })
             ]);
 
             if (contactsRes.ok) {
@@ -41,7 +64,7 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                 this.newsletters = await newsRes.json();
             }
         } catch (err) {
-            console.error("Hiba a megkeresések betöltésekor:", err);
+            console.error("Error loading submissions:", err);
         } finally {
             this.loading = false;
         }
@@ -50,8 +73,10 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
     async toggleRead(id, e) {
         if (e) e.stopPropagation();
         try {
+            const headers = await this.getAuthHeaders();
             const res = await fetch(`/umbraco/api/submissions/contacts/${id}/toggle-read`, {
                 method: "POST",
+                headers,
                 credentials: "include"
             });
             if (res.ok) {
@@ -61,17 +86,19 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                 }
             }
         } catch (err) {
-            console.error("Hiba a státusz módosításakor:", err);
+            console.error("Error updating status:", err);
         }
     }
 
     async deleteContact(id, e) {
         if (e) e.stopPropagation();
-        if (!confirm("Biztosan törölni szeretné ezt a megkeresést?")) return;
+        if (!confirm("Are you sure you want to delete this inquiry?")) return;
 
         try {
+            const headers = await this.getAuthHeaders();
             const res = await fetch(`/umbraco/api/submissions/contacts/${id}`, {
                 method: "DELETE",
+                headers,
                 credentials: "include"
             });
             if (res.ok) {
@@ -81,7 +108,7 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                 }
             }
         } catch (err) {
-            console.error("Hiba a törlés során:", err);
+            console.error("Error deleting inquiry:", err);
         }
     }
 
@@ -96,17 +123,36 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
         this.selectedContact = null;
     }
 
-    exportCsv() {
-        window.location.href = "/umbraco/api/submissions/newsletters/export";
+    async exportCsv() {
+        try {
+            const headers = await this.getAuthHeaders();
+            const res = await fetch("/umbraco/api/submissions/newsletters/export", {
+                headers,
+                credentials: "include"
+            });
+            if (res.ok) {
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `newsletter_subscribers_${new Date().toISOString().slice(0, 10)}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (err) {
+            console.error("Error exporting CSV:", err);
+        }
     }
 
     formatDate(dateStr) {
         if (!dateStr) return "";
         try {
             const d = new Date(dateStr);
-            return d.toLocaleString("hu-HU", {
+            return d.toLocaleString("en-US", {
                 year: "numeric",
-                month: "2-digit",
+                month: "short",
                 day: "2-digit",
                 hour: "2-digit",
                 minute: "2-digit"
@@ -138,12 +184,12 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                 <!-- Header -->
                 <div class="header">
                     <div>
-                        <h1 class="title">Űrlapok és Megkeresések</h1>
-                        <p class="subtitle">A weboldal kapcsolatfelvételi űrlapján és hírlevelén keresztül érkező adatok</p>
+                        <h1 class="title">Forms & Inquiries</h1>
+                        <p class="subtitle">Submissions received through website contact forms and newsletter signups</p>
                     </div>
                     <div class="header-actions">
                         <button class="btn btn-secondary" @click=${this.loadData}>
-                            ${this.loading ? "Betöltés..." : "↻ Frissítés"}
+                            ${this.loading ? "Loading..." : "↻ Refresh"}
                         </button>
                     </div>
                 </div>
@@ -151,15 +197,15 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                 <!-- Stats Cards -->
                 <div class="stats-row">
                     <div class="stat-card">
-                        <span class="stat-label">Összes megkeresés</span>
+                        <span class="stat-label">Total Inquiries</span>
                         <span class="stat-value">${this.contacts.length}</span>
                     </div>
                     <div class="stat-card ${unreadCount > 0 ? 'highlight' : ''}">
-                        <span class="stat-label">Új / Olvasatlan üzenet</span>
+                        <span class="stat-label">New / Unread Messages</span>
                         <span class="stat-value">${unreadCount}</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-label">Hírlevél feliratkozó</span>
+                        <span class="stat-label">Newsletter Subscribers</span>
                         <span class="stat-value">${this.newsletters.length}</span>
                     </div>
                 </div>
@@ -168,12 +214,12 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                 <div class="tabs-nav">
                     <button class="tab-btn ${this.activeTab === 'contacts' ? 'active' : ''}" 
                             @click=${() => this.activeTab = 'contacts'}>
-                        ✉ Kapcsolati üzenetek
+                        ✉ Contact Inquiries
                         ${unreadCount > 0 ? html`<span class="badge badge-unread">${unreadCount}</span>` : ''}
                     </button>
                     <button class="tab-btn ${this.activeTab === 'newsletter' ? 'active' : ''}" 
                             @click=${() => this.activeTab = 'newsletter'}>
-                        📰 Hírlevél feliratkozók (${this.newsletters.length})
+                        📰 Newsletter Subscribers (${this.newsletters.length})
                     </button>
                 </div>
 
@@ -181,13 +227,13 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                 <div class="filter-bar">
                     <input type="text" 
                            class="search-input" 
-                           placeholder="Keresés név, email vagy szöveg alapján..." 
+                           placeholder="Search by name, email, or message..." 
                            .value=${this.filterText} 
                            @input=${e => this.filterText = e.target.value} />
                     
                     ${this.activeTab === 'newsletter' ? html`
                         <button class="btn btn-primary" @click=${this.exportCsv}>
-                            📥 Exportálás CSV-be
+                            📥 Export to CSV
                         </button>
                     ` : ''}
                 </div>
@@ -195,21 +241,21 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                 <!-- Content Area -->
                 <div class="table-container">
                     ${this.loading && !this.contacts.length && !this.newsletters.length ? html`
-                        <div class="empty-state">Adatok betöltése...</div>
+                        <div class="empty-state">Loading submissions...</div>
                     ` : this.activeTab === 'contacts' ? html`
                         ${filteredContacts.length === 0 ? html`
-                            <div class="empty-state">Nincs megjeleníthető kapcsolatfelvételi üzenet.</div>
+                            <div class="empty-state">No contact inquiries found.</div>
                         ` : html`
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 80px;">Státusz</th>
-                                        <th style="width: 140px;">Dátum</th>
-                                        <th>Név</th>
-                                        <th>E-mail cím</th>
-                                        <th>Cég / Pozíció</th>
-                                        <th>Üzenet részlet</th>
-                                        <th style="width: 160px; text-align: right;">Műveletek</th>
+                                        <th style="width: 80px;">Status</th>
+                                        <th style="width: 140px;">Date</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Company / Role</th>
+                                        <th>Message Preview</th>
+                                        <th style="width: 160px; text-align: right;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -217,7 +263,7 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                                         <tr class="${c.isRead ? '' : 'unread-row'}" @click=${() => this.openModal(c)}>
                                             <td>
                                                 <span class="status-pill ${c.isRead ? 'read' : 'unread'}">
-                                                    ${c.isRead ? 'Olvasott' : 'Új'}
+                                                    ${c.isRead ? 'Read' : 'New'}
                                                 </span>
                                             </td>
                                             <td class="date-cell">${this.formatDate(c.createdAt)}</td>
@@ -226,10 +272,10 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                                             <td>${c.company || "-"}</td>
                                             <td class="message-preview">${c.message}</td>
                                             <td style="text-align: right;" @click=${e => e.stopPropagation()}>
-                                                <button class="action-btn" title="Olvasottnak jelölés" @click=${e => this.toggleRead(c.id, e)}>
-                                                    ${c.isRead ? '✉ Újnak' : '✔ Olvasott'}
+                                                <button class="action-btn" title="Toggle read status" @click=${e => this.toggleRead(c.id, e)}>
+                                                    ${c.isRead ? '✉ Mark Unread' : '✔ Mark Read'}
                                                 </button>
-                                                <button class="action-btn danger" title="Törlés" @click=${e => this.deleteContact(c.id, e)}>
+                                                <button class="action-btn danger" title="Delete" @click=${e => this.deleteContact(c.id, e)}>
                                                     🗑
                                                 </button>
                                             </td>
@@ -240,14 +286,14 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                         `}
                     ` : html`
                         ${filteredNews.length === 0 ? html`
-                            <div class="empty-state">Nincs megjeleníthető feliratkozó.</div>
+                            <div class="empty-state">No newsletter subscribers found.</div>
                         ` : html`
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 180px;">Feliratkozás ideje</th>
-                                        <th>E-mail cím</th>
-                                        <th style="width: 100px;">Státusz</th>
+                                        <th style="width: 180px;">Subscribed At</th>
+                                        <th>Email</th>
+                                        <th style="width: 100px;">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -256,7 +302,7 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                                             <td class="date-cell">${this.formatDate(n.subscribedAt)}</td>
                                             <td class="bold-cell"><a href="mailto:${n.email}" class="link">${n.email}</a></td>
                                             <td>
-                                                <span class="status-pill read">Aktív</span>
+                                                <span class="status-pill read">Active</span>
                                             </td>
                                         </tr>
                                     `)}
@@ -279,32 +325,32 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
                             </div>
                             <div class="modal-body">
                                 <div class="field-group">
-                                    <span class="field-label">E-mail cím:</span>
+                                    <span class="field-label">Email:</span>
                                     <a href="mailto:${this.selectedContact.email}" class="link font-medium">${this.selectedContact.email}</a>
                                 </div>
                                 ${this.selectedContact.company ? html`
                                     <div class="field-group">
-                                        <span class="field-label">Cég / Pozíció:</span>
+                                        <span class="field-label">Company / Role:</span>
                                         <span>${this.selectedContact.company}</span>
                                     </div>
                                 ` : ''}
                                 <div class="field-group message-box">
-                                    <span class="field-label">Üzenet:</span>
+                                    <span class="field-label">Message:</span>
                                     <div class="message-content">${this.selectedContact.message}</div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <a href="mailto:${this.selectedContact.email}?subject=Válasz a megkeresésére&body=Kedves ${encodeURIComponent(this.selectedContact.name)}!" class="btn btn-primary">
-                                    ✉ Válasz küldése
+                                <a href="mailto:${this.selectedContact.email}?subject=Regarding your inquiry&body=Dear ${encodeURIComponent(this.selectedContact.name)}," class="btn btn-primary">
+                                    ✉ Reply
                                 </a>
                                 <button class="btn btn-secondary" @click=${() => this.toggleRead(this.selectedContact.id)}>
-                                    ${this.selectedContact.isRead ? 'Jelölés olvasatlanként' : 'Jelölés olvasottként'}
+                                    ${this.selectedContact.isRead ? 'Mark as Unread' : 'Mark as Read'}
                                 </button>
                                 <button class="btn btn-danger" @click=${() => this.deleteContact(this.selectedContact.id)}>
-                                    Törlés
+                                    Delete
                                 </button>
                                 <button class="btn btn-secondary" style="margin-left: auto;" @click=${this.closeModal}>
-                                    Bezárás
+                                    Close
                                 </button>
                             </div>
                         </div>
@@ -319,7 +365,7 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             display: block;
             padding: 24px 32px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: var(--uui-color-text, #1A2A4F);
+            color: var(--uui-color-text, #f8fafc);
             box-sizing: border-box;
         }
         .dashboard-wrapper {
@@ -336,11 +382,11 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             font-size: 24px;
             font-weight: 700;
             margin: 0 0 6px 0;
-            color: var(--uui-color-text, #1A2A4F);
+            color: var(--uui-color-text, #f8fafc);
         }
         .subtitle {
             font-size: 14px;
-            color: var(--uui-color-text-alt, #666);
+            color: var(--uui-color-text-alt, #94a3b8);
             margin: 0;
         }
         .stats-row {
@@ -350,35 +396,35 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             margin-bottom: 24px;
         }
         .stat-card {
-            background: var(--uui-color-surface, #ffffff);
-            border: 1px solid var(--uui-color-border, #e0e0e0);
+            background: var(--uui-color-surface, #1e293b);
+            border: 1px solid var(--uui-color-border, #334155);
             border-radius: 12px;
             padding: 16px 20px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .stat-card.highlight {
-            border-color: #F7A5A5;
-            background: rgba(247, 165, 165, 0.08);
+            border-color: #f87171;
+            background: rgba(248, 113, 113, 0.12);
         }
         .stat-label {
             font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--uui-color-text-alt, #777);
+            color: var(--uui-color-text-alt, #94a3b8);
             margin-bottom: 6px;
         }
         .stat-value {
             font-size: 28px;
             font-weight: 700;
-            color: var(--uui-color-text, #1A2A4F);
+            color: var(--uui-color-text, #f8fafc);
         }
         .tabs-nav {
             display: flex;
             gap: 8px;
-            border-bottom: 1px solid var(--uui-color-border, #e0e0e0);
+            border-bottom: 1px solid var(--uui-color-border, #334155);
             margin-bottom: 16px;
         }
         .tab-btn {
@@ -387,7 +433,7 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             padding: 10px 18px;
             font-size: 14px;
             font-weight: 600;
-            color: var(--uui-color-text-alt, #666);
+            color: var(--uui-color-text-alt, #94a3b8);
             cursor: pointer;
             border-bottom: 2px solid transparent;
             display: flex;
@@ -396,11 +442,11 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             transition: all 0.15s ease;
         }
         .tab-btn:hover {
-            color: var(--uui-color-text, #1A2A4F);
+            color: var(--uui-color-text, #ffffff);
         }
         .tab-btn.active {
-            color: #1A2A4F;
-            border-bottom-color: #1A2A4F;
+            color: var(--uui-color-interactive, #38bdf8);
+            border-bottom-color: var(--uui-color-interactive, #38bdf8);
             font-weight: 700;
         }
         .badge {
@@ -410,8 +456,8 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             font-weight: 700;
         }
         .badge-unread {
-            background-color: #F7A5A5;
-            color: #1A2A4F;
+            background-color: #ef4444;
+            color: #ffffff;
         }
         .filter-bar {
             display: flex;
@@ -425,15 +471,15 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             max-width: 400px;
             padding: 8px 14px;
             border-radius: 8px;
-            border: 1px solid var(--uui-color-border, #ccc);
+            border: 1px solid var(--uui-color-border, #475569);
             font-size: 14px;
-            background: var(--uui-color-surface, #fff);
-            color: var(--uui-color-text, #1A2A4F);
+            background: var(--uui-color-surface, #1e293b);
+            color: var(--uui-color-text, #f8fafc);
             outline: none;
         }
         .search-input:focus {
-            border-color: #1A2A4F;
-            box-shadow: 0 0 0 2px rgba(26,42,79,0.1);
+            border-color: var(--uui-color-interactive, #38bdf8);
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
         }
         .btn {
             display: inline-flex;
@@ -449,34 +495,36 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             border: 1px solid transparent;
         }
         .btn-primary {
-            background-color: #1A2A4F;
-            color: #ffffff;
+            background-color: var(--uui-color-interactive, #38bdf8);
+            color: var(--uui-color-surface, #0f172a) !important;
+            font-weight: 700;
         }
         .btn-primary:hover {
-            background-color: #2A3A5F;
+            filter: brightness(1.1);
+            color: var(--uui-color-surface, #0f172a) !important;
         }
         .btn-secondary {
-            background-color: var(--uui-color-surface, #fff);
-            border-color: var(--uui-color-border, #ccc);
-            color: var(--uui-color-text, #333);
+            background-color: var(--uui-color-surface, #1e293b);
+            border-color: var(--uui-color-border, #475569);
+            color: var(--uui-color-text, #f8fafc);
         }
         .btn-secondary:hover {
-            background-color: var(--uui-color-surface-alt, #f5f5f5);
+            background-color: var(--uui-color-surface-alt, #334155);
         }
         .btn-danger {
-            background-color: #fee2e2;
-            color: #b91c1c;
-            border-color: #fecaca;
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.3);
         }
         .btn-danger:hover {
-            background-color: #fca5a5;
+            background-color: rgba(239, 68, 68, 0.25);
         }
         .table-container {
-            background: var(--uui-color-surface, #ffffff);
-            border: 1px solid var(--uui-color-border, #e0e0e0);
+            background: var(--uui-color-surface, #1e293b);
+            border: 1px solid var(--uui-color-border, #334155);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
         .data-table {
             width: 100%;
@@ -485,34 +533,35 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             text-align: left;
         }
         .data-table th {
-            background: var(--uui-color-surface-alt, #f9f9fb);
-            color: var(--uui-color-text-alt, #666);
+            background: var(--uui-color-surface-alt, rgba(255,255,255,0.03));
+            color: var(--uui-color-text-alt, #94a3b8);
             font-weight: 600;
             padding: 12px 16px;
-            border-bottom: 1px solid var(--uui-color-border, #e0e0e0);
+            border-bottom: 1px solid var(--uui-color-border, #334155);
         }
         .data-table td {
             padding: 12px 16px;
-            border-bottom: 1px solid var(--uui-color-border, #eee);
+            border-bottom: 1px solid var(--uui-color-border, rgba(255,255,255,0.06));
             vertical-align: middle;
+            color: var(--uui-color-text, #f8fafc);
         }
         .data-table tbody tr {
             cursor: pointer;
             transition: background 0.1s ease;
         }
         .data-table tbody tr:hover {
-            background: var(--uui-color-surface-alt, #f9f9fb);
+            background: var(--uui-color-surface-hover, rgba(255,255,255,0.05));
         }
         .unread-row {
-            background: rgba(247, 165, 165, 0.05);
+            background: rgba(248, 113, 113, 0.08);
             font-weight: 600;
         }
         .bold-cell {
             font-weight: 600;
-            color: var(--uui-color-text, #1A2A4F);
+            color: var(--uui-color-text, #f8fafc);
         }
         .date-cell {
-            color: var(--uui-color-text-alt, #777);
+            color: var(--uui-color-text-alt, #94a3b8);
             font-size: 12px;
         }
         .message-preview {
@@ -520,7 +569,7 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            color: var(--uui-color-text-alt, #555);
+            color: var(--uui-color-text-alt, #cbd5e1);
         }
         .status-pill {
             display: inline-block;
@@ -531,43 +580,45 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             text-align: center;
         }
         .status-pill.unread {
-            background-color: #F7A5A5;
-            color: #1A2A4F;
+            background-color: rgba(248, 113, 113, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(248, 113, 113, 0.35);
         }
         .status-pill.read {
-            background-color: #e5e7eb;
-            color: #4b5563;
+            background-color: rgba(148, 163, 184, 0.15);
+            color: var(--uui-color-text-alt, #94a3b8);
+            border: 1px solid rgba(148, 163, 184, 0.25);
         }
         .action-btn {
             background: none;
-            border: 1px solid var(--uui-color-border, #ddd);
+            border: 1px solid var(--uui-color-border, #475569);
             border-radius: 6px;
             padding: 4px 8px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            color: var(--uui-color-text, #333);
+            color: var(--uui-color-text, #f8fafc);
             margin-left: 4px;
         }
         .action-btn:hover {
-            background: var(--uui-color-surface-alt, #f0f0f5);
+            background: var(--uui-color-surface-alt, rgba(255,255,255,0.1));
         }
         .action-btn.danger:hover {
-            background: #fee2e2;
-            color: #b91c1c;
-            border-color: #fca5a5;
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border-color: #f87171;
         }
         .link {
-            color: #1A2A4F;
+            color: var(--uui-color-interactive, #38bdf8);
             text-decoration: underline;
         }
         .link:hover {
-            color: #2A3A5F;
+            opacity: 0.85;
         }
         .empty-state {
             padding: 48px;
             text-align: center;
-            color: var(--uui-color-text-alt, #777);
+            color: var(--uui-color-text-alt, #94a3b8);
             font-size: 14px;
         }
         /* Modal */
@@ -577,23 +628,25 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
         }
         .modal-box {
-            background: var(--uui-color-surface, #ffffff);
+            background: var(--uui-color-surface, #1e293b);
+            border: 1px solid var(--uui-color-border, #334155);
             border-radius: 16px;
             width: 90%;
             max-width: 600px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             animation: popIn 0.2s ease;
+            color: var(--uui-color-text, #f8fafc);
         }
         @keyframes popIn {
             from { transform: scale(0.96); opacity: 0; }
@@ -604,7 +657,7 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             justify-content: space-between;
             align-items: flex-start;
             padding: 20px 24px;
-            border-bottom: 1px solid var(--uui-color-border, #eee);
+            border-bottom: 1px solid var(--uui-color-border, #334155);
         }
         .modal-title {
             margin: 0;
@@ -613,18 +666,18 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
         }
         .modal-subtitle {
             font-size: 12px;
-            color: #777;
+            color: var(--uui-color-text-alt, #94a3b8);
         }
         .close-btn {
             background: none;
             border: none;
             font-size: 18px;
             cursor: pointer;
-            color: #888;
+            color: var(--uui-color-text-alt, #94a3b8);
             padding: 4px;
         }
         .close-btn:hover {
-            color: #111;
+            color: var(--uui-color-text, #ffffff);
         }
         .modal-body {
             padding: 24px;
@@ -642,11 +695,11 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #888;
+            color: var(--uui-color-text-alt, #94a3b8);
         }
         .message-content {
-            background: var(--uui-color-surface-alt, #f9f9fb);
-            border: 1px solid var(--uui-color-border, #eee);
+            background: var(--uui-color-surface-alt, rgba(0,0,0,0.25));
+            border: 1px solid var(--uui-color-border, #334155);
             border-radius: 8px;
             padding: 16px;
             white-space: pre-wrap;
@@ -654,11 +707,12 @@ export default class SubmissionsDashboard extends UmbElementMixin(LitElement) {
             font-size: 14px;
             max-height: 250px;
             overflow-y: auto;
+            color: var(--uui-color-text, #f8fafc);
         }
         .modal-footer {
             padding: 16px 24px;
-            border-top: 1px solid var(--uui-color-border, #eee);
-            background: var(--uui-color-surface-alt, #fafafa);
+            border-top: 1px solid var(--uui-color-border, #334155);
+            background: var(--uui-color-surface-alt, rgba(0,0,0,0.2));
             display: flex;
             gap: 8px;
             align-items: center;
