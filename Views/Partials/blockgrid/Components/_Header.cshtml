@@ -8,8 +8,11 @@
         return;
     }
 
-    var align = Model.Value<string>("textAlignment") ?? "Left";
-    var layout = Model.Value<string>("headerLayout") ?? "Stacked";
+    var align = Model.Value<string>("textAlignment");
+    if (string.IsNullOrWhiteSpace(align)) align = "Left";
+
+    var layout = Model.Value<string>("headerLayout");
+    if (string.IsNullOrWhiteSpace(layout)) layout = "Stacked";
     var isSideBySide = layout == "SideBySide";
 
     var alignClass = align == "Center" ? "text-center" : align == "Right" ? "text-right" : "text-left";
@@ -22,14 +25,14 @@
     var subtitleColor = isDark ? "text-[#FFF2EF]/75" : "text-[#1A2A4F]/75";
     var tagBg = isDark ? "border-white/15 bg-white/10 text-[#FFF2EF]" : "border-[#1A2A4F]/10 bg-white shadow-sm text-[#1A2A4F]";
 
-    string ParseJsonProp(string json, out string style) {
+    string ParseJsonProp(string? json, out string style) {
         style = "";
         if (string.IsNullOrWhiteSpace(json)) return "";
         if (json.Trim().StartsWith("{")) {
             try {
                 using (var doc = System.Text.Json.JsonDocument.Parse(json)) {
-                    if (doc.RootElement.TryGetProperty("style", out var sProp)) style = sProp.GetString();
-                    if (doc.RootElement.TryGetProperty("text", out var tProp)) return tProp.GetString();
+                    if (doc.RootElement.TryGetProperty("style", out var sProp)) style = sProp.GetString() ?? "";
+                    if (doc.RootElement.TryGetProperty("text", out var tProp)) return tProp.GetString() ?? "";
                 }
             } catch { }
         }

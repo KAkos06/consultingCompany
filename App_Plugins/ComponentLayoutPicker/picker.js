@@ -9,7 +9,25 @@ export default class ComponentLayoutPicker extends UmbElementMixin(LitElement) {
 
     constructor() {
         super();
-        this.value = "Stacked";
+        this._value = "Stacked";
+    }
+
+    get value() {
+        return this._value || "Stacked";
+    }
+
+    set value(v) {
+        const oldVal = this._value;
+        this._value = (v === "SideBySide") ? "SideBySide" : "Stacked";
+        this.requestUpdate('value', oldVal);
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        if (!this._value || (this._value !== "Stacked" && this._value !== "SideBySide")) {
+            this._value = "Stacked";
+            this.dispatchEvent(new UmbPropertyValueChangeEvent());
+        }
     }
 
     #onChange(e) {
@@ -18,10 +36,11 @@ export default class ComponentLayoutPicker extends UmbElementMixin(LitElement) {
     }
 
     render() {
+        const currentVal = (this.value === 'SideBySide') ? 'SideBySide' : 'Stacked';
         return html`
             <div class="picker">
                 <label>
-                    <input type="radio" name="layout" value="Stacked" .checked=${this.value === 'Stacked' || !this.value} @change=${this.#onChange}>
+                    <input type="radio" name="layout" value="Stacked" .checked=${currentVal === 'Stacked'} @change=${this.#onChange}>
                     <div class="box">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="4" y="4" width="16" height="6" rx="1"></rect>
@@ -31,7 +50,7 @@ export default class ComponentLayoutPicker extends UmbElementMixin(LitElement) {
                     <span>Stacked</span>
                 </label>
                 <label>
-                    <input type="radio" name="layout" value="SideBySide" .checked=${this.value === 'SideBySide'} @change=${this.#onChange}>
+                    <input type="radio" name="layout" value="SideBySide" .checked=${currentVal === 'SideBySide'} @change=${this.#onChange}>
                     <div class="box">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="4" y="4" width="7" height="16" rx="1"></rect>
@@ -57,29 +76,39 @@ export default class ComponentLayoutPicker extends UmbElementMixin(LitElement) {
         .box {
             width: 48px;
             height: 48px;
-            background: var(--uui-color-surface-alt, #f9f9fc);
-            border: 2px solid transparent;
-            border-radius: 4px;
+            background: var(--uui-color-surface-alt, #2d333b);
+            border: 2px solid var(--uui-color-border, #434c56);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 150ms ease;
-            color: var(--uui-color-interactive, #1a2a4f);
-            opacity: 0.6;
+            color: var(--uui-color-text, #eeeeef);
+            opacity: 0.75;
+        }
+        label:hover .box {
+            opacity: 1;
+            border-color: var(--uui-color-border-emphasis, #626e7b);
         }
         input:checked + .box {
-            background: var(--uui-color-surface-alt-hover, #f0f0f5);
-            border-color: var(--uui-color-interactive, #1a2a4f);
+            background: var(--uui-color-selected, #316dca);
+            border-color: var(--uui-color-selected, #316dca);
+            color: var(--uui-color-selected-contrast, #ffffff);
             opacity: 1;
+        }
+        .box svg {
+            stroke: currentColor;
         }
         span {
             font-size: 11px;
             font-weight: 600;
-            color: var(--uui-color-text, #666);
+            color: var(--uui-color-text-alt, var(--uui-color-text, #888));
             text-transform: uppercase;
+            transition: color 150ms ease;
         }
         input:checked ~ span {
-            color: var(--uui-color-interactive, #1a2a4f);
+            color: var(--uui-color-selected, #316dca);
+            font-weight: 700;
         }
     `;
 }
