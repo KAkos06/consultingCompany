@@ -13,10 +13,19 @@
     var siteLogo = settings?.Value<MediaWithCrops>("siteLogo");
     var navBlocks = settings?.Value<BlockListModel>("headerNavLinks");
     var ctaBlocks = settings?.Value<BlockListModel>("headerCtaButton");
+    var ctaBlock = ctaBlocks?.FirstOrDefault()?.Content;
+    var ctaLinks = ctaBlock?.Value<IEnumerable<Link>>("link");
+    var ctaLinkObj = ctaLinks?.FirstOrDefault();
+    var ctaIcon = ctaBlock?.Value<string>("icon");
+    var ctaIconVal = ctaBlock?.GetIconValue("icon");
     
     // Legacy fallback
     var legacyCtaLabel = settings?.Value<string>("headerCtaLabel") ?? "Kapcsolat";
     var legacyCtaLink = settings?.Value<string>("headerCtaLink") ?? "/kapcsolat";
+
+    var finalCtaUrl = ctaLinkObj?.Url ?? legacyCtaLink;
+    var finalCtaName = ctaLinkObj?.Name ?? legacyCtaLabel;
+    var finalCtaTarget = ctaLinkObj?.Target;
 }
 
 <style>
@@ -39,6 +48,9 @@
     visibility: visible;
     pointer-events: auto;
     transform: translateX(-50%) translateY(0);
+  }
+  .nav-item-dropdown:hover .mega-menu-arrow {
+    transform: rotate(180deg);
   }
   .mega-menu-card {
     display: flex;
@@ -67,26 +79,41 @@
   .mega-menu-card:hover .mega-menu-icon {
     background-color: rgba(247, 165, 165, 0.5);
   }
+
+  /* Mobile Header - Instant dropdown, No circle morphing */
+  @@media (max-width: 767px) {
+    #main-navbar {
+      transition: none !important;
+    }
+    #main-navbar.nav-floating {
+      width: calc(100% - 24px) !important;
+      max-width: 480px;
+    }
+    #main-navbar .nav-shell-inner {
+      padding-left: 1rem;
+      padding-right: 0.75rem;
+    }
+  }
 </style>
 
 <!-- Modern Dynamic Scrolling Nav with MegaMenu Tree Support -->
 <header id="main-navbar" class="nav-shell nav-floating fixed top-0 left-1/2 -translate-x-1/2 z-50 bg-white/95 backdrop-blur-md shadow-[0_8px_32px_rgba(26,42,79,0.18)] py-3 border border-[#1A2A4F]/5">
   <div class="nav-shell-inner flex items-center justify-between">
-    <a href="/" class="flex items-center gap-3 shrink-0 group" style="text-decoration: none;">
+    <a href="/" class="flex items-center gap-2.5 sm:gap-3 shrink-0 group" style="text-decoration: none;">
       @if (siteLogo != null && !string.IsNullOrWhiteSpace(siteLogo.Url())) {
-        <img src="@siteLogo.Url()" alt="@brandName" class="h-10 w-auto max-h-10 max-w-[140px] object-contain group-hover:scale-105 transition-transform" />
+        <img src="@siteLogo.Url()" alt="@brandName" class="h-8 sm:h-10 w-auto max-h-10 max-w-[130px] sm:max-w-[140px] object-contain group-hover:scale-105 transition-transform" />
       } else {
-        <div class="w-10 h-10 rounded-full bg-[#1A2A4F] text-[#FFDBB6] flex items-center justify-center font-bold text-xl font-[Outfit] group-hover:scale-105 transition-transform">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1A2A4F] text-[#FFDBB6] flex items-center justify-center font-bold text-lg sm:text-xl font-[Outfit] group-hover:scale-105 transition-transform">
           EI
         </div>
       }
-      <span class="font-[Outfit] font-bold text-[#1A2A4F] text-lg tracking-tight">
+      <span class="font-[Outfit] font-bold text-[#1A2A4F] text-base sm:text-lg tracking-tight truncate max-w-[165px] xs:max-w-none">
         @brandName
       </span>
     </a>
 
-    <!-- Desktop Navigation -->
-    <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-[#1A2A4F]">
+    <!-- Desktop & Tablet Navigation -->
+    <nav class="hidden md:flex items-center gap-3 lg:gap-6 xl:gap-7 text-sm font-semibold text-[#1A2A4F]">
       @if(navBlocks != null && navBlocks.Any()) {
         foreach(var block in navBlocks) {
           var alias = block.Content.ContentType.Alias;
@@ -100,11 +127,12 @@
                            || (link.Udi != null && Umbraco.Content(link.Udi)?.ContentType.Alias == "homePage");
               
               if (isHome) {
-                <a href="@link.Url" target="@link.Target" class="nav-link hover:text-[#F7A5A5] transition-colors inline-flex items-center justify-center p-1.5 rounded-full hover:bg-[#1A2A4F]/5" style="text-decoration: none;" aria-label="Kezdőlap" title="Kezdőlap">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform hover:scale-110">
+                <a href="@link.Url" target="@link.Target" class="nav-link hover:text-[#F7A5A5] transition-colors inline-flex items-center gap-1.5" style="text-decoration: none;" aria-label="Kezdőlap" title="Kezdőlap">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lg:hidden transition-transform hover:scale-110">
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                     <polyline points="9 22 9 12 15 12 15 22"/>
                   </svg>
+                  <span class="hidden lg:inline">@(string.IsNullOrWhiteSpace(link.Name) ? "Kezdőlap" : link.Name)</span>
                 </a>
               } else {
                 <a href="@link.Url" target="@link.Target" class="nav-link hover:text-[#F7A5A5] transition-colors" style="text-decoration: none;">@link.Name</a>
@@ -113,15 +141,14 @@
           } else if (alias.Equals("megaMenuItem", StringComparison.OrdinalIgnoreCase)) {
             var links = block.Content.Value<IEnumerable<Link>>("link");
             var topLink = links?.FirstOrDefault();
-            var tabName = topLink?.Name ?? "Szolgáltatások";
-            var tabUrl = topLink?.Url ?? "/executive-coaching";
+            var tabName = !string.IsNullOrWhiteSpace(topLink?.Name) ? topLink.Name : "Szolgáltatások";
             var subBlocks = block.Content.Value<BlockListModel>("subItems");
             
             <div class="nav-item-dropdown cursor-pointer">
-              <a href="@tabUrl" class="nav-link inline-flex items-center gap-1 hover:text-[#F7A5A5] transition-colors" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+              <span class="nav-link inline-flex items-center gap-1 hover:text-[#F7A5A5] transition-colors cursor-pointer select-none" style="display: inline-flex; align-items: center; gap: 4px;">
                 @tabName
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><path d="m6 9 6 6 6-6"/></svg>
-              </a>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mega-menu-arrow transition-transform duration-200"><path d="m6 9 6 6 6-6"/></svg>
+              </span>
               @if (subBlocks != null && subBlocks.Any()) {
                 <div class="mega-menu-panel">
                   <div class="bg-white rounded-[28px] shadow-[0_24px_64px_-12px_rgba(26,42,79,0.25)] p-5 grid grid-cols-2 gap-2 border border-[#1A2A4F]/10" style="background: white; border-radius: 28px; box-shadow: 0 24px 64px -12px rgba(26,42,79,0.25); padding: 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; border: 1px solid rgba(26,42,79,0.08);">
@@ -169,11 +196,12 @@
                          || link.Name?.Equals("Home", StringComparison.OrdinalIgnoreCase) == true
                          || (link.Udi != null && Umbraco.Content(link.Udi)?.ContentType.Alias == "homePage");
             if (isHome) {
-              <a href="@link.Url" target="@link.Target" class="nav-link hover:text-[#F7A5A5] transition-colors inline-flex items-center justify-center p-1.5 rounded-full hover:bg-[#1A2A4F]/5" style="text-decoration: none;" aria-label="Kezdőlap" title="Kezdőlap">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform hover:scale-110">
+              <a href="@link.Url" target="@link.Target" class="nav-link hover:text-[#F7A5A5] transition-colors inline-flex items-center gap-1.5" style="text-decoration: none;" aria-label="Kezdőlap" title="Kezdőlap">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lg:hidden transition-transform hover:scale-110">
                   <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                   <polyline points="9 22 9 12 15 12 15 22"/>
                 </svg>
+                <span class="hidden lg:inline">@(string.IsNullOrWhiteSpace(link.Name) ? "Kezdőlap" : link.Name)</span>
               </a>
             } else {
               <a href="@link.Url" target="@link.Target" class="nav-link hover:text-[#F7A5A5] transition-colors" style="text-decoration: none;">@link.Name</a>
@@ -184,40 +212,35 @@
     </nav>
 
     <!-- Action Buttons (CTA & Mobile Menu Toggle) -->
-    <div class="flex items-center gap-3">
-      @if (ctaBlocks != null && ctaBlocks.Any()) {
-        var ctaBlock = ctaBlocks.FirstOrDefault()?.Content;
-        var ctaLinks = ctaBlock?.Value<IEnumerable<Link>>("link");
-        var ctaLinkObj = ctaLinks?.FirstOrDefault();
-        if (ctaLinkObj != null) {
-          var ctaIcon = ctaBlock?.Value<string>("icon");
-          var ctaIconVal = ctaBlock?.GetIconValue("icon");
-          <a href="@ctaLinkObj.Url" target="@ctaLinkObj.Target" class="inline-flex items-center gap-2 bg-[#F7A5A5] text-[#1A2A4F] px-6 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-[#FFDBB6] active:scale-95 transition-all" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: #F7A5A5; color: #1A2A4F; padding: 10px 24px; border-radius: 9999px; font-size: 14px; font-weight: 700; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-            @if(ctaIconVal != null && !ctaIconVal.IsEmpty) {
-              @ctaIconVal.Render(size: 18)
-            } else if(!string.IsNullOrWhiteSpace(ctaIcon)) {
-              @RenderSvgIcon(ctaIcon, 18)
-            }
-            @ctaLinkObj.Name
-          </a>
-        }
-      } else {
-        @* Legacy CTA fallback *@
-        <a href="@legacyCtaLink" class="inline-flex items-center gap-2 bg-[#F7A5A5] text-[#1A2A4F] px-6 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-[#FFDBB6] active:scale-95 transition-all" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: #F7A5A5; color: #1A2A4F; padding: 10px 24px; border-radius: 9999px; font-size: 14px; font-weight: 700;">
-          @legacyCtaLabel
+    <div class="flex items-center gap-2.5">
+      @* Desktop & Tablet CTA: icon-only on tablet (w-10 h-10), full pill on desktop (lg) *@
+      @if (!string.IsNullOrWhiteSpace(finalCtaUrl) && !string.IsNullOrWhiteSpace(finalCtaName)) {
+        <a href="@finalCtaUrl" target="@finalCtaTarget" 
+           class="hidden md:inline-flex items-center justify-center gap-2 bg-[#F7A5A5] text-[#1A2A4F] w-10 h-10 lg:w-auto lg:h-auto lg:px-6 lg:py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-[#FFDBB6] active:scale-95 transition-all shrink-0" 
+           style="text-decoration: none;"
+           title="@finalCtaName"
+           aria-label="@finalCtaName">
+          @if(ctaIconVal != null && !ctaIconVal.IsEmpty) {
+            @ctaIconVal.Render(size: 18)
+          } else if(!string.IsNullOrWhiteSpace(ctaIcon)) {
+            @RenderSvgIcon(ctaIcon, 18)
+          } else {
+            @RenderSvgIcon("Mail", 18)
+          }
+          <span class="hidden lg:inline whitespace-nowrap">@finalCtaName</span>
         </a>
       }
 
       <!-- Mobile Menu Toggle Button -->
-      <button id="mobile-menu-toggle" type="button" aria-label="Menü megnyitása" class="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-[#1A2A4F]/5 text-[#1A2A4F] hover:bg-[#1A2A4F]/10 active:scale-95 transition-all">
-        <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-        <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      <button id="mobile-menu-toggle" type="button" aria-label="Menü megnyitása" aria-expanded="false" class="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-[#1A2A4F]/5 text-[#1A2A4F] hover:bg-[#1A2A4F]/10 active:scale-95 transition-all shrink-0 cursor-pointer">
+        <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- Mobile Dropdown Navigation Panel -->
-  <div id="mobile-nav-panel" class="hidden md:hidden w-full px-4 pt-3 pb-4 border-t border-[#1A2A4F]/10 mt-3 space-y-2 bg-white rounded-b-2xl">
+  <!-- Mobile Dropdown Navigation Panel (Clean card below navbar pill, NO circle morphing) -->
+  <div id="mobile-nav-panel" class="hidden md:hidden absolute top-[calc(100%+8px)] left-0 right-0 w-full bg-white rounded-3xl shadow-[0_20px_48px_-8px_rgba(26,42,79,0.25)] border border-[#1A2A4F]/10 p-4 space-y-2 max-h-[80vh] overflow-y-auto">
     @if(navBlocks != null && navBlocks.Any()) {
       foreach(var block in navBlocks) {
         var alias = block.Content.ContentType.Alias;
@@ -231,7 +254,7 @@
                          || (link.Udi != null && Umbraco.Content(link.Udi)?.ContentType.Alias == "homePage");
             
             if (isHome) {
-              <a href="@link.Url" target="@link.Target" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-base font-semibold text-[#1A2A4F] hover:bg-[#FFF2EF] hover:text-[#F7A5A5] transition-colors" style="text-decoration: none;">
+              <a href="@link.Url" target="@link.Target" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-semibold text-[#1A2A4F] hover:bg-[#FFF2EF] hover:text-[#F7A5A5] transition-colors" style="text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                   <polyline points="9 22 9 12 15 12 15 22"/>
@@ -239,20 +262,19 @@
                 <span>Kezdőlap</span>
               </a>
             } else {
-              <a href="@link.Url" target="@link.Target" class="block px-3 py-2 rounded-xl text-base font-semibold text-[#1A2A4F] hover:bg-[#FFF2EF] hover:text-[#F7A5A5] transition-colors" style="text-decoration: none;">@link.Name</a>
+              <a href="@link.Url" target="@link.Target" class="block px-3 py-2.5 rounded-xl text-base font-semibold text-[#1A2A4F] hover:bg-[#FFF2EF] hover:text-[#F7A5A5] transition-colors" style="text-decoration: none;">@link.Name</a>
             }
           }
         } else if (alias.Equals("megaMenuItem", StringComparison.OrdinalIgnoreCase)) {
           var links = block.Content.Value<IEnumerable<Link>>("link");
           var topLink = links?.FirstOrDefault();
-          var tabName = topLink?.Name ?? "Szolgáltatások";
-          var tabUrl = topLink?.Url ?? "/executive-coaching";
+          var tabName = !string.IsNullOrWhiteSpace(topLink?.Name) ? topLink.Name : "Szolgáltatások";
           var subBlocks = block.Content.Value<BlockListModel>("subItems");
           
-          <div class="space-y-1">
-            <a href="@tabUrl" class="block px-3 py-2 rounded-xl text-base font-bold text-[#1A2A4F] hover:bg-[#FFF2EF] hover:text-[#F7A5A5] transition-colors" style="text-decoration: none;">@tabName</a>
+          <div class="py-1">
+            <div class="px-3 py-2 text-base font-bold text-[#1A2A4F] select-none">@tabName</div>
             @if (subBlocks != null && subBlocks.Any()) {
-              <div class="pl-4 space-y-1">
+              <div class="pl-4 pr-1 space-y-1 mt-1 border-l-2 border-[#1A2A4F]/10 ml-3">
                 @foreach(var sub in subBlocks) {
                   var subLinks = sub.Content.Value<IEnumerable<Link>>("link");
                   var subLink = subLinks?.FirstOrDefault();
@@ -269,6 +291,41 @@
           </div>
         }
       }
+    } else {
+      var legacyNav = settings?.Value<IEnumerable<Link>>("headerNavLinks");
+      if (legacyNav != null) {
+        foreach(var link in legacyNav) {
+          var isHome = link.Url == "/" 
+                       || link.Name?.Equals("Kezdőlap", StringComparison.OrdinalIgnoreCase) == true 
+                       || link.Name?.Equals("Home", StringComparison.OrdinalIgnoreCase) == true
+                       || (link.Udi != null && Umbraco.Content(link.Udi)?.ContentType.Alias == "homePage");
+          if (isHome) {
+            <a href="@link.Url" target="@link.Target" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-semibold text-[#1A2A4F] hover:bg-[#FFF2EF] hover:text-[#F7A5A5] transition-colors" style="text-decoration: none;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+              <span>Kezdőlap</span>
+            </a>
+          } else {
+            <a href="@link.Url" target="@link.Target" class="block px-3 py-2.5 rounded-xl text-base font-semibold text-[#1A2A4F] hover:bg-[#FFF2EF] hover:text-[#F7A5A5] transition-colors" style="text-decoration: none;">@link.Name</a>
+          }
+        }
+      }
+    }
+
+    @* Mobile CTA Button inside Hamburger Menu *@
+    @if (!string.IsNullOrWhiteSpace(finalCtaUrl) && !string.IsNullOrWhiteSpace(finalCtaName)) {
+      <div class="pt-3 pb-1 mt-2 border-t border-[#1A2A4F]/10">
+        <a href="@finalCtaUrl" target="@finalCtaTarget" class="w-full flex items-center justify-center gap-2 bg-[#F7A5A5] text-[#1A2A4F] py-3 px-4 rounded-xl text-sm font-bold shadow-md hover:bg-[#FFDBB6] active:scale-[0.98] transition-all" style="text-decoration: none;">
+          @if(ctaIconVal != null && !ctaIconVal.IsEmpty) {
+            @ctaIconVal.Render(size: 18)
+          } else if(!string.IsNullOrWhiteSpace(ctaIcon)) {
+            @RenderSvgIcon(ctaIcon, 18)
+          }
+          <span>@finalCtaName</span>
+        </a>
+      </div>
     }
   </div>
 </header>
@@ -277,19 +334,44 @@
   (function() {
     const btn = document.getElementById('mobile-menu-toggle');
     const panel = document.getElementById('mobile-nav-panel');
+    const navbar = document.getElementById('main-navbar');
     const iconOpen = document.getElementById('menu-icon-open');
     const iconClose = document.getElementById('menu-icon-close');
+
     if (btn && panel) {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
         const isClosed = panel.classList.contains('hidden');
         if (isClosed) {
           panel.classList.remove('hidden');
           iconOpen?.classList.add('hidden');
           iconClose?.classList.remove('hidden');
+          btn.setAttribute('aria-expanded', 'true');
         } else {
           panel.classList.add('hidden');
           iconOpen?.classList.remove('hidden');
           iconClose?.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!panel.contains(e.target) && !btn.contains(e.target) && !panel.classList.contains('hidden')) {
+          panel.classList.add('hidden');
+          iconOpen?.classList.remove('hidden');
+          iconClose?.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Close menu on screen resize to desktop
+      window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768 && !panel.classList.contains('hidden')) {
+          panel.classList.add('hidden');
+          iconOpen?.classList.remove('hidden');
+          iconClose?.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
         }
       });
     }

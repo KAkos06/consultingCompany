@@ -31,24 +31,45 @@
 }
 
 <style>
+    /* Position breadcrumb with safe clearance below the floating header */
     .breadcrumb-wrapper {
         position: absolute;
-        top: 118px;
+        top: 104px;
         left: 0;
         right: 0;
         z-index: 40;
         pointer-events: none;
     }
+    @@media (min-width: 640px) {
+        .breadcrumb-wrapper {
+            top: 110px;
+        }
+    }
     @@media (min-width: 768px) {
         .breadcrumb-wrapper {
-            top: 126px;
+            top: 116px;
+        }
+    }
+
+    /* When breadcrumbs are active, set optimal first section top padding without redundant layout padding */
+    main .umb-block-grid__layout-item:first-child > section {
+        padding-top: 148px !important;
+    }
+    @@media (min-width: 640px) {
+        main .umb-block-grid__layout-item:first-child > section {
+            padding-top: 156px !important;
+        }
+    }
+    @@media (min-width: 768px) {
+        main .umb-block-grid__layout-item:first-child > section {
+            padding-top: 164px !important;
         }
     }
 </style>
 
 <div class="breadcrumb-wrapper">
     <div class="mx-auto max-w-7xl px-6">
-        <nav aria-label="Breadcrumb" class="pointer-events-auto inline-flex items-center gap-1.5 text-xs text-white/80 bg-[#1A2A4F]/70 backdrop-blur-md px-4 py-2 rounded-full shadow-sm">
+        <nav aria-label="Breadcrumb" class="pointer-events-auto inline-flex items-center gap-1.5 text-xs text-white/80 bg-[#1A2A4F]/70 backdrop-blur-md px-4 py-2 rounded-full shadow-sm border border-white/15">
             @for (var i = 0; i < breadcrumbs.Count; i++) {
                 var b = breadcrumbs[i];
                 var isLast = i == breadcrumbs.Count - 1;
