@@ -27,6 +27,9 @@
     var twitterUrl = settings?.Value<string>("twitterUrl");
     var instagramUrl = settings?.Value<string>("instagramUrl");
     
+    var turnstileEnabled = settings?.Value<bool>("enableTurnstile") ?? false;
+    var turnstileSiteKey = settings?.Value<string>("turnstileSiteKey")?.Trim() ?? "";
+
     var hasNewsForm = !string.IsNullOrWhiteSpace(newsTitle);
 }
 
@@ -115,6 +118,10 @@
               →
             </button>
           </form>
+          @if (turnstileEnabled && !string.IsNullOrWhiteSpace(turnstileSiteKey))
+          {
+            <div id="footer-turnstile-container" class="hidden"></div>
+          }
           <div id="footer-newsletter-status" class="mt-2 text-xs transition-all hidden"></div>
         </div>
       </div>
@@ -143,6 +150,70 @@
         const statusEl = document.getElementById("footer-newsletter-status");
         const submitBtn = document.getElementById("footer-newsletter-submit");
 
+        const turnstileEnabled = @(turnstileEnabled && !string.IsNullOrWhiteSpace(turnstileSiteKey) ? "true" : "false");
+        const turnstileSiteKey = "@turnstileSiteKey";
+        let footerWidgetId = null;
+
+        if (turnstileEnabled) {
+            function loadTurnstileScript() {
+                if (window.turnstile) {
+                    initFooterTurnstile();
+                    return;
+                }
+                if (!document.getElementById("cf-turnstile-script")) {
+                    const script = document.createElement("script");
+                    script.id = "cf-turnstile-script";
+                    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+                    script.async = true;
+                    script.defer = true;
+                    script.onload = () => initFooterTurnstile();
+                    document.head.appendChild(script);
+                } else {
+                    const checkInterval = setInterval(() => {
+                        if (window.turnstile) {
+                            clearInterval(checkInterval);
+                            initFooterTurnstile();
+                        }
+                    }, 100);
+                }
+            }
+
+            function initFooterTurnstile() {
+                const container = document.getElementById("footer-turnstile-container");
+                if (!container || footerWidgetId !== null || !window.turnstile) return;
+                try {
+                    footerWidgetId = turnstile.render(container, {
+                        sitekey: turnstileSiteKey,
+                        execution: "render"
+                    });
+                } catch (err) {
+                    console.warn("Turnstile footer init error:", err);
+                }
+            }
+
+            loadTurnstileScript();
+        }
+
+        async function getFooterTurnstileToken() {
+            if (!turnstileEnabled || !window.turnstile || footerWidgetId === null) {
+                return null;
+            }
+            let token = turnstile.getResponse(footerWidgetId);
+            if (token) return token;
+
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const interval = setInterval(() => {
+                    attempts++;
+                    token = turnstile.getResponse(footerWidgetId);
+                    if (token || attempts >= 25) {
+                        clearInterval(interval);
+                        resolve(token || null);
+                    }
+                }, 100);
+            });
+        }
+
         if (form && emailInput && statusEl && submitBtn) {
             form.addEventListener("submit", async function(e) {
                 e.preventDefault();
@@ -156,23 +227,40 @@
                 statusEl.classList.remove("hidden");
 
                 try {
+                    let token = null;
+                    if (turnstileEnabled) {
+                        token = await getFooterTurnstileToken();
+                    }
+
                     const res = await fetch("/api/forms/newsletter", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email: email })
+                        body: JSON.stringify({ 
+                            email: email,
+                            turnstileToken: token
+                        })
                     });
                     const data = await res.json();
                     if (res.ok && data.success) {
                         statusEl.className = "mt-2 text-xs text-[#86efac]";
                         statusEl.textContent = data.message || "Köszönjük! Sikeres feliratkozás.";
                         emailInput.value = "";
+                        if (turnstileEnabled && window.turnstile && footerWidgetId !== null) {
+                            turnstile.reset(footerWidgetId);
+                        }
                     } else {
                         statusEl.className = "mt-2 text-xs text-[#fca5a5]";
                         statusEl.textContent = data.message || "Hiba történt a feliratkozás során.";
+                        if (turnstileEnabled && window.turnstile && footerWidgetId !== null) {
+                            turnstile.reset(footerWidgetId);
+                        }
                     }
                 } catch (err) {
                     statusEl.className = "mt-2 text-xs text-[#fca5a5]";
                     statusEl.textContent = "Hálózati hiba történt. Kérjük próbálja újra.";
+                    if (turnstileEnabled && window.turnstile && footerWidgetId !== null) {
+                        turnstile.reset(footerWidgetId);
+                    }
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.style.opacity = "1";

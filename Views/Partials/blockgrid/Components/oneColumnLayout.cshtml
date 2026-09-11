@@ -13,7 +13,7 @@
     var bgClass = "bg-transparent";
     if (bgName == "cream") { bgClass = "bg-[#FFF2EF] text-[#1A2A4F]"; }
     else if (bgName == "warm") { bgClass = "text-[#1A2A4F] bg-gradient-to-br from-[#FFDBB6]/55 via-[#FFF2EF] to-[#F7A5A5]/30"; }
-    else if (bgName == "dark" || bgName == "solidDark") { bgClass = "bg-[#1A2A4F] text-[#FFF2EF]"; }
+    else if (bgName == "dark" || bgName == "solidDark") { bgClass = "bg-[#1A2A4F] text-[#FFF2EF] selection:bg-[#F7A5A5] selection:text-[#1A2A4F]"; }
     ViewData["bgName"] = bgName;
 
     var widthName = Model.Settings?.Value<string>("width") ?? Model.Content.Value<string>("width");

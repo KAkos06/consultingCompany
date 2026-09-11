@@ -176,5 +176,28 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("twitterUrl")]
 		public virtual string TwitterUrl => this.Value<string>(_publishedValueFallback, "twitterUrl");
+
+		///<summary>
+		/// Enable Turnstile: Enable invisible Cloudflare Turnstile spam protection on forms (Contact and Newsletter)
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
+		[ImplementPropertyType("enableTurnstile")]
+		public virtual bool EnableTurnstile => this.Value<bool>(_publishedValueFallback, "enableTurnstile");
+
+		///<summary>
+		/// Turnstile Site Key: Cloudflare Turnstile public site key
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("turnstileSiteKey")]
+		public virtual string TurnstileSiteKey => this.Value<string>(_publishedValueFallback, "turnstileSiteKey");
+
+		///<summary>
+		/// Turnstile Secret Key: Cloudflare Turnstile secret server-side key
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("turnstileSecretKey")]
+		public virtual string TurnstileSecretKey => this.Value<string>(_publishedValueFallback, "turnstileSecretKey");
 	}
 }

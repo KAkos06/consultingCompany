@@ -1,4 +1,5 @@
 @using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Extensions;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ContactComponent>>
 @{
     var content = Model.Content;
@@ -6,6 +7,12 @@
 
     var contactBlocks = content.ContactValues;
     var formGuid = content.Form;
+
+    var siteRoot = Umbraco.ContentAtRoot()?.FirstOrDefault();
+    var settings = Umbraco.ContentAtRoot().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings")
+        ?? siteRoot?.Children().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings");
+    var turnstileEnabled = settings?.Value<bool>("enableTurnstile") ?? false;
+    var turnstileSiteKey = settings?.Value<string>("turnstileSiteKey")?.Trim() ?? "";
 
     var bgName = ViewData["bgName"]?.ToString() ?? "";
     var isDark = bgName == "dark" || bgName == "solidDark";
@@ -92,6 +99,12 @@
                         <label class="text-sm font-semibold" style="color: var(--form-text);">Miben segíthetünk? *</label>
                         <textarea name="message" id="contact-message" required rows="2" style="height: 72px; min-height: 72px; max-height: 72px; background-color: var(--form-input-bg); border-color: var(--form-input-border); color: var(--form-text);" placeholder="Pár mondatban a helyzetről, kihívásokról..." class="w-full resize-none rounded-2xl border px-5 py-3 transition-all outline-none"></textarea>
                     </div>
+
+                    @if (turnstileEnabled && !string.IsNullOrWhiteSpace(turnstileSiteKey))
+                    {
+                        <div id="contact-turnstile-container" class="hidden"></div>
+                    }
+
                     <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-2">
                         <span class="text-xs" style="color: rgba(var(--form-text-rgb), 0.6);">Üzeneted bizalmas. 24 órán belül válaszolunk.</span>
                         <button type="submit" id="contact-submit-btn" class="w-full md:w-auto flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-bold transition-all active:scale-95 shadow-lg cursor-pointer" style="background-color: var(--form-btn-bg); color: var(--form-btn-text);">
@@ -114,6 +127,70 @@
         const submitBtn = document.getElementById("contact-submit-btn");
         const btnText = document.getElementById("contact-btn-text");
 
+        const turnstileEnabled = @(turnstileEnabled && !string.IsNullOrWhiteSpace(turnstileSiteKey) ? "true" : "false");
+        const turnstileSiteKey = "@turnstileSiteKey";
+        let contactWidgetId = null;
+
+        if (turnstileEnabled) {
+            function loadTurnstileScript() {
+                if (window.turnstile) {
+                    initTurnstileWidget();
+                    return;
+                }
+                if (!document.getElementById("cf-turnstile-script")) {
+                    const script = document.createElement("script");
+                    script.id = "cf-turnstile-script";
+                    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+                    script.async = true;
+                    script.defer = true;
+                    script.onload = () => initTurnstileWidget();
+                    document.head.appendChild(script);
+                } else {
+                    const checkInterval = setInterval(() => {
+                        if (window.turnstile) {
+                            clearInterval(checkInterval);
+                            initTurnstileWidget();
+                        }
+                    }, 100);
+                }
+            }
+
+            function initTurnstileWidget() {
+                const container = document.getElementById("contact-turnstile-container");
+                if (!container || contactWidgetId !== null || !window.turnstile) return;
+                try {
+                    contactWidgetId = turnstile.render(container, {
+                        sitekey: turnstileSiteKey,
+                        execution: "render"
+                    });
+                } catch (err) {
+                    console.warn("Turnstile contact init error:", err);
+                }
+            }
+
+            loadTurnstileScript();
+        }
+
+        async function getTurnstileToken() {
+            if (!turnstileEnabled || !window.turnstile || contactWidgetId === null) {
+                return null;
+            }
+            let token = turnstile.getResponse(contactWidgetId);
+            if (token) return token;
+
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const interval = setInterval(() => {
+                    attempts++;
+                    token = turnstile.getResponse(contactWidgetId);
+                    if (token || attempts >= 25) {
+                        clearInterval(interval);
+                        resolve(token || null);
+                    }
+                }, 100);
+            });
+        }
+
         form.addEventListener("submit", async function(e) {
             e.preventDefault();
 
@@ -133,21 +210,41 @@
             statusEl.classList.add("hidden");
 
             try {
+                let token = null;
+                if (turnstileEnabled) {
+                    token = await getTurnstileToken();
+                }
+
                 const res = await fetch("/api/forms/contact", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ name: name, email: email, company: company, message: message })
+                    body: JSON.stringify({ 
+                        name: name, 
+                        email: email, 
+                        company: company, 
+                        message: message,
+                        turnstileToken: token 
+                    })
                 });
 
                 const data = await res.json();
                 if (res.ok && data.success) {
                     showStatus(data.message || "Köszönjük megkeresését! Hamarosan felvesszük Önnel a kapcsolatot.", true);
                     form.reset();
+                    if (turnstileEnabled && window.turnstile && contactWidgetId !== null) {
+                        turnstile.reset(contactWidgetId);
+                    }
                 } else {
                     showStatus(data.message || "Hiba történt az elküldéskor. Kérjük próbálja újra.", false);
+                    if (turnstileEnabled && window.turnstile && contactWidgetId !== null) {
+                        turnstile.reset(contactWidgetId);
+                    }
                 }
             } catch (err) {
                 showStatus("Hálózati hiba történt. Kérjük ellenőrizze az internetkapcsolatot.", false);
+                if (turnstileEnabled && window.turnstile && contactWidgetId !== null) {
+                    turnstile.reset(contactWidgetId);
+                }
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.style.opacity = "1";

@@ -64,8 +64,8 @@ export default class ComponentColorPicker extends UmbElementMixin(LitElement) {
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         input:checked + .box {
-            border-color: var(--uui-color-interactive, #1a2a4f);
-            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--uui-color-interactive, #1a2a4f);
+            border-color: var(--uui-color-selected, #316dca);
+            box-shadow: 0 0 0 2px var(--uui-color-surface, #1e293b), 0 0 0 4px var(--uui-color-selected, #316dca);
         }
         .cream { 
             background-color: #FFF2EF; 
@@ -84,14 +84,16 @@ export default class ComponentColorPicker extends UmbElementMixin(LitElement) {
         }
 
         span {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            color: var(--uui-color-text, #666);
+            color: var(--uui-color-text-alt, var(--uui-color-text, #888));
             text-transform: uppercase;
             margin-top: 4px;
+            transition: color 150ms ease;
         }
         input:checked ~ span {
-            color: var(--uui-color-interactive, #1a2a4f);
+            color: var(--uui-color-selected, #316dca);
+            font-weight: 700;
         }
     `;
 }

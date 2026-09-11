@@ -126,6 +126,46 @@
 }
 
 /* ==========================================================================
+   Section Selected State (Explicit high-contrast colors in dark & light mode)
+   ========================================================================== */
+
+:host(:not([area-key])) .umb-block-grid__layout-item[selected],
+:host(:not([area-key])) .umb-block-grid__layout-item:has(uui-ref-node[selected]),
+.umb-block-grid__layout-item[selected] {
+    border-color: var(--uui-color-selected, #316dca) !important;
+    box-shadow: 0 0 0 2px var(--uui-color-selected, #316dca), 0 4px 12px rgba(49, 109, 202, 0.25) !important;
+}
+
+:host(:not([area-key])) uui-ref-node[selected],
+:host(:not([area-key])) .umb-block-grid__layout-item[selected] uui-ref-node,
+.umb-block-grid__layout-item[selected] uui-ref-node {
+    background: var(--uui-color-selected, #316dca) !important;
+    --uui-color-surface: var(--uui-color-selected, #316dca) !important;
+    border-bottom-color: var(--uui-color-selected, #316dca) !important;
+}
+
+:host(:not([area-key])) uui-ref-node[selected] #name,
+:host(:not([area-key])) uui-ref-node[selected] umb-ufm-render,
+.umb-block-grid__layout-item[selected] uui-ref-node #name,
+.umb-block-grid__layout-item[selected] uui-ref-node umb-ufm-render {
+    color: var(--uui-color-selected-contrast, #ffffff) !important;
+}
+
+:host(:not([area-key])) uui-ref-node[selected] em,
+:host(:not([area-key])) uui-ref-node[selected] i,
+.umb-block-grid__layout-item[selected] uui-ref-node em,
+.umb-block-grid__layout-item[selected] uui-ref-node i {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+:host(:not([area-key])) uui-ref-node[selected] #icon,
+:host(:not([area-key])) uui-ref-node[selected] umb-icon,
+.umb-block-grid__layout-item[selected] uui-ref-node #icon,
+.umb-block-grid__layout-item[selected] uui-ref-node umb-icon {
+    color: var(--uui-color-selected-contrast, #ffffff) !important;
+}
+
+/* ==========================================================================
    Areas inside Sections
    ========================================================================== */
 

@@ -37,6 +37,19 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--ei-navy);
 }
 
+/* High-contrast text selection specifically for dark sections and any dark components */
+section.bg-\[\#1A2A4F\] *::selection,
+section[class*="bg-[#1A2A4F]"] *::selection,
+[class*="bg-[#1A2A4F]"] *::selection,
+section.bg-\[\#1A2A4F\] ::selection,
+section[class*="bg-[#1A2A4F]"] ::selection,
+[class*="bg-[#1A2A4F]"] ::selection,
+input::selection,
+textarea::selection {
+    background-color: #F7A5A5 !important;
+    color: #1A2A4F !important;
+}
+
 /* Navbar dynamic width — keeps center fixed, transitions smoothly */
 .nav-floating {
     width: min(95%, 72rem);

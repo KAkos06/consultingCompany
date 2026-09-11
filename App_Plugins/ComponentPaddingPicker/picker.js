@@ -65,8 +65,8 @@ export default class ComponentPaddingPicker extends UmbElementMixin(LitElement) 
         .box {
             width: 80px;
             height: 100px;
-            background: var(--uui-color-surface-alt, #f9f9fc);
-            border: 2px solid transparent;
+            background: var(--uui-color-surface-alt, #2d333b);
+            border: 2px solid var(--uui-color-border, #434c56);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
@@ -76,23 +76,29 @@ export default class ComponentPaddingPicker extends UmbElementMixin(LitElement) 
             transition: all 150ms ease;
             overflow: hidden;
         }
+        label:hover .box {
+            border-color: var(--uui-color-border-emphasis, #626e7b);
+        }
         input:checked + .box {
-            background: var(--uui-color-surface-alt-hover, #f0f0f5);
-            border-color: var(--uui-color-interactive, #1a2a4f);
+            background: var(--uui-color-surface-alt, #2d333b);
+            border-color: var(--uui-color-selected, #316dca);
         }
         .inner {
-            background: var(--uui-color-interactive, #1a2a4f);
-            color: white;
+            background: var(--uui-color-text-alt, #8c8c8e);
+            color: var(--uui-color-text, #eeeeef);
             font-size: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 150ms ease;
-            opacity: 0.5;
+            opacity: 0.4;
             width: 100%;
         }
         input:checked + .box .inner {
+            background: var(--uui-color-selected, #316dca);
+            color: var(--uui-color-selected-contrast, #ffffff);
             opacity: 1;
+            font-weight: 600;
         }
         
         /* Padding variations */
@@ -109,13 +115,15 @@ export default class ComponentPaddingPicker extends UmbElementMixin(LitElement) 
         .pad-large .inner { height: 20px; line-height: 1; }
 
         span {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            color: var(--uui-color-text, #666);
+            color: var(--uui-color-text-alt, var(--uui-color-text, #888));
             text-transform: uppercase;
+            transition: color 150ms ease;
         }
         input:checked ~ span {
-            color: var(--uui-color-interactive, #1a2a4f);
+            color: var(--uui-color-selected, #316dca);
+            font-weight: 700;
         }
     `;
 }

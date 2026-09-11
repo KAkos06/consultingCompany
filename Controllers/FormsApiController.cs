@@ -2,6 +2,7 @@ using System.Net.Mail;
 using System.Text;
 using ExecutiveInsightUmbraco.Models.Forms;
 using ExecutiveInsightUmbraco.Services.Forms;
+using ExecutiveInsightUmbraco.Services.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Security;
@@ -14,17 +15,20 @@ public class FormsApiController : ControllerBase
 {
     private readonly IFormsService _formsService;
     private readonly IEmailNotificationService _emailService;
+    private readonly ITurnstileService _turnstileService;
     private readonly IBackOfficeSecurityAccessor _backOfficeSecurityAccessor;
     private readonly ILogger<FormsApiController> _logger;
 
     public FormsApiController(
         IFormsService formsService,
         IEmailNotificationService emailService,
+        ITurnstileService turnstileService,
         IBackOfficeSecurityAccessor backOfficeSecurityAccessor,
         ILogger<FormsApiController> logger)
     {
         _formsService = formsService;
         _emailService = emailService;
+        _turnstileService = turnstileService;
         _backOfficeSecurityAccessor = backOfficeSecurityAccessor;
         _logger = logger;
     }
@@ -39,6 +43,13 @@ public class FormsApiController : ControllerBase
         if (dto == null)
         {
             return BadRequest(new { success = false, message = "Érvénytelen kérés." });
+        }
+
+        var remoteIp = HttpContext.Connection.RemoteIpAddress?.ToString();
+        var isTurnstileValid = await _turnstileService.VerifyTokenAsync(dto.TurnstileToken, remoteIp);
+        if (!isTurnstileValid)
+        {
+            return BadRequest(new { success = false, message = "A biztonsági ellenőrzés nem sikerült (bot gyanú). Kérjük, próbálja újra." });
         }
 
         if (string.IsNullOrWhiteSpace(dto.Name))
@@ -89,6 +100,13 @@ public class FormsApiController : ControllerBase
         if (dto == null || string.IsNullOrWhiteSpace(dto.Email) || !IsValidEmail(dto.Email))
         {
             return BadRequest(new { success = false, message = "Kérjük, adjon meg érvényes e-mail címet." });
+        }
+
+        var remoteIp = HttpContext.Connection.RemoteIpAddress?.ToString();
+        var isTurnstileValid = await _turnstileService.VerifyTokenAsync(dto.TurnstileToken, remoteIp);
+        if (!isTurnstileValid)
+        {
+            return BadRequest(new { success = false, message = "A biztonsági ellenőrzés nem sikerült (bot gyanú). Kérjük, próbálja újra." });
         }
 
         var result = await _formsService.SaveNewsletterSubscriberAsync(dto.Email);
@@ -172,9 +190,11 @@ public class ContactSubmissionDto
     public string? Email { get; set; }
     public string? Company { get; set; }
     public string? Message { get; set; }
+    public string? TurnstileToken { get; set; }
 }
 
 public class NewsletterDto
 {
     public string? Email { get; set; }
+    public string? TurnstileToken { get; set; }
 }
