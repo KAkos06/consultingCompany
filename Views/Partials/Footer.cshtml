@@ -42,7 +42,7 @@
       <div class="@(hasNewsForm ? "md:col-span-5" : "md:col-span-8")">
         <div class="flex items-center gap-3 mb-6">
           @if (siteLogo != null && !string.IsNullOrWhiteSpace(siteLogo.Url())) {
-            <img src="@siteLogo.Url()" alt="@brandName" class="h-10 w-auto max-h-10 max-w-[140px] object-contain" />
+            <img src="@siteLogo.Url()" alt="" width="40" height="40" aria-hidden="true" class="h-10 w-auto max-h-10 max-w-[140px] object-contain" />
           } else {
             <div class="w-10 h-10 rounded-full bg-[#F7A5A5] text-[#1A2A4F] flex items-center justify-center font-bold text-xl font-[Outfit]">
               EI
@@ -129,15 +129,15 @@
     </div>
 
     <!-- Bottom Bar -->
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-xs text-[#FFF2EF]/50">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-xs text-[#FFF2EF]/80">
       <div>@copyText</div>
       <div class="flex flex-wrap items-center gap-6">
         @if(bottomLinks != null) {
           foreach(var link in bottomLinks) {
-            <a href="@link.Url" target="@link.Target" class="hover:text-[#F7A5A5] transition-colors">@link.Name</a>
+            <a href="@link.Url" target="@link.Target" class="text-[#FFF2EF]/80 hover:text-[#F7A5A5] transition-colors">@link.Name</a>
           }
         }
-        <button type="button" data-cookie-settings class="hover:text-[#F7A5A5] transition-colors cursor-pointer bg-transparent border-0 p-0 text-xs text-[#FFF2EF]/60 hover:underline">Süti beállítások</button>
+        <button type="button" data-cookie-settings class="hover:text-[#F7A5A5] transition-colors cursor-pointer bg-transparent border-0 p-0 text-xs text-[#FFF2EF]/80 hover:underline">Süti beállítások</button>
       </div>
     </div>
   </div>

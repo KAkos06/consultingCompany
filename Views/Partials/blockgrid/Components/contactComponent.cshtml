@@ -17,14 +17,14 @@
     var bgName = ViewData["bgName"]?.ToString() ?? "";
     var isDark = bgName == "dark" || bgName == "solidDark";
 
-    var eyebrowColor = isDark ? "text-white/50" : "text-[#1A2A4F]/50";
+    var eyebrowColor = isDark ? "text-white/75" : "text-[#1A2A4F]/75";
     var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
     var subtitleColor = isDark ? "text-white/70" : "text-[#1A2A4F]/70";
     
     var infoCardBg = isDark ? "bg-white/[0.07] border border-white/10 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)] backdrop-blur text-white" : "bg-white shadow-xl shadow-[#1A2A4F]/5";
     var infoTextColor = isDark ? "text-white/70" : "text-[#1A2A4F]/70";
     var iconBoxBg = isDark ? "bg-[#F7A5A5] text-[#1A2A4F]" : "bg-[#FFF2EF] text-[#1A2A4F]";
-    var labelColor = isDark ? "text-white/50" : "text-[#1A2A4F]/50";
+    var labelColor = isDark ? "text-white/75" : "text-[#1A2A4F]/75";
     var valueColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
     
     var formBg = isDark ? "bg-white/[0.05] border-white/10 text-white shadow-black/30 backdrop-blur" : "bg-[#FFECE8] border-[#F7A5A5]/20 text-[#1A2A4F] shadow-xl";
@@ -106,7 +106,7 @@
                     }
 
                     <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-2">
-                        <span class="text-xs" style="color: rgba(var(--form-text-rgb), 0.6);">Üzeneted bizalmas. 24 órán belül válaszolunk.</span>
+                        <span class="text-xs" style="color: rgba(var(--form-text-rgb), 0.85);">Üzeneted bizalmas. 24 órán belül válaszolunk.</span>
                         <button type="submit" id="contact-submit-btn" class="w-full md:w-auto flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-bold transition-all active:scale-95 shadow-lg cursor-pointer" style="background-color: var(--form-btn-bg); color: var(--form-btn-text);">
                             <span id="contact-btn-text">Üzenet küldése</span>
                             <svg id="contact-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>

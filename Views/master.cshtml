@@ -3,9 +3,13 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
 	Layout = null;
+    var currentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+    if (string.IsNullOrWhiteSpace(currentCulture) || currentCulture.Equals("iv", StringComparison.OrdinalIgnoreCase)) {
+        currentCulture = "hu";
+    }
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@currentCulture">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

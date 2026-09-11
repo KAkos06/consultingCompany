@@ -101,7 +101,7 @@
   <div class="nav-shell-inner flex items-center justify-between">
     <a href="/" class="flex items-center gap-2.5 sm:gap-3 shrink-0 group" style="text-decoration: none;">
       @if (siteLogo != null && !string.IsNullOrWhiteSpace(siteLogo.Url())) {
-        <img src="@siteLogo.Url()" alt="@brandName" class="h-8 sm:h-10 w-auto max-h-10 max-w-[130px] sm:max-w-[140px] object-contain group-hover:scale-105 transition-transform" />
+        <img src="@siteLogo.Url()" alt="" width="40" height="40" aria-hidden="true" class="h-8 sm:h-10 w-auto max-h-10 max-w-[130px] sm:max-w-[140px] object-contain group-hover:scale-105 transition-transform" />
       } else {
         <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1A2A4F] text-[#FFDBB6] flex items-center justify-center font-bold text-lg sm:text-xl font-[Outfit] group-hover:scale-105 transition-transform">
           EI

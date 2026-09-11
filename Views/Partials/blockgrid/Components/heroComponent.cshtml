@@ -180,6 +180,10 @@
                     const lastClone = originalSlides[totalSlides - 1].cloneNode(true);
                     firstClone.setAttribute('aria-hidden', 'true');
                     lastClone.setAttribute('aria-hidden', 'true');
+                    firstClone.inert = true;
+                    lastClone.inert = true;
+                    firstClone.querySelectorAll('a, button, input, textarea, select').forEach(el => el.setAttribute('tabindex', '-1'));
+                    lastClone.querySelectorAll('a, button, input, textarea, select').forEach(el => el.setAttribute('tabindex', '-1'));
                     
                     container.appendChild(firstClone);
                     container.insertBefore(lastClone, originalSlides[0]);

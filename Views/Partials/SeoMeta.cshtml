@@ -32,3 +32,62 @@
     <meta property="og:url" content="@seo.SocialUrl" />
 }
 <meta property="og:type" content="@seo.SocialType" />
+
+<!-- Twitter (X) Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="@seo.SocialTitle" />
+@if (!string.IsNullOrWhiteSpace(seo.SocialDescription))
+{
+    <meta name="twitter:description" content="@seo.SocialDescription" />
+}
+@if (!string.IsNullOrWhiteSpace(seo.SocialImageUrl))
+{
+    <meta name="twitter:image" content="@seo.SocialImageUrl" />
+}
+
+<!-- Schema.org JSON-LD Structured Data -->
+@{
+    var root = Model.Root();
+    var settings = Umbraco.ContentAtRoot().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings")
+        ?? root?.Children().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings")
+        ?? root?.SiblingsAndSelf().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings");
+
+    var orgName = settings?.Value<string>("logoText") ?? "Executive Insight";
+    var orgDesc = !string.IsNullOrWhiteSpace(seo.Description) ? seo.Description : "Vezetői coaching és stratégiai tanácsadás felsővezetőknek.";
+    var orgLogo = settings?.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("siteLogo");
+    var baseSiteUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+    var orgLogoUrl = orgLogo != null ? $"{baseSiteUrl}{orgLogo.Url()}" : $"{baseSiteUrl}/media/cxadsmoj/test-logo.png";
+
+    var jsonLd = $@"{{
+  ""@context"": ""https://schema.org"",
+  ""@graph"": [
+    {{
+      ""@type"": ""ProfessionalService"",
+      ""@id"": ""{baseSiteUrl}/#organization"",
+      ""name"": ""{orgName}"",
+      ""url"": ""{baseSiteUrl}"",
+      ""logo"": ""{orgLogoUrl}"",
+      ""description"": ""{orgDesc}"",
+      ""telephone"": ""+36 1 234 5678"",
+      ""email"": ""hello@executiveinsights.hu"",
+      ""address"": {{
+        ""@type"": ""PostalAddress"",
+        ""addressLocality"": ""Budapest"",
+        ""addressCountry"": ""HU""
+      }},
+      ""priceRange"": ""$$$""
+    }},
+    {{
+      ""@type"": ""WebSite"",
+      ""@id"": ""{baseSiteUrl}/#website"",
+      ""url"": ""{baseSiteUrl}"",
+      ""name"": ""{orgName}"",
+      ""publisher"": {{
+        ""@id"": ""{baseSiteUrl}/#organization""
+      }},
+      ""inLanguage"": ""hu""
+    }}
+  ]
+}}";
+}
+@Html.Raw("<script type=\"application/ld+json\">\n" + jsonLd + "\n</script>")
