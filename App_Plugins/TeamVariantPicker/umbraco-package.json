@@ -1,0 +1,18 @@
+{
+  "name": "TeamVariantPicker",
+  "version": "1.0.0",
+  "extensions": [
+    {
+      "type": "propertyEditorUi",
+      "alias": "My.PropertyEditorUi.TeamVariant",
+      "name": "Team Component Variant Picker UI",
+      "js": "/App_Plugins/TeamVariantPicker/picker.js",
+      "meta": {
+        "label": "Team Component Variant Picker",
+        "icon": "icon-users-alt",
+        "group": "common",
+        "propertyEditorSchemaAlias": "Umbraco.Plain.String"
+      }
+    }
+  ]
+}

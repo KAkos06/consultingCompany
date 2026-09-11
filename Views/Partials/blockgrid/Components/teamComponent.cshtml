@@ -4,22 +4,23 @@
     var content = Model.Content;
     var members = content.Value<Umbraco.Cms.Core.Models.Blocks.BlockListModel>("teamMembers");
 
+    var variant = content.Value<string>("layoutVariant");
+    if (string.IsNullOrWhiteSpace(variant)) {
+        variant = "classic";
+    }
+
     var bgName = ViewData["bgName"]?.ToString() ?? "";
     var isDark = bgName == "dark" || bgName == "solidDark";
 
-    var eyebrowColor = isDark ? "text-[#FFDBB6]" : "text-[#1A2A4F]/60";
-    var titleColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
-    var subtitleColor = isDark ? "text-[#FFF2EF]/75" : "text-[#1A2A4F]/70";
-    
     var cardBg = isDark ? "bg-white/[0.05] border border-white/10 backdrop-blur" : "bg-white border border-transparent shadow-xl shadow-[#1A2A4F]/5";
     var cardHover = isDark ? "hover:border-[#F7A5A5]/60 hover:bg-white/[0.08]" : "hover:shadow-2xl hover:border-[#1A2A4F]/10";
     var nameColor = isDark ? "text-[#FFF2EF]" : "text-[#1A2A4F]";
-    var roleColor = isDark ? "text-[#F7A5A5]" : "text-[#1A2A4F]/60"; // Accented role color
+    var roleColor = isDark ? "text-[#F7A5A5]" : "text-[#1A2A4F]/60";
     var descColor = isDark ? "text-[#FFF2EF]/70" : "text-[#1A2A4F]/70";
     var avatarRing = isDark ? "ring-white/10 group-hover:ring-[#F7A5A5]/50" : "ring-[#1A2A4F]/5 group-hover:ring-[#1A2A4F]/20";
     var placeholderBg = isDark ? "bg-[#1A2A4F] text-white" : "bg-gray-100 text-[#1A2A4F]";
 }
-<div data-testid="team-component" class="w-full py-12 md:py-24">
+<div data-testid="team-component" data-variant="@variant" class="w-full py-12 md:py-24">
     <div class="mx-auto max-w-6xl px-4">
 
         @if (members != null && members.Any()) {
@@ -33,28 +34,58 @@
                     var imageProp = item.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>("image");
                     var imageUrl = imageProp != null ? imageProp.MediaUrl() : "";
                     
-                    <div class="group flex flex-col items-center rounded-[32px] p-8 text-center transition-all duration-300 hover:-translate-y-2 @cardBg @cardHover fade-up delay-@index">
-                        <div class="mb-6 overflow-hidden rounded-full ring-4 transition-all duration-300 @avatarRing">
-                            @if (!string.IsNullOrEmpty(imageUrl)) {
-                                <img src="@imageUrl" alt="@mName" class="h-40 w-40 object-cover transition-transform duration-500 group-hover:scale-110" />
-                            } else {
-                                <div class="flex h-40 w-40 items-center justify-center text-4xl font-bold @placeholderBg">
-                                    @(string.IsNullOrWhiteSpace(mName) ? "?" : mName.Substring(0, 1).ToUpper())
+                    @if (variant == "portrait") {
+                        <!-- Portrait Card Variant (Rectangular Top Photo, Text Below) -->
+                        <div class="group flex flex-col overflow-hidden rounded-[32px] transition-all duration-500 hover:-translate-y-2 @cardBg @cardHover fade-up delay-@index">
+                            <div class="relative w-full aspect-[4/5] sm:aspect-[3/4] overflow-hidden @(isDark ? "bg-white/5" : "bg-slate-100")">
+                                @if (!string.IsNullOrEmpty(imageUrl)) {
+                                    <img src="@imageUrl" alt="@mName" class="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105" />
+                                    <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t @(isDark ? "from-black/40" : "from-black/10") to-transparent pointer-events-none"></div>
+                                } else {
+                                    <div class="flex h-full w-full items-center justify-center text-5xl font-bold @placeholderBg">
+                                        @(string.IsNullOrWhiteSpace(mName) ? "?" : mName.Substring(0, 1).ToUpper())
+                                    </div>
+                                }
+                            </div>
+                            <div class="flex flex-1 flex-col p-6 sm:p-8">
+                                <div class="mb-2 text-xs font-semibold uppercase tracking-widest @roleColor">
+                                    @mRole
                                 </div>
+                                <h3 class="mb-3 font-[Outfit] text-2xl font-bold transition-colors duration-300 @nameColor group-hover:text-[#F7A5A5]">
+                                    @mName
+                                </h3>
+                                @if (!string.IsNullOrWhiteSpace(mDesc)) {
+                                    <p class="text-sm leading-relaxed @descColor">
+                                        @mDesc
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    } else {
+                        <!-- Classic Avatar Variant (Centered, Circular Avatar) -->
+                        <div class="group flex flex-col items-center rounded-[32px] p-8 text-center transition-all duration-300 hover:-translate-y-2 @cardBg @cardHover fade-up delay-@index">
+                            <div class="mb-6 overflow-hidden rounded-full ring-4 transition-all duration-300 @avatarRing">
+                                @if (!string.IsNullOrEmpty(imageUrl)) {
+                                    <img src="@imageUrl" alt="@mName" class="h-40 w-40 object-cover transition-transform duration-500 group-hover:scale-110" />
+                                } else {
+                                    <div class="flex h-40 w-40 items-center justify-center text-4xl font-bold @placeholderBg">
+                                        @(string.IsNullOrWhiteSpace(mName) ? "?" : mName.Substring(0, 1).ToUpper())
+                                    </div>
+                                }
+                            </div>
+                            <h3 class="mb-1 font-[Outfit] text-2xl font-bold @nameColor">
+                                @mName
+                            </h3>
+                            <div class="mb-4 text-sm font-semibold uppercase tracking-wider @roleColor">
+                                @mRole
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(mDesc)) {
+                                <p class="text-sm leading-relaxed @descColor">
+                                    @mDesc
+                                </p>
                             }
                         </div>
-                        <h3 class="mb-1 font-[Outfit] text-2xl font-bold @nameColor">
-                            @mName
-                        </h3>
-                        <div class="mb-4 text-sm font-semibold uppercase tracking-wider @roleColor">
-                            @mRole
-                        </div>
-                        @if (!string.IsNullOrWhiteSpace(mDesc)) {
-                            <p class="text-sm leading-relaxed @descColor">
-                                @mDesc
-                            </p>
-                        }
-                    </div>
+                    }
                     index++;
                 }
             </div>
