@@ -1,0 +1,82 @@
+@* 
+    Lightweight, privacy-friendly analytics tracker for Executive Insight
+    Asynchronously logs genuine visitor pageviews to /api/analytics/track
+*@
+<script>
+(function() {
+    // Avoid running inside iframes or Umbraco backoffice
+    if (window.top !== window.self || window.location.pathname.startsWith('/umbraco')) return;
+
+    function detectDevice() {
+        const ua = navigator.userAgent || '';
+        if (/ipad|tablet|(android(?!.*mobile))/i.test(ua)) return 'Tablet';
+        if (/mobile|iphone|ipod|android|blackberry|iemobile|kindle/i.test(ua)) return 'Mobile';
+        return 'Desktop';
+    }
+
+    function detectOS() {
+        const ua = navigator.userAgent || '';
+        if (/windows/i.test(ua)) return 'Windows';
+        if (/macintosh|mac os x/i.test(ua)) return 'macOS';
+        if (/iphone|ipad|ipod/i.test(ua)) return 'iOS';
+        if (/android/i.test(ua)) return 'Android';
+        if (/linux/i.test(ua)) return 'Linux';
+        return 'Other';
+    }
+
+    function detectBrowser() {
+        const ua = navigator.userAgent || '';
+        if (ua.includes('Edg/')) return 'Edge';
+        if (ua.includes('OPR/') || ua.includes('Opera/')) return 'Opera';
+        if (ua.includes('Chrome/') && !ua.includes('Edg/')) return 'Chrome';
+        if (ua.includes('Safari/') && !ua.includes('Chrome/')) return 'Safari';
+        if (ua.includes('Firefox/')) return 'Firefox';
+        return 'Other';
+    }
+
+    function sendTracking() {
+        try {
+            // Check cookie preferences if set
+            const consentRaw = localStorage.getItem('ei_cookie_consent_v1');
+            if (consentRaw) {
+                const consent = JSON.parse(consentRaw);
+                if (consent && consent.analytics === false) {
+                    return; // Analytics explicitly opted-out
+                }
+            }
+
+            const payload = {
+                path: window.location.pathname || '/',
+                pageTitle: document.title || '',
+                referrer: document.referrer || '',
+                deviceType: detectDevice(),
+                operatingSystem: detectOS(),
+                browser: detectBrowser()
+            };
+
+            const jsonStr = JSON.stringify(payload);
+            const endpoint = '/api/analytics/track';
+
+            if (navigator.sendBeacon) {
+                const blob = new Blob([jsonStr], { type: 'application/json' });
+                navigator.sendBeacon(endpoint, blob);
+            } else {
+                fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: jsonStr,
+                    keepalive: true
+                }).catch(function() {});
+            }
+        } catch (e) {}
+    }
+
+    if (document.readyState === 'complete') {
+        setTimeout(sendTracking, 400);
+    } else {
+        window.addEventListener('load', function() {
+            setTimeout(sendTracking, 400);
+        });
+    }
+})();
+</script>

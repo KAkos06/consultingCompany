@@ -164,6 +164,7 @@ echo "==> Server preparation complete."
         "--exclude=*.sqlite.db*",
         "--exclude=scratch",
         "--exclude=deploy.ps1",
+        "--exclude=set-vps-secrets.ps1",
         "--exclude=.env"
     )
 

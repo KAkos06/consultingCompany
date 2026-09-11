@@ -1,5 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common;
@@ -12,6 +14,7 @@ public class TurnstileService : ITurnstileService
     private readonly IUmbracoContextFactory _umbracoContextFactory;
     private readonly UmbracoHelper _umbracoHelper;
     private readonly HttpClient _httpClient;
+    private readonly IConfiguration _configuration;
     private readonly ILogger<TurnstileService> _logger;
 
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -23,30 +26,35 @@ public class TurnstileService : ITurnstileService
         IUmbracoContextFactory umbracoContextFactory,
         UmbracoHelper umbracoHelper,
         HttpClient httpClient,
+        IConfiguration configuration,
         ILogger<TurnstileService> logger)
     {
         _umbracoContextFactory = umbracoContextFactory;
         _umbracoHelper = umbracoHelper;
         _httpClient = httpClient;
+        _configuration = configuration;
         _logger = logger;
     }
 
     public bool IsEnabled()
     {
+        var configEnabled = _configuration.GetValue<bool?>("Turnstile:Enabled");
+        if (configEnabled.HasValue) return configEnabled.Value;
+
         var node = GetSettingsNode();
         return node?.Value<bool>("enableTurnstile") ?? false;
     }
 
     public string? GetSiteKey()
     {
-        var node = GetSettingsNode();
-        return node?.Value<string>("turnstileSiteKey")?.Trim();
+        var configSiteKey = _configuration["Turnstile:SiteKey"];
+        return !string.IsNullOrWhiteSpace(configSiteKey) ? configSiteKey.Trim() : null;
     }
 
     private string? GetSecretKey()
     {
-        var node = GetSettingsNode();
-        return node?.Value<string>("turnstileSecretKey")?.Trim();
+        var configSecretKey = _configuration["Turnstile:SecretKey"];
+        return !string.IsNullOrWhiteSpace(configSecretKey) ? configSecretKey.Trim() : null;
     }
 
     public async Task<bool> VerifyTokenAsync(string? token, string? remoteIp = null)

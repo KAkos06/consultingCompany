@@ -60,6 +60,8 @@ services:
       uSync__Settings__RootFolder: "uSync/v17/"
       uSync__Settings__ImportAtStartup: ${USYNC_IMPORT_AT_STARTUP:-None}
       uSync__Settings__ExportOnSave: "None"
+      Turnstile__SiteKey: ${TURNSTILE_SITE_KEY:-}
+      Turnstile__SecretKey: ${TURNSTILE_SECRET_KEY:-}
     volumes:
       - umbraco_media:/app/wwwroot/media
       - umbraco_data:/app/umbraco/Data

@@ -1,6 +1,7 @@
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @using Umbraco.Extensions;
 @using Umbraco.Cms.Core.Models;
+@inject ExecutiveInsightUmbraco.Services.Security.ITurnstileService TurnstileService
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
     var siteRoot = Model.Root();
@@ -27,8 +28,8 @@
     var twitterUrl = settings?.Value<string>("twitterUrl");
     var instagramUrl = settings?.Value<string>("instagramUrl");
     
-    var turnstileEnabled = settings?.Value<bool>("enableTurnstile") ?? false;
-    var turnstileSiteKey = settings?.Value<string>("turnstileSiteKey")?.Trim() ?? "";
+    var turnstileEnabled = TurnstileService.IsEnabled();
+    var turnstileSiteKey = TurnstileService.GetSiteKey() ?? "";
 
     var hasNewsForm = !string.IsNullOrWhiteSpace(newsTitle);
 }

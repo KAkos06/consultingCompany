@@ -1,0 +1,31 @@
+{
+  "$schema": "../../umbraco-package-schema.json",
+  "name": "WelcomeDashboard",
+  "version": "1.0.0",
+  "extensions": [
+    {
+      "type": "dashboard",
+      "alias": "ExecutiveInsight.Dashboard.Welcome",
+      "name": "Overview",
+      "element": "/App_Plugins/WelcomeDashboard/dashboard.js?v=5",
+      "elementName": "welcome-dashboard",
+      "weight": 1000,
+      "meta": {
+        "label": "Overview",
+        "pathname": "overview"
+      },
+      "conditions": [
+        {
+          "alias": "Umb.Condition.SectionAlias",
+          "match": "Umb.Section.Content"
+        }
+      ]
+    },
+    {
+      "type": "entryPoint",
+      "alias": "ExecutiveInsight.Welcome.EntryPoint",
+      "name": "Welcome Dashboard Entry Point",
+      "js": "/App_Plugins/WelcomeDashboard/entrypoint.js?v=5"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @using Umbraco.Extensions;
+@inject ExecutiveInsightUmbraco.Services.Security.ITurnstileService TurnstileService
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ContactComponent>>
 @{
     var content = Model.Content;
@@ -11,8 +12,8 @@
     var siteRoot = Umbraco.ContentAtRoot()?.FirstOrDefault();
     var settings = Umbraco.ContentAtRoot().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings")
         ?? siteRoot?.Children().FirstOrDefault(x => x.ContentType.Alias == "siteSettings" || x.ContentType.Alias == "settings");
-    var turnstileEnabled = settings?.Value<bool>("enableTurnstile") ?? false;
-    var turnstileSiteKey = settings?.Value<string>("turnstileSiteKey")?.Trim() ?? "";
+    var turnstileEnabled = TurnstileService.IsEnabled();
+    var turnstileSiteKey = TurnstileService.GetSiteKey() ?? "";
 
     var bgName = ViewData["bgName"]?.ToString() ?? "";
     var isDark = bgName == "dark" || bgName == "solidDark";
