@@ -97,6 +97,12 @@
       "element": "/App_Plugins/BlockGridCustom/views/timeline.js",
       "forContentTypeAlias": "timelineComponent",
       "forBlockEditor": "block-grid"
+    },
+    {
+      "type": "appEntryPoint",
+      "alias": "BlockGridCustom.CataloguePreviewEntryPoint",
+      "name": "BlockGrid Catalogue Preview Entry Point",
+      "js": "/App_Plugins/BlockGridCustom/catalogue-preview.js"
     }
   ]
 }
