@@ -2,7 +2,7 @@ import { UMB_AUTH_CONTEXT as G } from "@umbraco-cms/backoffice/auth";
 const Q = [
   {
     type: "dashboard",
-    name: "maintenancemanager",
+    name: "Maintenance Manager",
     alias: "maintenancemanager.dashboard",
     elementName: "maintenancemanager-dashboard",
     weight: -10,
@@ -687,26 +687,48 @@ const ge = () => ({
       put: c("PUT"),
       trace: c("TRACE")
     },
-    trace: i("TRACE")
   };
-}, R = Se(V({ baseUrl: "http://localhost:31222", throwOnError: !0 })), xe = [
+};
+let teAuthResolve, teAuthInstance = null;
+const teAuthPromise = new Promise((resolve) => { teAuthResolve = resolve; });
+const R = Se(V({ baseUrl: "", credentials: "include", throwOnError: !0 }));
+R.interceptors.request.use(async (n, l) => {
+  try {
+    if (!teAuthInstance) {
+      await Promise.race([
+        teAuthPromise,
+        new Promise((resolve) => setTimeout(resolve, 2000))
+      ]);
+    }
+    if (teAuthInstance) {
+      const o = await teAuthInstance.getLatestToken();
+      if (o) n.headers.set("Authorization", `Bearer ${o}`);
+    }
+  } catch {}
+  return n;
+});
+const xe = [
   ...K,
   ...Y,
   ...ee,
   ...re,
   ...se
 ], Ce = (r, t) => {
-  t.registerMany(xe), r.consumeContext(G, (e) => {
+  R.setConfig({ baseUrl: "", credentials: "include" });
+  r.consumeContext(G, (e) => {
     if (!e) return;
+    teAuthInstance = e;
+    if (teAuthResolve) {
+      teAuthResolve(e);
+      teAuthResolve = null;
+    }
     const a = e.getOpenApiConfiguration();
     R.setConfig({
-      baseUrl: a.base,
-      credentials: a.credentials
-    }), R.interceptors.request.use(async (n, l) => {
-      const o = await e.getLatestToken();
-      return n.headers.set("Authorization", `Bearer ${o}`), n;
+      baseUrl: "",
+      credentials: (a && a.credentials) || "include"
     });
   });
+  t.registerMany(xe);
 };
 export {
   R as c,

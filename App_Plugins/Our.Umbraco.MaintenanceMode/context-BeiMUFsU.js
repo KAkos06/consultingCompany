@@ -7,7 +7,7 @@ import { UmbControllerBase as L } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken as U } from "@umbraco-cms/backoffice/context-api";
 import { UmbObjectState as M } from "@umbraco-cms/backoffice/observable-api";
 import { UmbModalToken as T, UMB_MODAL_MANAGER_CONTEXT as O } from "@umbraco-cms/backoffice/modal";
-import { c as l } from "./index-CRC76a_9.js";
+import { c as l } from "./index-CRC76a_9.js?v=17.1.4.4";
 import { tryExecute as g } from "@umbraco-cms/backoffice/resources";
 class u {
   static getSettings(e) {

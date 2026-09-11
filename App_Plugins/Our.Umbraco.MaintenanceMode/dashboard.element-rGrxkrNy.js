@@ -581,7 +581,7 @@ let y = class extends Tt(N) {
       settings: {
         allowBackOfficeUsersThrough: !0
       }
-    }, this.title = "MaintenanceManager dashboard", C(this, tt, () => {
+    }, this.title = "Maintenance Manager dashboard", C(this, tt, () => {
       var s;
       (s = v(this, E)) == null || s.toggleMaintenance();
     }), C(this, et, () => {
